@@ -1,0 +1,14 @@
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0px -2px 3px rgba(10, 10, 10, 0.1);
+  z-index: 11;
+  .navbar-item {
+    padding: 0.5rem 0.5rem;
+  }
+  .navbar-end-center {
+    justify-content: flex-start;
+    margin: 0 auto;
+  }
+}

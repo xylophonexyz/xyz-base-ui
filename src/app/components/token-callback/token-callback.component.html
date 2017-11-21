@@ -1,0 +1,26 @@
+<section class="hero is-white is-fullheight">
+  <div class="hero-body has-text-centered">
+    <div class="container">
+      <div *ngIf="!isSuccess && !isFail">
+        <a class="button is-white is-large is-loading">Loading</a>
+        <p>Logging in...</p>
+      </div>
+      <div *ngIf="isSuccess">
+        <a class="button is-white is-large">
+          <span class="icon is-large">
+            <app-feather-icon icon="check"></app-feather-icon>
+          </span>
+        </a>
+        <p>Success!</p>
+      </div>
+      <div *ngIf="isFail">
+        <a class="button is-white is-large">
+          <span class="icon is-large">
+            <app-feather-icon icon="x"></app-feather-icon>
+          </span>
+        </a>
+        <p>Failed</p>
+      </div>
+    </div>
+  </div>
+</section>

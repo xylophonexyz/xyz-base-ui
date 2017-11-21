@@ -1,0 +1,16 @@
+<section class="section text-component"
+         [class.section--inset]="!isFullWidth()"
+         [class.has-text-right]="isRightAligned()"
+         [class.has-text-centered]="isCenterAligned()">
+  <div class="content"
+       [xzRichTextModel]="textModel"
+       (xzRichTextModelChange)="textDidChange($event)"
+       (xzTextPreview)="textPreview = $event"
+       [xzRichTextEnabled]="editable"
+       [xzRichTextEditorToolbarOptions]="textEditorToolbarOptions"
+       (click)="didFocusField($event)"
+       [class.title]="isTitle()"
+       [class.subtitle]="isSubtitle()">
+    {{textPreview}}
+  </div>
+</section>

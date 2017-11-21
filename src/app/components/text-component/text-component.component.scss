@@ -1,0 +1,13 @@
+.text-component {
+  white-space: pre-line;
+  .title {
+    font-weight: 700;
+    font-size: 44px;
+    letter-spacing: -2px;
+  }
+  .subtitle {
+    font-weight: 400;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.5);
+  }
+}

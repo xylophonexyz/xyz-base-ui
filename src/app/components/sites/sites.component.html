@@ -1,0 +1,128 @@
+<div class="admin__sites">
+  <div class="tabs">
+    <ul>
+      <li [class.is-active]="uiFilter.all"
+          (click)="setUIFilter('all')"><a>All</a></li>
+      <li [class.is-active]="uiFilter.showPublic"
+          (click)="setUIFilter('showPublic')"><a>Public</a></li>
+      <li [class.is-active]="uiFilter.showPrivate"
+          (click)="setUIFilter('showPrivate')"><a>Private</a></li>
+    </ul>
+  </div>
+  <div class="container"
+       *ngFor="let site of sitesFilteredByActiveTab(sites)">
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <figure class="site-thumb image is-128x128">
+            <img [src]="site.cover"
+                 alt="">
+          </figure>
+        </div>
+        <div class="level-item">
+          <h1 class="title">
+            <a class="button is-white is-large"
+               [routerLink]="[settingsUrl(site)]">
+              <span>&nbsp;</span>
+              <span>&nbsp;</span>
+              <span>{{site.title}}</span>
+            </a>
+          </h1>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <p class="control">
+            <a class="button is-white"
+               [routerLink]="[settingsUrl(site)]">Manage</a>
+          </p>
+        </div>
+        <div class="level-item">
+          <p class="control">
+            <a class="button is-white"
+               [routerLink]="[firstPageUrl(site)]"
+               target="_blank">View</a>
+          </p>
+        </div>
+      </div>
+    </nav>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="subtitle">
+            <small [class.text-success]="site.isPublished()"
+                   [class.text-muted]="!site.isPublished()">
+              {{site.isPublished() ? 'ACTIVE' : 'INACTIVE'}}
+            </small>
+          </p>
+        </div>
+        <div class="level-item">&middot;</div>
+        <div class="level-item">
+          <small>{{site.pages.length}} pages</small>
+        </div>
+        <div class="level-item">&middot;</div>
+        <div class="level-item">
+          <small>Last updated {{site.updatedAt | amTimeAgo}}</small>
+        </div>
+        <div class="level-item">&middot;</div>
+        <div class="level-item">
+          <small>Launched {{site.createdAt | amDateFormat:'LL hh:mmA'}}</small>
+        </div>
+      </div>
+    </nav>
+    <hr>
+  </div>
+
+  <div [hidden]="shouldShowForm()">
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">
+            <a class="button is-white is-large"
+               (click)="showForm()">
+            <span class="icon">
+              <app-feather-icon icon="plus"></app-feather-icon>
+            </span>
+              <span>Add New</span>
+            </a>
+          </h1>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div [hidden]="shouldShowAddSiteButton()">
+    <h1 class="title">Add New Site</h1>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="control">
+            <input type="text"
+                   class="input"
+                   placeholder="Site Name"
+                   [(ngModel)]="siteToCreate.title">
+          </p>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <p class="control">
+            <button class="button is-primary is-inverted"
+                    [class.is-loading]="isLoading"
+                    (click)="createSite(siteToCreate)">
+              Save
+            </button>
+          </p>
+        </div>
+        <div class="level-item">
+          <p class="control">
+            <button class="button is-white"
+                    (click)="showAddSiteButton()">Cancel
+            </button>
+          </p>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+

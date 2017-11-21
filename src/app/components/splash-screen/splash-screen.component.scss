@@ -1,0 +1,51 @@
+@import "../../../../node_modules/bulma/sass/utilities/_all.sass";
+
+.splash-screen {
+  $white: rgba(255, 255, 255, 0.75);
+  .navbar {
+    z-index: 1;
+    background: transparent;
+    .navbar-brand {
+      .navbar-item {
+        &:hover {
+          background: transparent;
+        }
+      }
+    }
+    .navbar-burger {
+      span {
+        background-color: $white;
+      }
+      &:active, &:hover {
+        background: transparent;
+      }
+    }
+    .navbar-menu {
+      .navbar-end {
+        .navbar-item {
+          color: $white;
+        }
+      }
+      @media(max-width: $tablet) {
+        border-bottom: 1px solid $white;
+      }
+    }
+  }
+  .hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    .bg {
+      background: url('../../../assets/img/splash.jpg');
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0.15;
+    }
+  }
+}

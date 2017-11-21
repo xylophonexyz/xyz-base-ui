@@ -1,0 +1,146 @@
+<div class="admin__settings"
+     *ngIf="currentUser">
+  <section class="section section--account">
+    <h1 class="subtitle">
+      <strong>Account Settings</strong>
+    </h1>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="subtitle"
+             *ngIf="!willEditUser()">
+            {{currentUser.email}}
+          </p>
+          <div class="field"
+               *ngIf="willEditUser()">
+            <p class="control">
+              <input class="input"
+                     type="email"
+                     placeholder="Email address"
+                     [(ngModel)]="currentUserCopy.email">
+            </p>
+            <p class="help is-danger"
+               *ngIf="emailIsTaken">This email is taken</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="level-right">
+        <p class="level-item"
+           (click)="editUser()"
+           *ngIf="!willEditUser()">
+          <a class="button is-white">Edit email</a>
+        </p>
+        <div class="level-item"
+             *ngIf="willEditUser()">
+          <button class="button is-primary is-inverted"
+                  [class.is-loading]="isLoading"
+                  (click)="updateUserEmail()">
+            <span>Save</span>
+          </button>
+          &nbsp;
+          <button class="button is-white"
+                  (click)="cancelEditUser()">
+            <span>Cancel</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <hr>
+
+    <h1 class="subtitle">
+      <strong>Photo</strong>
+    </h1>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <label class="image is-64x64 has-background-image file-picker"
+                 [style.background-image]="'url(' + currentUser.avatar + ')'">
+            <input type="file"
+                   accept="image/*"
+                   (change)="fileDidChange($event)"/>
+          </label>
+          <button class="delete is-small logo--delete"
+                  (click)="removePhoto()"
+                  *ngIf="currentUser.hasAvatar()">
+          </button>
+        </div>
+      </div>
+
+      <div class="level-right">
+        <p class="level-item">
+          <label class="button is-white file-picker"
+                 [class.is-loading]="isLoading">
+            <input type="file"
+                   accept="image/*"
+                   (change)="fileDidChange($event)"/>
+            Choose file
+          </label>
+        </p>
+      </div>
+    </nav>
+
+    <hr>
+
+    <h1 class="subtitle">
+      <strong>Delete Account</strong>
+    </h1>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="subtitle">
+            Permanently delete account, pages, and all content
+          </p>
+        </div>
+      </div>
+    </nav>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <p class="subtitle">
+            <button class="button is-inverted is-danger"
+                    (click)="willDeleteAccount = true">Delete Account
+            </button>
+          </p>
+        </div>
+      </div>
+    </nav>
+  </section>
+
+  <div class="modal"
+       [class.is-active]="willDeleteAccount">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Are you sure?</p>
+        <button class="delete"
+                (click)="willDeleteAccount = false"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>
+          This action CANNOT be undone. This will permanently delete your account, site, pages, and all content.
+        </p>
+        <br>
+        <p>
+          Please type in your email address to confirm.
+        </p>
+        <br>
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   [(ngModel)]="accountDeletionConfirmation">
+          </p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-fullwidth is-danger"
+                [class.is-loading]="isLoading"
+                (click)="deleteAccount()"
+                [attr.disabled]="(accountDeletionConfirmation !== currentUser.email) || isLoading">
+          I understand, delete my account.
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>

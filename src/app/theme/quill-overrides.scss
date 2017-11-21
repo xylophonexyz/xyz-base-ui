@@ -1,0 +1,63 @@
+@import "../../../node_modules/bulma/sass/utilities/_all.sass";
+
+.ql-container {
+  font-size: inherit;
+  font-family: inherit;
+  text-align: inherit;
+  height: initial;
+}
+
+.ql-editor {
+  font-family: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  padding: 0;
+  overflow-y: hidden;
+  p {
+    margin-bottom: 0 !important;
+  }
+  strong {
+    color: inherit;
+  }
+  .subtitle {
+    strong {
+      color: inherit;
+    }
+  }
+}
+
+.ql-bubble {
+  .ql-editor {
+    a {
+      text-decoration: none;
+    }
+  }
+  .ql-tooltip {
+    z-index: 1;
+    font-size: 1rem;
+  }
+}
+
+.ql-tooltip-editor {
+  text-align: left;
+}
+
+.has-text-right {
+  .ql-editor.ql-blank::before {
+    right: 0;
+  }
+}
+
+.has-text-centered {
+  .ql-editor.ql-blank::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.ql-editor.ql-blank::before {
+  color: $dark;
+  font-style: normal;
+  left: 0 !important;
+  transform: unset !important;
+}

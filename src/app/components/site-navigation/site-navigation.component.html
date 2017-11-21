@@ -1,0 +1,127 @@
+<div class="site--navigation"
+     *ngIf="site">
+  <h1 class="subtitle">
+    <strong>Site Navigation</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Navigation will appear as items in the site's top header from left to right in the order below.
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level"
+       *ngFor="let page of navigationItems">
+    <div class="level-left">
+      <div class="level-item">
+        <a [routerLink]="['/p/' + page.id]"
+           [queryParams]="{edit: true}">
+          <figure class="image is-64x64 has-background-image"
+                  *ngIf="page.hasCover()"
+                  [style.background-image]="'url(' + page.cover + ')'">
+          </figure>
+          <app-placeholder [title]="page.title"
+                           [size]="'sm'"
+                           *ngIf="!page.hasCover()"></app-placeholder>
+        </a>
+      </div>
+      <div class="level-item"
+           *ngIf="!willEditPage(page)">
+        <a [routerLink]="['/p/' + page.id]"
+           [queryParams]="{edit: true}">
+          {{page.title || 'Untitled'}}
+        </a>
+      </div>
+      <div class="level-item"
+           *ngIf="willEditPage(page)">
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   placeholder="Page name..."
+                   [(ngModel)]="pageCopy.title">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <p class="control"
+           *ngIf="willEditPage(page)">
+          <button class="button is-primary is-inverted"
+                  [class.is-loading]="isLoading"
+                  (click)="updatePageName(page)">
+            <span>Save</span>
+          </button>
+          <button class="button is-white"
+                  (click)="setEditModeOnPage(null)">
+            Cancel
+          </button>
+        </p>
+        <div class="field has-addons"
+             *ngIf="!willEditPage(page)">
+          <p class="control">
+            <button class="button"
+                    (click)="setEditModeOnPage(page)">
+              Edit
+            </button>
+          </p>
+          <p class="control">
+            <button class="button has-text-dark"
+                    (click)="swapPageUpwards(page)">
+                    <span class="icon">
+                      <app-feather-icon icon="corner-left-up"></app-feather-icon>
+                    </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button has-text-dark"
+                    (click)="swapPageDownwards(page)">
+                    <span class="icon">
+                      <app-feather-icon icon="corner-right-down"></app-feather-icon>
+                    </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button has-text-dark"
+                    (click)="removePage(page.id)">
+                    <span class="icon">
+                      <app-feather-icon icon="trash-2"></app-feather-icon>
+                    </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <figure class="image is-64x64 text-muted"
+                style="border: 1px dashed;">
+        </figure>
+      </div>
+      <div class="level-item">
+        <p>Add new...</p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button is-white"
+                    (click)="addChildPageAsNavItem()">
+                    <span class="icon is-large">
+                      <app-feather-icon icon="plus"></app-feather-icon>
+                    </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

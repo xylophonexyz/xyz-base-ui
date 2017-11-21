@@ -1,0 +1,121 @@
+<div class="site--pages"
+     *ngIf="site">
+  <div class="columns is-multiline">
+    <div class="column is-3-desktop"
+         *ngFor="let page of navigationItems.concat(pages); let i = index;">
+      <div class="card">
+        <div class="card-image">
+          <a [routerLink]="'/p/' + page.id"
+             [queryParams]="{edit: true}">
+            <figure class="image is-4by3">
+              <img [src]="page.cover"
+                   alt="Image">
+              <span class="icon is-large">
+                  <app-feather-icon icon="edit-3"></app-feather-icon>
+                </span>
+            </figure>
+          </a>
+        </div>
+        <div class="card-content">
+          <div class="media">
+            <div class="media-content">
+              <p class="title is-4"><em>{{page.title || page.bestGuessTitle}}</em></p>
+            </div>
+            <div class="dropdown is-hoverable is-right">
+              <div class="dropdown-trigger">
+                <button class="button is-small is-fullwidth"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-stats">
+                  <span>Stats</span>
+                </button>
+              </div>
+              <div class="dropdown-menu"
+                   id="dropdown-stats"
+                   role="menu">
+                <div class="dropdown-content">
+                  <div class="dropdown-item">
+                    <div class="field is-grouped is-grouped-multiline">
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">Control</span>
+                          <span class="tag is-success"
+                                *ngIf="page.isPublished()">Published</span>
+                          <span class="tag"
+                                *ngIf="!page.isPublished()">Private</span>
+                        </div>
+                      </div>
+
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">Type</span>
+                          <span class="tag"
+                                *ngIf="page.isNavigationItem()">Nav Item</span>
+                          <span class="tag"
+                                *ngIf="!page.isNavigationItem()">Standard</span>
+                        </div>
+                      </div>
+
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">Views</span>
+                          <span class="tag">{{page.views}}</span>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">Created</span>
+                          <span class="tag">{{page.createdAt | amDateFormat:'M/D/YY'}}</span>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-dark">Updated</span>
+                          <span class="tag">{{page.updatedAt | amTimeAgo:true}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            <small *ngIf="page.description">{{page.description}}<br><br></small>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a class="card-footer-item"
+             [routerLink]="'/p/' + page.id"
+             [queryParams]="{edit: true}">
+            <span class="icon">
+              <app-feather-icon icon="edit-3"></app-feather-icon>
+            </span>
+          </a>
+          <a class="card-footer-item"
+             [routerLink]="'/p/' + page.id"
+             target="_blank">
+            <span class="icon">
+              <app-feather-icon icon="zoom-in"></app-feather-icon>
+            </span>
+          </a>
+          <a class="card-footer-item"
+             (click)="removePage(page.id)">
+            <span class="icon">
+              <app-feather-icon icon="trash-2"></app-feather-icon>
+            </span>
+          </a>
+        </footer>
+      </div>
+    </div>
+    <div class="column is-3">
+      <div class="card--placeholder">
+        <button class="button is-primary is-fullwidth"
+                (click)="addChildPage()">
+              <span class="icon is-extra-large is-white">
+                <app-feather-icon icon="plus"></app-feather-icon>
+              </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

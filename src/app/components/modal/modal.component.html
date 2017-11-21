@@ -1,0 +1,12 @@
+<div class="modal is-active"
+     xzOnEsc
+     (onKeyPressed)="emitClose()"
+     *ngIf="show">
+  <div class="modal-background"
+       (click)="emitClose()"></div>
+  <div class="modal-content">
+    <ng-content></ng-content>
+  </div>
+  <button class="modal-close is-large"
+          (click)="emitClose()"></button>
+</div>

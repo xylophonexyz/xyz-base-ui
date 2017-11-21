@@ -1,0 +1,219 @@
+<div class="site--theme"
+     *ngIf="site">
+
+  <h1 class="subtitle">
+    <strong>Header Settings</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Show your logo in the header.
+        </p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="site.shouldShowLogoInHeader()"
+                    (click)="showLogoInSiteHeader()">
+              <span>On</span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!site.shouldShowLogoInHeader()"
+                    (click)="hideLogoInSiteHeader()">
+              <span>Off</span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Display a subtle shadow below the header.
+        </p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="site.hasHeaderShadow()"
+                    (click)="addShadowToSiteHeader()">
+              <span>On</span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!site.hasHeaderShadow()"
+                    (click)="removeShadowFromSiteHeader()">
+              <span>Off</span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Make use of "tabbed" navigation by displaying a colored underline under active items.
+        </p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="site.hasTabbedNav()"
+                    (click)="addTabbedNavToSiteHeader()">
+              <span>On</span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!site.hasTabbedNav()"
+                    (click)="removeTabbedNavFromSiteHeader()">
+              <span>Off</span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Theme Settings</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Primary color
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <small>
+          This is the color used for navigation links in your site's main header.
+        </small>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   type="text"
+                   placeholder="#FFFFFF"
+                   [(ngModel)]="site.primaryColor">
+          </p>
+        </div>
+      </div>
+      <div class="level-item">
+        <figure class="image is-12x12 has-shadow color-preview"
+                [style.background-color]="site.primaryColor"></figure>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <p class="control">
+          <button class="button is-primary is-inverted"
+                  (click)="updateSiteMetadata()"
+                  [class.is-loading]="isLoading">
+            <span>Save</span>
+          </button>
+        </p>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Header color
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <small>
+          This is the background color of your site's main header.
+        </small>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   type="text"
+                   placeholder="#FFFFFF"
+                   [(ngModel)]="site.headerColor">
+          </p>
+        </div>
+      </div>
+      <div class="level-item">
+        <figure class="image is-12x12 has-shadow color-preview"
+                [style.background-color]="site.headerColor"></figure>
+      </div>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Help Me Choose a Color</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <small>
+          Use the color wheel tool created by Adobe to choose your theme and palette colors.
+        </small>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <a class="button button-link"
+           href="https://color.adobe.com"
+           target="_blank">
+          <span>Open Color Wheel</span>
+          <span class="icon">
+            <app-feather-icon icon="external-link"></app-feather-icon>
+          </span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,214 @@
+<div class="site--settings"
+     *ngIf="site">
+
+  <h1 class="subtitle">
+    <strong>Name</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle"
+           *ngIf="!willEditName()">
+          {{site.title}}
+        </p>
+        <div class="field"
+             *ngIf="willEditName()">
+          <p class="control">
+            <input class="input"
+                   placeholder="Site name..."
+                   [(ngModel)]="siteCopy.title">
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <p class="level-item"
+         (click)="editSiteName()"
+         *ngIf="!willEditName()">
+        <a class="button is-white">Edit name</a>
+      </p>
+      <div class="level-item"
+           *ngIf="willEditName()">
+        <button class="button is-primary is-inverted"
+                [class.is-loading]="isLoading"
+                (click)="updateSiteName()">
+          <span>Save</span>
+        </button>
+        &nbsp;
+        <button class="button is-white"
+                (click)="cancelEditSiteName()">
+          <span>Cancel</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Logo</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <label class="image is-64x64 has-background-image file-picker"
+               [style.background-image]="'url(' + site.cover + ')'">
+          <input type="file"
+                 accept="image/*"
+                 (change)="coverFileDidChange($event)"/>
+        </label>
+        <button class="delete is-small logo--delete"
+                (click)="removeLogo()"
+                *ngIf="site.hasCover()">
+        </button>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <p class="level-item">
+        <label class="button is-white file-picker"
+               [class.is-loading]="isLoading">
+          <input type="file"
+                 accept="image/*"
+                 (change)="coverFileDidChange($event)"/>
+          Choose file
+        </label>
+      </p>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Favicon</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <label class="image is-64x64 has-background-image file-picker"
+               [style.background-image]="faviconUrl(site)">
+          <input type="file"
+                 accept="image/*"
+                 (change)="faviconFileDidChange($event)"/>
+        </label>
+        <button class="delete is-small logo--delete"
+                (click)="removeFavicon()"
+                *ngIf="site.hasFavicon()">
+        </button>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <p class="level-item">
+        <label class="button is-white file-picker"
+               [class.is-loading]="isLoading">
+          <input type="file"
+                 accept="image/*"
+                 (change)="faviconFileDidChange($event)"/>
+          Choose file
+        </label>
+      </p>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Publishing Settings</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Publishing your site will make it publicly viewable.
+        </p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="site.isPublished()"
+                    (click)="setSiteToPublished()">
+              <span>Public</span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!site.isPublished()"
+                    (click)="setSiteToPrivate()">
+              <span>Private</span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <hr>
+
+  <h1 class="subtitle">
+    <strong>Delete Site</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Permanently delete site, pages, and all content
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          <button class="button is-outlined is-danger"
+                  (click)="willDeleteSite = true">Delete Site
+          </button>
+        </p>
+      </div>
+    </div>
+  </nav>
+
+  <div class="modal"
+       [class.is-active]="willDeleteSite">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Are you sure?</p>
+        <button class="delete"
+                (click)="willDeleteSite = false"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>
+          This action CANNOT be undone. This will permanently delete the <strong>{{site.title}}</strong>
+          site, pages, and all content.
+        </p>
+        <br>
+        <p>
+          Please type in the name of the site to confirm.
+        </p>
+        <br>
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   type="text"
+                   [(ngModel)]="siteDeleteConfirmation">
+          </p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-fullwidth is-danger"
+                [class.is-loading]="isLoading"
+                (click)="deleteSite()"
+                [disabled]="(siteDeleteConfirmation !== site.title) || isLoading">
+          I understand, delete this site
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>

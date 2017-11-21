@@ -1,0 +1,48 @@
+<nav class="navbar-component navbar has-shadow"
+     *ngIf="shouldDisplay">
+  <div class="navbar-brand">
+    <a class="navbar-item"
+       routerLink="/admin">
+      <img src="favicon.png"
+           alt="Logo">
+    </a>
+
+    <div class="navbar-burger burger"
+         [class.is-active]="shouldShowMenu"
+         xzToggleOnClick
+         [(toggle)]="shouldShowMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="navbar-menu"
+       [class.is-active]="shouldShowMenu">
+    <div class="navbar-end">
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-item">
+          <figure class="image is-32x32 has-background-image avatar"
+                  [style.background-image]="'url(' + getProfileImage() + ')'">
+          </figure>
+        </a>
+
+        <div class="navbar-dropdown is-right is-boxed">
+          <a class="navbar-item"
+             routerLink="admin">
+            Your Sites
+          </a>
+          <a class="navbar-item"
+             routerLink="/admin/settings">
+            Account
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item"
+             (click)="signOut()">
+            Sign out
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

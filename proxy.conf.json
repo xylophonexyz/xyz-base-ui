@@ -1,0 +1,20 @@
+{
+  "/api/*": {
+    "target": "http://localhost:8080",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/oauth/*": {
+    "target": "http://localhost:8080",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/me/components": {
+    "target": "http://localhost:8080",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

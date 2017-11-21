@@ -1,0 +1,45 @@
+<div class="splash-screen">
+  <nav class="navbar is-transparent">
+    <div class="navbar-brand">
+      <a class="navbar-item"
+         routerLink="/">
+        <img src="favicon.png"
+             alt="Logo">
+      </a>
+
+      <div class="navbar-burger burger"
+           [class.is-active]="shouldShowMenu"
+           xzToggleOnClick
+           [(toggle)]="shouldShowMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <div class="navbar-menu"
+         [class.is-active]="shouldShowMenu">
+      <div class="navbar-end">
+        <a class="navbar-item"
+           (click)="showLogin()">Sign in / Sign up</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero is-fullheight is-bold is-dark">
+    <div class="bg"></div>
+    <div class="hero-body has-text-centered">
+      <div class="container">
+        <h1 class="title">Tell your story</h1>
+        <h2 class="subtitle">
+          {{applicationName}} puts the brush in your hand.
+          <br>
+          Join to paint your mark.
+        </h2>
+        <button class="button is-white is-outlined"
+                (click)="showLogin()">Get Started
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

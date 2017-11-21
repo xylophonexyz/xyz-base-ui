@@ -1,0 +1,27 @@
+<section class="free-form-html-component section"
+         [class.has-background-light]="editorIsInFocus()">
+  <div class="container edit-container"
+       [hidden]="!editorIsInFocus()"
+       [style.min-height]="isEditable() ? '1rem' : 'unset'"
+       [style.cursor]="isEditable() ? 'pointer' : 'default'">
+    <div [xzRichTextModel]="htmlModel"
+         (click)="$event.stopImmediatePropagation()"
+         (xzRichTextModelChange)="htmlDidChange($event)"
+         (xzTextPreview)="htmlPreview = $event"
+         [xzUsePlainClipboard]="true"
+         [xzRichTextEnabled]="isEditable()"
+         [xzRichTextEditorToolbarOptions]="false"
+         xzRichTextPlaceholderText="Write code...">
+    </div>
+  </div>
+  <div class="container"
+       *ngIf="!editorIsInFocus()"
+       [style.cursor]="isEditable() ? 'pointer' : 'default'">
+    <div class="content" [innerHTML]="getHtml()"></div>
+  </div>
+  <div class="action-button-container has-text-centered" *ngIf="isEditable()">
+    <button class="button is-small action-button">
+      {{editorIsInFocus() ? 'Refresh view' : 'Edit code'}}
+    </button>
+  </div>
+</section>

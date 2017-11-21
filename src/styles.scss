@@ -1,0 +1,314 @@
+/* You can add global styles to this file, and also import other style files */
+@import './assets/fonts/_pictos-redux-part-1-lines.css';
+@import './app/theme/colors.scss';
+@import '../node_modules/bulma/bulma.sass';
+@import '../node_modules/bulma/sass/utilities/_all.sass';
+@import '../node_modules/quill/dist/quill.bubble.css';
+@import '../node_modules/quill/dist/quill.snow.css';
+@import '../src/app/theme/quill-overrides.scss';
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  display: block;
+}
+
+.text-muted {
+  color: $muted;
+}
+
+.text-primary {
+  color: $primary;
+}
+
+.text-success {
+  color: $success;
+}
+
+[contenteditable] {
+  outline: none;
+}
+
+.icon {
+  svg {
+    height: 1rem;
+    width: 1rem;
+    color: rgba(25, 25, 25, 0.8);
+    margin-top: 0.4rem;
+  }
+  &.is-white {
+    svg {
+      color: white;
+    }
+  }
+  &.is-muted {
+    svg {
+      color: $muted;
+    }
+  }
+  &.is-large {
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+  &.is-extra-large {
+    svg {
+      height: 3rem;
+      width: 3rem;
+    }
+  }
+  .is-large {
+    font-size: 24px;
+  }
+  .is-2x {
+    font-size: 36px;
+  }
+  .is-3x {
+    font-size: 48px;
+  }
+  .is-4x {
+    font-size: 60px;
+  }
+  .is-5x {
+    font-size: 72px;
+  }
+}
+
+.has-background-image {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.has-bg-success {
+  background-color: $success;
+  color: white;
+}
+
+.popover {
+  position: absolute;
+  z-index: 10;
+  @media(max-width: $tablet) {
+    width: 100%;
+  }
+  .box {
+    min-width: 12rem;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .popover-arrow {
+    position: absolute;
+    &:after {
+      content: '';
+      display: block;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+    }
+  }
+  &.popover-bottom {
+    .popover-arrow {
+      clip: rect(0 18px 14px -4px);
+      top: -14px;
+      &:after {
+        transform: rotate(45deg) translate(6px, 6px);
+        box-shadow: -1px -1px 1px -1px rgba(0, 0, 0, .44)
+      }
+    }
+  }
+  &.popover-top {
+    .popover-arrow {
+      clip: rect(0 18px 14px -4px);
+      bottom: -14px;
+      &:after {
+        transform: rotate(225deg) translate(6px, 6px);
+        box-shadow: -1px -1px 1px -1px rgba(0, 0, 0, .44)
+      }
+    }
+  }
+}
+
+.section--inset {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 722px;
+  padding: 3rem 0;
+  @media(max-width: $tablet) {
+    padding: 3rem 1rem;
+  }
+}
+
+label {
+  &.file-picker {
+    cursor: pointer;
+    input[type="file"] {
+      width: 100%;
+      display: none;
+    }
+  }
+}
+
+input[type=range].slider {
+  $radius: 290486px;
+  --height: 8px;
+  &.is-small {
+    --height: 4px;
+  }
+  &.is-medium {
+    --height: 12px;
+  }
+  &.is-large {
+    --height: 16px;
+  }
+  &.is-fullwidth {
+    width: 100%;
+  }
+  border: none;
+  border-radius: $radius;
+  display: block;
+  height: var(--height);
+  padding: 0;
+  margin: 0;
+  // width: 100%;
+  cursor: pointer;
+  outline: none;
+  background: $border;
+  -webkit-tap-highlight-color: transparent;
+  &:focus {
+    outline: none;
+  }
+  // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
+  &::-moz-focus-outer {
+    border: none;
+  }
+  &::-webkit-slider-runnable-track,
+  &::-webkit-slider-thumb,
+  & {
+    appearance: none;
+  }
+  @mixin thumb-base() {
+    border-radius: 50%;
+    height: calc(var(--height) * 2.33);
+    width: calc(var(--height) * 2.33);
+    background-color: #FFF;
+    border: calc(var(--height) / 2) solid $text;
+    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
+    transform: translateZ(0);
+    transition: (0.233s / 2) ease-in-out;
+    box-sizing: border-box;
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
+  @mixin thumb-base-active {
+    cursor: grabbing;
+  }
+  @mixin track {
+    display: flex;
+    align-items: center;
+    height: var(--height);
+    border-radius: $radius;
+    --track-background: linear-gradient(to right, transparent var(--low), $text calc(0%), $text var(--high), transparent calc(0%)) no-repeat 0 100%;
+    background: var(--track-background);
+    transform: translateZ(0);
+    transition: (0.233s / 2);
+  }
+  &::-webkit-slider-thumb {
+    @include thumb-base();
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+  &::-webkit-slider-runnable-track {
+    @include track();
+  }
+  &::-moz-range-thumb {
+    @include thumb-base();
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+  &::-moz-range-progress:focus {
+    outline: 0;
+    border: 0;
+  }
+  &::-moz-range-track {
+    background: transparent;
+  }
+  &::-moz-range-progress {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--height);
+    border-radius: $radius;
+    background-color: $text;
+  }
+  &::-ms-thumb {
+    @include thumb-base();
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+  &::-ms-tooltip {
+    display: none;
+  }
+  // Colors
+  @each $name, $pair in $colors {
+    $color: nth($pair, 1);
+    &.is-#{$name} {
+      &::-webkit-slider-thumb {
+        border-color: $color;
+      }
+      &::-webkit-slider-runnable-track {
+        --track-background: linear-gradient(to right, transparent var(--low), $color calc(0%), $color var(--high), transparent calc(0%)) no-repeat 0 100%;
+        background: var(--track-background);
+      }
+      // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
+      &::-moz-range-thumb {
+        border-color: $color;
+      }
+      &::-moz-range-progress {
+        background-color: $color;
+      }
+      &::-ms-thumb {
+        border-color: $color;
+      }
+      &::-ms-fill-lower {
+        background-color: $color;
+      }
+    }
+  }
+  &[orient=vertical] {
+    writing-mode: bt-lr; // IE
+    -webkit-appearance: slider-vertical; // webkit
+    height: 200px;
+    width: var(--height);
+    -webkit-transform-origin: 0 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    // Colors
+    @each $name, $pair in $colors {
+      $color: nth($pair, 1);
+      &.is-#{$name} {
+        &::-webkit-slider-thumb {
+          &:after {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border: 2px solid $color;
+            content: '';
+            position: absolute;
+            z-index: 233;
+          }
+        }
+        &::-webkit-slider-runnable-track {
+          display: block;
+          --track-background: linear-gradient(to top, transparent var(--low), $color 0, $color var(--high), transparent 0) no-repeat 0 100%;
+          background: var(--track-background);
+        }
+      }
+    }
+  }
+}

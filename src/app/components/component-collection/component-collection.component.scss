@@ -1,0 +1,7 @@
+@import '../../theme/colors.scss';
+
+.component-collection {
+  &.is-mediaFocused {
+    border: 2px solid $success;
+  }
+}

@@ -1,0 +1,52 @@
+<div class="page-component-addition field has-addons">
+  <a class="button button--add"
+     (click)="shouldShowButtons = !shouldShowButtons">
+    <span class="icon is-large">
+      <app-feather-icon icon="plus"></app-feather-icon>
+    </span>
+  </a>
+</div>
+
+<app-modal [show]="shouldShowButtons"
+           (onHide)="shouldShowButtons = !shouldShowButtons">
+  <div class="page-component-addition tile is-ancestor">
+    <div class="tile is-4 is-vertical is-parent"
+         *ngFor="let buttonsInColumn of groupButtonsIntoColumns();">
+      <article class="file-picker tile is-child notification has-text-centered"
+               *ngFor="let button of buttonsInColumn; let i = index">
+        <!-- components with file input dependency -->
+        <div *ngIf="isFileInputType(button)"
+             class="button--create_component">
+          <label class="file-picker"
+                 *ngIf="isFileInputType(button)"
+                 [for]="'file-' + i">
+            <p class="title">
+              <span class="icon is-large">
+                <app-feather-icon [icon]="button.icon"></app-feather-icon>
+              </span>
+            </p>
+            <p class="subtitle">
+              <span>{{button.text}}</span>
+              <input [id]="'file-' + i"
+                     type="file"
+                     (change)="fileDidChange(button, $event)"/>
+            </p>
+          </label>
+        </div>
+        <!-- text based components -->
+        <div (click)="addComponent(button)"
+             *ngIf="!isFileInputType(button)"
+             class="button--create_component">
+          <p class="title">
+            <span class="icon is-large">
+              <app-feather-icon [icon]="button.icon"></app-feather-icon>
+            </span>
+          </p>
+          <p class="subtitle">
+            <span>{{button.text}}</span>
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</app-modal>

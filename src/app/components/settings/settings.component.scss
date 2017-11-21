@@ -1,0 +1,38 @@
+@import '../admin/admin.component.scss';
+
+.admin__settings {
+
+  @extend .dashboard--admin;
+
+  .section--account {
+    padding-top: 1rem;
+    padding-left: 1rem;
+  }
+
+  padding-bottom: 6rem;
+  .has-shadow {
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.25);
+  }
+  .has-text-dark {
+    color: #363636;
+  }
+  .hero-body {
+    padding: 0 3rem;
+  }
+  .logo--delete {
+    left: 0.25rem;
+    bottom: 32px;
+  }
+  .site-settings__heading {
+    .hero-body {
+      padding-top: 3rem;
+    }
+  }
+  .container {
+    padding: 0.5rem 0.75rem;
+  }
+  .is-12x12 {
+    height: 12px;
+    width: 12px;
+  }
+}

@@ -1,0 +1,10 @@
+<figure class="image has-background-image has-text-centered"
+        [class.is-64x64]="size === 'sm'"
+        [class.is-96x96]="size === 'md'"
+        [class.is-128x128]="size === 'lg'"
+        style="display: table; background-image: url(../../../assets/img/placeholder.svg)">
+  <p style="vertical-align: middle; color: white; display: table-cell;"
+     [style.font-size]="titleSize()">
+    {{abbreviation()}}
+  </p>
+</figure>

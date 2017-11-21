@@ -1,0 +1,57 @@
+<div class="site-settings--admin">
+  <section class="section">
+    <nav class="breadcrumb"
+         aria-label="breadcrumbs">
+      <ul>
+        <li><a routerLink="/admin/sites">Sites</a></li>
+        <li class="is-active"><a href="#"
+                                 aria-current="page"
+                                 *ngIf="site">{{site.title}}</a></li>
+      </ul>
+    </nav>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h1 class="title">
+            {{title}}
+          </h1>
+        </div>
+      </div>
+      <div class="level-right"
+           *ngIf="site && site.pages.length > 0">
+        <div class="level-item">
+          <a class="button is-primary is-inverted"
+             target="_blank"
+             [routerLink]="'/p/' + navigationItems[0].id"
+             [queryParams]="{edit: true}">
+            <span>Launch</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="tabs">
+      <ul>
+        <li [class.is-active]="routePath() === 'settings'">
+          <a routerLink="settings">General</a>
+        </li>
+        <li [class.is-active]="routePath() === 'pages'">
+          <a routerLink="pages">Pages</a>
+        </li>
+        <li [class.is-active]="routePath() === 'navigation'">
+          <a routerLink="navigation">Navigation</a>
+        </li>
+        <li [class.is-active]="routePath() === 'theme'">
+          <a routerLink="theme">Header & Theme</a>
+        </li>
+        <li [class.is-active]="routePath() === 'advanced'">
+          <a routerLink="advanced">Advanced</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="admin--child">
+      <router-outlet></router-outlet>
+    </div>
+
+  </section>
+</div>

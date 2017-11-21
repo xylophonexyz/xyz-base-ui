@@ -1,0 +1,17 @@
+.site--pages {
+  .card--placeholder {
+    .button {
+      min-height: 12rem;
+    }
+  }
+  .card-image {
+    cursor: pointer;
+    .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 44px;
+    }
+  }
+}

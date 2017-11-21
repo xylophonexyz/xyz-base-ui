@@ -1,0 +1,122 @@
+<nav class="navbar app-footer"
+     *ngIf="shouldDisplay">
+  <div class="navbar-brand">
+    <div class="navbar-burger burger"
+         [class.is-active]="menuIsOpen"
+         xzToggleOnClick
+         [(toggle)]="menuIsOpen">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div class="navbar-menu"
+       [class.is-active]="menuIsOpen">
+
+    <div class="navbar-start">
+      <div class="navbar-item"
+           *ngFor="let item of leftActionItems"
+           [ngSwitch]="item.isInput()">
+        <div class="field is-grouped is-block-mobile">
+          <p class="control">
+            <input [class.input]="!item.isRange()"
+                   [min]="item.min"
+                   [max]="item.max"
+                   [step]="item.step"
+                   [type]="item.inputType"
+                   [placeholder]="item.inputPlaceholder"
+                   (input)="item.onInputChange($event)"
+                   [value]="item.inputBinding"
+                   (focus)="item.onInputFocus($event)"
+                   (blur)="item.onInputBlur($event)"
+                   (click)="item.onInputClick($event)"
+                   *ngSwitchCase="true">
+            <a *ngSwitchCase="false"
+               (click)="item.onInputClick($event)"
+               [title]="item.text"
+               [class]="getFullCssClassString(item)">
+              <span *ngIf="item.hasIcon()"
+                    class="icon">
+                <app-feather-icon [icon]="item.options.iconName"></app-feather-icon>
+              </span>
+              <img *ngIf="item.isImage()"
+                   [src]="item.options.imgSrc">
+              <span *ngIf="!(item.hasIcon() || item.isImage())">{{item.text}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end navbar-end-center">
+      <div class="navbar-item"
+           *ngFor="let item of centerActionItems"
+           [ngSwitch]="item.isInput()">
+        <div class="field is-grouped is-block-mobile">
+          <p class="control">
+            <input [class.input]="!item.isRange()"
+                   [class.slider]="item.isRange()"
+                   [min]="item.min"
+                   [max]="item.max"
+                   [step]="item.step"
+                   [type]="item.inputType"
+                   [placeholder]="item.inputPlaceholder"
+                   (input)="item.onInputChange($event)"
+                   [value]="item.inputBinding"
+                   (focus)="item.onInputFocus($event)"
+                   (blur)="item.onInputBlur($event)"
+                   (click)="item.onInputClick($event)"
+                   *ngSwitchCase="true">
+            <a *ngSwitchCase="false"
+               [title]="item.text"
+               (click)="item.onInputClick($event)"
+               [class]="getFullCssClassString(item)">
+              <span *ngIf="item.hasIcon()"
+                    class="icon">
+                <app-feather-icon [icon]="item.options.iconName"></app-feather-icon>
+              </span>
+              <img *ngIf="item.isImage()"
+                   [src]="item.options.imgSrc">
+              <span *ngIf="!(item.hasIcon() || item.isImage())">{{item.text}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item"
+           *ngFor="let item of rightActionItems"
+           [ngSwitch]="item.isInput()">
+        <div class="field is-grouped is-block-mobile">
+          <p class="control">
+            <input [class.input]="!item.isRange()"
+                   [min]="item.min"
+                   [max]="item.max"
+                   [step]="item.step"
+                   [type]="item.inputType"
+                   [placeholder]="item.inputPlaceholder"
+                   (input)="item.onInputChange($event)"
+                   [value]="item.inputBinding"
+                   (focus)="item.onInputFocus($event)"
+                   (blur)="item.onInputBlur($event)"
+                   (click)="item.onInputClick($event)"
+                   *ngSwitchCase="true">
+            <a *ngSwitchCase="false"
+               [title]="item.text"
+               (click)="item.onInputClick($event)"
+               [class]="getFullCssClassString(item)">
+                <span *ngIf="item.hasIcon()"
+                      class="icon">
+                  <app-feather-icon [icon]="item.options.iconName"></app-feather-icon>
+                </span>
+              <img *ngIf="item.isImage()"
+                   [src]="item.options.imgSrc">
+              <span *ngIf="!(item.hasIcon() || item.isImage())">{{item.text}}</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

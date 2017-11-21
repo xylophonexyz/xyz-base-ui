@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+- '8'
+dist: trusty
+sudo: required
+addons:
+  chrome: stable
+before_install:
+- openssl aes-256-cbc -K $encrypted_edafb7be4c06_key -iv $encrypted_edafb7be4c06_iv
+  -in .deployment-credentials.tar.gz.enc -out .deployment-credentials.tar.gz -d
+- tar -xzf .deployment-credentials.tar.gz
+- mv .env.production .env
+before_script:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 3
+script: npm run test:singleRun
+before_deploy: npm run build:full
+deploy:
+- provider: gae
+  on: master
+  skip_cleanup: true
+  keyfile: xyz-base-0db172f7ba1c.json
+  project: xyz-base
+- provider: heroku
+  on: develop
+  skip_cleanup: true
+  app: xyz-base-staging
+  api_key:
+    secure: 17tFS+HNqMT/Z6lliMC4gTNIsmTLI9nPxihzrweCSmrk9b/F9dKbOnviIZcTxN5Y08g6UegcTIfPs2nqQGRSGaSA/eLl8fogEokc8Kux3XzGXz79E9WLt551aP4DtQ3VobDIwb5tTMRgX4258remGHaNtHqwI1LbB2Aq8G14ucnpSeCD7e6l/wca9refXXaseOCLsBDDifDP7e6XD+TM/BGIyeqZRvYzlA0h5xP0wBlbhSc6qAiekCpUyE3hvowdr6aOPgJgIpGEwcHOFExj+NhSPZmVrDgnYB1fjYf4frAnhGxNc5apPC1qo8uSxZx/+3+YLJkS60t2/4w4DV6TruI5aoDBRbIdgKGW7jeDzgjAUX43vFn/+aL6BVt7XjAYLVb5yC3s2gbv32Nls91gMs88bgg+stjScwglCy5RCHn7fobdfJJqptuijtRUjvHcFBGnmC7Tie4nFwKmm6XBU3SwZGuYuWfy5rxHqhkNpdhuB+KINvVw5XCTWrFOpGPa//fjKyHjoIb97lepjSZY+u+59WRVmQLg84s8ZiYuccBUoxIxWYJcpMGLDtsmUroEIBYC8tvjcx56LVF02i8C72nWcNl5QE3fsochALuFnN3Lp0tzdEGeiAjrdj5BwY929iEDqreAxzrU1qtcBZFT+I9/DywS12w+AfaiBUd91AE=

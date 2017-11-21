@@ -1,0 +1,66 @@
+<div class="site--advanced" *ngIf="site">
+  <h1 class="subtitle">
+    <strong>Custom Domain</strong>
+  </h1>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <small>
+          Use a domain you own to point to this site.
+        </small>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <div class="control has-icons-right">
+            <input class="input"
+                   type="text"
+                   placeholder="example.com"
+                   [(ngModel)]="customDomainName">
+            <span class="icon is-small is-right" *ngIf="errorMessage">
+              <app-feather-icon icon="alert-triangle"></app-feather-icon>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <p class="control" *ngIf="!customDomainName">
+          <button class="button is-primary is-inverted"
+                  (click)="addCustomDomain()"
+                  [disabled]="isLoading"
+                  [class.is-loading]="isLoading">
+            <span>Save</span>
+          </button>
+        </p>
+        <p class="control" *ngIf="customDomainName">
+          <button class="button is-danger is-inverted"
+                  (click)="removeCustomDomain()"
+                  [disabled]="isLoading"
+                  [class.is-loading]="isLoading">
+            <span>Remove</span>
+          </button>
+        </p>
+      </div>
+    </div>
+  </nav>
+  <div *ngIf="site && site.customDomain">
+    <small>
+      Add the following name servers to your DNS provider's configuration page to complete the process:
+    </small>
+    <p *ngFor="let name of site.customDomain.nameServers">
+      <strong>{{name}}</strong>
+    </p>
+  </div>
+  <div *ngIf="errorMessage">
+    <small>
+      The following errors occurred while attempting to add a custom domain:
+    </small>
+    <p class="has-text-danger"><small>{{errorMessage}}</small></p>
+  </div>
+</div>

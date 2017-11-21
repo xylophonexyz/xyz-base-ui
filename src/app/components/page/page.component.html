@@ -1,0 +1,189 @@
+<div class="site__page"
+     *ngIf="canRender()">
+  <article class="message is-small is-primary"
+           *ngIf="shouldShowSwitchToEditModeBanner()"
+           [routerLink]="'/p/' + page.id"
+           [queryParams]="{edit: true}">
+    <div class="message-header">
+      <p class="has-text-centered"><i>You are viewing this page in Preview mode.</i> Switch to Edit mode</p>
+      <button class="delete"
+              (click)="hideBanner = true"></button>
+    </div>
+  </article>
+  <nav class="navbar"
+       *ngIf="page.hasHeader()"
+       [class.has-shadow]="page.composition.hasHeaderShadow()"
+       [class.has-transparent-nav]="page.hasTransparentHeader()"
+       [style.background-color]="page.composition.headerColor">
+    <div class="container">
+
+      <div class="navbar-brand">
+        <a class="navbar-item"
+           *ngIf="page.composition.shouldShowLogoInHeader()"
+           [routerLink]="[pageUrl(siteNavigation()[0])]">
+          <img [src]="page.composition.cover">
+        </a>
+
+        <div class="navbar-burger burger"
+             [class.is-active]="menuIsOpen"
+             xzToggleOnClick
+             [(toggle)]="menuIsOpen">
+          <span [style.background-color]="page.composition.primaryColor"></span>
+          <span [style.background-color]="page.composition.primaryColor"></span>
+          <span [style.background-color]="page.composition.primaryColor"></span>
+        </div>
+      </div>
+
+      <div class="navbar-menu"
+           [class.is-active]="menuIsOpen">
+        <div [class.navbar-start]="!page.composition.shouldShowLogoInHeader()"
+             [class.navbar-end]="page.composition.shouldShowLogoInHeader()">
+          <div *ngFor="let childPage of siteNavigation()">
+            <a *ngIf="childPage.title"
+               class="navbar-item full-height"
+               [class.is-active]="childPage.id === page.id"
+               [class.has-transparent-nav]="page.hasTransparentHeader()"
+               [style.color]="childPage.id === page.id ? page.composition.primaryColor : page.composition.primaryColorLight"
+               [class.is-tab]="page.composition.hasTabbedNav()"
+               (click)="menuIsOpen && toggleMenu()"
+               [style.border-bottom-color]="childPage.id === page.id && page.composition.primaryColor"
+               [routerLink]="[pageUrl(childPage)]">
+              {{childPage.title || 'Untitled'}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div *ngFor="let component of components">
+    <app-component-collection [page]="page"
+                              [componentCollection]="component"
+                              [editable]="editMode">
+    </app-component-collection>
+  </div>
+
+  <section class="section section--inset"
+           *ngIf="editMode">
+    <div class="container">
+      <app-page-component-addition [page]="page"></app-page-component-addition>
+    </div>
+  </section>
+</div>
+
+<app-modal (onHide)="didClosePageSettings()"
+           [show]="pageSettingsViewIsActive"
+           *ngIf="page">
+  <div class="card">
+    <div class="card-content">
+      <p class="subtitle">
+        <strong>Settings for <i>{{page.title || 'Untitled'}}</i></strong>
+      </p>
+      <hr>
+      <p class="subtitle">
+        Title
+      </p>
+      <p>
+        The title is used to identify this page and how it appears in search results and on social media sites.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <input class="input"
+                 [(ngModel)]="page.title"
+                 placeholder="Page Title">
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Description
+      </p>
+      <p>
+        A short description is used to enhance this page's visibility to search engines. Maximum of 160 characters.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <input class="input"
+                 [(ngModel)]="page.description"
+                 placeholder="Page Description"
+                 maxlength="160">
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Privacy
+      </p>
+      <p>
+        Manage privacy settings for this page. A public page can be viewed by anybody. Private pages are only
+        viewable by you and are excluded from site navigation.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="page.published"
+                  (click)="publishPage(true)">
+            Public
+          </button>
+        </p>
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="!page.published"
+                  (click)="publishPage(false)">
+            Private
+          </button>
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Header
+      </p>
+      <p>
+        Hide or show the top navigational header for this page.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="page.hasHeader()"
+                  (click)="showPageNav(true)">
+            Show
+          </button>
+        </p>
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="!page.hasHeader()"
+                  (click)="showPageNav(false)">
+            Hide
+          </button>
+        </p>
+      </div>
+      <br>
+      <div *ngIf="page.hasHeader()">
+        <p>
+          Use a transparent navigational header for this page. This will allow you to
+          design full screen pages without sacrificing site navigation.
+        </p>
+        <br>
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="page.hasTransparentHeader()"
+                    (click)="useTransparentHeader(true)">
+              Transparent
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!page.hasTransparentHeader()"
+                    (click)="useTransparentHeader(false)">
+              Solid
+            </button>
+          </p>
+        </div>
+      </div>
+      <br>
+    </div>
+  </div>
+</app-modal>

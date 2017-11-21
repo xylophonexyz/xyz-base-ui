@@ -1,0 +1,85 @@
+<section class="component__section hero"
+         [style.background-color]="bgColor"
+         [style.background-image]="shouldUseBgImage() ? 'url(' + bgImage + ')' : ''"
+         [style.background-position]="'center center'"
+         [style.background-repeat]="'no-repeat'"
+         [style.background-size]="'cover'"
+         [class.has-text-centered]="isLayoutCentered()"
+         [class.has-text-right]="isLayoutRightAligned()"
+         [class.is-medium]="isLayoutMedium()"
+         [class.is-fullheight]="isLayoutFull()"
+         [class.is-large]="isLayoutLarge()">
+  <div class="hero-body">
+    <div class="container"
+         [ngSwitch]="isLayoutSplit()">
+      <div class="columns"
+           *ngSwitchCase="false">
+        <div class="column is-full">
+          <ng-container *ngTemplateOutlet="splitLayoutTextTmpl"></ng-container>
+        </div>
+      </div>
+      <div class="columns is-multiline"
+           *ngSwitchCase="true">
+        <div class="column is-half"
+             *ngIf="isLayoutRightAligned()">
+          <img [src]="bgImage"
+               *ngIf="hasBgImage()">
+        </div>
+        <div class="column is-half">
+          <ng-container *ngTemplateOutlet="splitLayoutTextTmpl"></ng-container>
+        </div>
+        <div class="column is-half"
+             *ngIf="!isLayoutRightAligned()">
+          <img [src]="bgImage"
+               *ngIf="hasBgImage()">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="editable && showOptions"
+       class="has-text-centered">
+    <ng-container *ngTemplateOutlet="bgImageActionTmpl"></ng-container>
+  </div>
+</section>
+
+<ng-template #splitLayoutTextTmpl>
+  <h1 class="title"
+      [xzRichTextModel]="titleModel"
+      (xzRichTextModelChange)="titleDidChange($event)"
+      (xzTextPreview)="titlePreview = $event"
+      [xzRichTextEnabled]="editable"
+      [xzRichTextEditorToolbarOptions]="textEditorToolbarOptions"
+      xzRichTextPlaceholderText="Title..."
+      (click)="didFocusField($event)"
+      [style.font-size]="titleSize"
+      [style.color]="textColor">{{titlePreview}}</h1>
+  <h2 class="subtitle"
+      [xzRichTextModel]="subtitleModel"
+      (xzRichTextModelChange)="subtitleDidChange($event)"
+      (xzTextPreview)="subtitlePreview = $event"
+      [xzRichTextEnabled]="editable"
+      [xzRichTextEditorToolbarOptions]="textEditorToolbarOptions"
+      xzRichTextPlaceholderText="Subtitle..."
+      (click)="didFocusField($event)"
+      [style.font-size]="subtitleSize"
+      [style.color]="textColor">{{subtitlePreview}}</h2>
+</ng-template>
+
+<ng-template #bgImageActionTmpl>
+  <label class="button is-small file-picker bg-add-remove"
+         [for]="'file-' + component.id"
+         *ngIf="!hasBgImage()"
+         (click)="didFocusField($event)">
+    <input type="file"
+           accept="image/*"
+           [id]="'file-' + component.id"
+           (change)="fileDidChange($event)"/>
+    Add Image...
+  </label>
+  <button class="button is-small"
+          [disabled]="shouldDisableRemoveBgImage()"
+          *ngIf="hasBgImage()"
+          (click)="removeBgImage(); didFocusField($event)">
+    {{shouldDisableRemoveBgImage() ? 'Please wait...' : 'Remove image'}}
+  </button>
+</ng-template>

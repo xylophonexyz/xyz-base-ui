@@ -1,0 +1,61 @@
+<app-modal class="login-component"
+           id="form"
+           (onHide)="hideLogin()"
+           [show]="display && !state.didDoSubmit">
+  <div class="box">
+    <p class="title">Log into {{appName}}</p>
+    <p class="subtitle">Enter your email address to sign in or create an account</p>
+    <form #loginForm="ngForm"
+          (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label class="label"
+               for="email">Email address</label>
+        <p class="control has-icons-right">
+          <input class="input"
+                 [class.is-danger]="email.invalid && !email.pristine"
+                 id="email"
+                 type="email"
+                 name="email"
+                 #email="ngModel"
+                 required
+                 [(ngModel)]="state.email"
+                 placeholder="yourname@example.com"/>
+        </p>
+        <p class="help is-danger"
+           [class.is-hidden]="email.valid || email.pristine">
+          A valid email is required
+        </p>
+      </div>
+      <button class="button is-fullwidth"
+              [class.is-loading]="state.willDoSubmit"
+              [disabled]="email.invalid && !email.pristine">
+          <span class="icon is-small is-left">
+            <i class="fa fa-envelope"></i>
+          </span>
+        <span>Email me a link to sign in</span>
+      </button>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal class="login-component"
+           id="confirm"
+           (onHide)="hideLogin()"
+           [show]="display && state.didDoSubmit">
+  <div class="box">
+    <p class="title">Check your inbox</p>
+    <p class="subtitle"
+       *ngIf="didDoLoginTypeLogin()">
+      We sent you a link to sign in. Please check your inbox.
+    </p>
+    <p class="subtitle"
+       *ngIf="didDoLoginTypeRegister()">
+      We sent you a link to create an account. Please check your inbox.
+    </p>
+    <button class="button is-outlined"
+            (click)="hideLogin()">
+      OK
+    </button>
+  </div>
+</app-modal>
+

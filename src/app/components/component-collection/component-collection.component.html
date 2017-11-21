@@ -1,0 +1,107 @@
+<section *ngIf="componentCollection"
+         [ngSwitch]="componentCollection.metatype"
+         class="component-collection"
+         [class.is-mediaFocused]="optionMenu.isOpen()"
+         [xzPopover]="optionMenuTemplate"
+         (shown)="showOptions()"
+         (hidden)="hideOptions()"
+         #optionMenu="xzPopover"
+         appendToBody="true"
+         [disabled]="!editable"
+         [placement]="popoverPlacement()">
+  <div *ngSwitchCase="'Hero'">
+    <app-section-component *ngFor="let component of componentCollection.components"
+                           [component]="component"
+                           [page]="page"
+                           [editable]="editable"
+                           [showOptions]="childShouldShowOptions">
+    </app-section-component>
+  </div>
+  <div *ngSwitchCase="'Text'">
+    <app-text-component *ngFor="let component of componentCollection.components"
+                        [component]="component"
+                        [page]="page"
+                        [editable]="editable"
+                        [showOptions]="childShouldShowOptions">
+    </app-text-component>
+  </div>
+  <div *ngSwitchCase="'ImageCollection'">
+    <app-image-component *ngFor="let component of componentCollection.components"
+                         [component]="component"
+                         [page]="page"
+                         [editable]="editable"
+                         [showOptions]="childShouldShowOptions">
+    </app-image-component>
+  </div>
+  <div *ngSwitchCase="'Embed'">
+    <app-embed-component *ngFor="let component of componentCollection.components"
+                         [component]="component"
+                         [page]="page"
+                         [editable]="editable"
+                         [showOptions]="childShouldShowOptions">
+    </app-embed-component>
+  </div>
+  <div *ngSwitchCase="'Spacer'">
+    <app-spacer-component *ngFor="let component of componentCollection.components"
+                          [component]="component"
+                          [page]="page"
+                          [editable]="editable"
+                          [showOptions]="childShouldShowOptions">
+    </app-spacer-component>
+  </div>
+  <div *ngSwitchCase="'FreeFormHtml'">
+    <app-free-form-html-component *ngFor="let component of componentCollection.components"
+                        [component]="component"
+                        [page]="page"
+                        [editable]="editable"
+                        [showOptions]="childShouldShowOptions">
+    </app-free-form-html-component>
+  </div>
+  <div *ngSwitchDefault>
+    {{componentCollection.type}}
+  </div>
+
+  <ng-template #optionMenuTemplate>
+    <div class="box"
+         style="padding:0; min-width:0;">
+      <div class="field has-addons">
+        <p class="control"
+           style="width:100%;">
+          <a class="button is-fullwidth"
+             (click)="moveUp($event)">
+            <span class="icon is-small">
+              <app-feather-icon icon="corner-left-up"></app-feather-icon>
+            </span>
+          </a>
+        </p>
+        <p class="control"
+           style="width: 100%;">
+          <a class="button is-fullwidth"
+             (click)="moveDown($event)">
+            <span class="icon">
+              <app-feather-icon icon="corner-right-down"></app-feather-icon>
+            </span>
+          </a>
+        </p>
+        <p class="control"
+           style="width: 100%;">
+          <a class="button is-fullwidth"
+             (click)="toggleLayout($event)">
+            <span class="icon">
+              <app-feather-icon icon="layout"></app-feather-icon>
+            </span>
+          </a>
+        </p>
+        <p class="control"
+           style="width:100%;">
+          <a class="button is-fullwidth"
+             (click)="remove()">
+            <span class="icon">
+              <app-feather-icon icon="trash-2"></app-feather-icon>
+            </span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </ng-template>
+</section>

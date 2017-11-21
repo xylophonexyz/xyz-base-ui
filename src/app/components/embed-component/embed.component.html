@@ -1,0 +1,26 @@
+<section class="section hero embed-component"
+         [style.background-color]="bgColor"
+         [style.padding]="hasEmbedSrc() ? '0' : '3rem 1.5rem'">
+  <h1 class="subtitle has-text-centered"
+      *ngIf="!hasEmbedSrc()">
+    <figure class="icon">
+      <i class="icon-Hand-2 is-2x"></i>
+    </figure>
+    <br>
+    <br>
+    Paste a url to embed content from another site.
+    <br>
+    <small>Tip: If you want to embed an iframe, copy/paste the <em>src</em> url.</small>
+  </h1>
+  <div *ngIf="hasEmbedSrc()"
+       [style.pointer-events]="editable ? 'none' : 'initial'"
+       class="embed-container"
+       [class.is-large]="isLarge()"
+       [class.is-fullwidth]="isFullWidth()">
+    <div class="responsive-object"
+         #iframeContainer>
+      <iframe [src]="embedUrl()"
+              width="100%"></iframe>
+    </div>
+  </div>
+</section>

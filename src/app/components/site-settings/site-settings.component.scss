@@ -1,0 +1,6 @@
+@import '../settings/settings.component.scss';
+@import "../../../../node_modules/bulma/sass/utilities/_all.sass";
+
+.site--settings {
+  @extend .admin__settings;
+}
