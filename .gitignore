@@ -43,3 +43,7 @@ Thumbs.db
 .env*
 xyz-base-0db172f7ba1c.json
 /.deployment-credentials.tar.gz
+
+**/**/*.js
+!karma.conf.js
+!protractor.conf.js
