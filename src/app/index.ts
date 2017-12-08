@@ -21,6 +21,16 @@ export type CanonicalComponentCollectionType = 'ComponentCollection';
 export type CanonicalComponentType = 'Component' | 'ImageComponent' | 'AudioComponent' | 'VideoComponent';
 
 /**
+ * Page Navigation Types. Can be internally pointing pages, or external urls (also #hashbangs)
+ */
+export type PageNavigationType = PageNavigationItemNavigationStrategy.Internal | PageNavigationItemNavigationStrategy.External;
+
+export enum PageNavigationItemNavigationStrategy {
+  Internal = 'INTERNAL',
+  External = 'EXTERNAL'
+}
+
+/**
  * The payload type for messages transmitted via MessageChannelService
  */
 export interface MessageChannelPayload {
@@ -380,6 +390,8 @@ export interface PageMetadata {
   showNav: boolean;
   hasTransparentHeader: boolean;
   navigationItem: boolean;
+  navigationType?: PageNavigationType;
+  navigationHref?: string;
 }
 
 /**

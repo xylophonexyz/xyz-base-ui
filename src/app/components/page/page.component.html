@@ -19,8 +19,13 @@
 
       <div class="navbar-brand">
         <a class="navbar-item"
-           *ngIf="page.composition.shouldShowLogoInHeader()"
+           *ngIf="page.composition.shouldShowLogoInHeader() && !page.isExternalNavigationType()"
            [routerLink]="[pageUrl(siteNavigation()[0])]">
+          <img [src]="page.composition.cover">
+        </a>
+        <a class="navbar-item"
+           *ngIf="page.composition.shouldShowLogoInHeader() && page.isExternalNavigationType()"
+           [href]="pageUrl(siteNavigation()[0])">
           <img [src]="page.composition.cover">
         </a>
 
@@ -39,7 +44,7 @@
         <div [class.navbar-start]="!page.composition.shouldShowLogoInHeader()"
              [class.navbar-end]="page.composition.shouldShowLogoInHeader()">
           <div *ngFor="let childPage of siteNavigation()">
-            <a *ngIf="childPage.title"
+            <a *ngIf="childPage.title && !childPage.isExternalNavigationType()"
                class="navbar-item full-height"
                [class.is-active]="childPage.id === page.id"
                [class.has-transparent-nav]="page.hasTransparentHeader()"
@@ -48,6 +53,16 @@
                (click)="menuIsOpen && toggleMenu()"
                [style.border-bottom-color]="childPage.id === page.id && page.composition.primaryColor"
                [routerLink]="[pageUrl(childPage)]">
+              {{childPage.title || 'Untitled'}}
+            </a>
+            <a *ngIf="childPage.title && childPage.isExternalNavigationType()"
+               class="navbar-item full-height"
+               [class.is-active]="childPage.id === page.id"
+               [class.has-transparent-nav]="page.hasTransparentHeader()"
+               [style.color]="childPage.id === page.id ? page.composition.primaryColor : page.composition.primaryColorLight"
+               [class.is-tab]="page.composition.hasTabbedNav()"
+               [style.border-bottom-color]="childPage.id === page.id && page.composition.primaryColor"
+               [href]="pageUrl(childPage)">
               {{childPage.title || 'Untitled'}}
             </a>
           </div>

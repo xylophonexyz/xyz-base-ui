@@ -80,10 +80,24 @@ export class PageComponent implements OnInit, OnDestroy {
 
   pageUrl(page: Page): string {
     if (page) {
-      const slug = getSlug(page.title);
-      return `/p/${page.id}/${slug}`;
+      if (page.isExternalNavigationType()) {
+        return this.getFormedExternalNavigationUrl(page.navigationHref);
+      } else {
+        const slug = getSlug(page.title);
+        return `/p/${page.id}/${slug}`;
+      }
     } else {
       return '';
+    }
+  }
+
+  getFormedExternalNavigationUrl(url: string): string {
+    // return absolute paths as they are defined
+    if (url.startsWith('/') || url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    } else {
+      const currentLocation = this.windowRef.nativeWindow.location.toString().split('#')[0];
+      return currentLocation + url;
     }
   }
 

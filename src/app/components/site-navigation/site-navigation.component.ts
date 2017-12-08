@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SiteAdminComponent} from '../site-admin/site-admin.component';
+import {Page} from '../../models/page';
+import {PageNavigationItemNavigationStrategy} from '../../index';
 
 @Component({
   selector: 'app-site-navigation',
@@ -10,5 +12,14 @@ export class SiteNavigationComponent extends SiteAdminComponent implements OnIni
 
   ngOnInit() {
     this.onChildInit();
+  }
+
+  toggleNavigationType(page: Page) {
+    if (page.isExternalNavigationType()) {
+      page.navigationType = PageNavigationItemNavigationStrategy.Internal;
+      page.navigationHref = null;
+    } else {
+      page.navigationType = PageNavigationItemNavigationStrategy.External;
+    }
   }
 }

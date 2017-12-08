@@ -1,4 +1,10 @@
-import {PageDataInterface, PageInterface, PageMetadata} from '../index';
+import {
+  PageDataInterface,
+  PageInterface,
+  PageMetadata,
+  PageNavigationItemNavigationStrategy,
+  PageNavigationType
+} from '../index';
 import {ComponentCollection} from './component-collection';
 import {Composition} from './composition';
 import {User} from './user';
@@ -205,6 +211,28 @@ export class Page implements PageInterface {
     }
   }
 
+  set navigationType(navigationType: PageNavigationType) {
+    try {
+      this._metadata.navigationType = navigationType;
+    } catch (e) {
+    }
+  }
+
+  set navigationHref(url: string) {
+    try {
+      this._metadata.navigationHref = url;
+    } catch (e) {
+    }
+  }
+
+  get navigationHref(): string {
+    try {
+      return this._metadata.navigationHref;
+    } catch (e) {
+      return null;
+    }
+  }
+
   hasCover(): boolean {
     return !!this._cover;
   }
@@ -220,6 +248,14 @@ export class Page implements PageInterface {
   hasTransparentHeader(): boolean {
     if (this._metadata) {
       return this._metadata.hasTransparentHeader;
+    } else {
+      return false;
+    }
+  }
+
+  isExternalNavigationType(): boolean {
+    if (this._metadata) {
+      return this._metadata.navigationType === PageNavigationItemNavigationStrategy.External;
     } else {
       return false;
     }

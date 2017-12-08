@@ -12,8 +12,7 @@
       </div>
     </div>
   </nav>
-  <nav class="level"
-       *ngFor="let page of navigationItems">
+  <nav class="level" *ngFor="let page of navigationItems">
     <div class="level-left">
       <div class="level-item">
         <a [routerLink]="['/p/' + page.id]"
@@ -34,13 +33,28 @@
           {{page.title || 'Untitled'}}
         </a>
       </div>
-      <div class="level-item"
-           *ngIf="willEditPage(page)">
+      <div class="level-item" *ngIf="willEditPage(page)">
         <div class="field">
           <p class="control">
             <input class="input"
                    placeholder="Page name..."
                    [(ngModel)]="pageCopy.title">
+          </p>
+        </div>
+      </div>
+      <div class="level-item" *ngIf="willEditPage(page)">
+        <div class="level-item-divider"></div>
+        <label class="checkbox">
+          <input type="checkbox" [checked]="pageCopy.isExternalNavigationType()" (click)="toggleNavigationType(pageCopy)">
+          Link to external site or url?
+        </label>
+      </div>
+      <div class="level-item" *ngIf="willEditPage(page) && pageCopy.isExternalNavigationType()">
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   placeholder="Url"
+                   [(ngModel)]="pageCopy.navigationHref">
           </p>
         </div>
       </div>
