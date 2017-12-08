@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = require("../index");
 var component_collection_1 = require("./component-collection");
 var composition_1 = require("./composition");
 var user_1 = require("./user");
@@ -247,6 +248,36 @@ var Page = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Page.prototype, "navigationType", {
+        set: function (navigationType) {
+            try {
+                this._metadata.navigationType = navigationType;
+            }
+            catch (e) {
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Page.prototype, "navigationHref", {
+        get: function () {
+            try {
+                return this._metadata.navigationHref;
+            }
+            catch (e) {
+                return null;
+            }
+        },
+        set: function (url) {
+            try {
+                this._metadata.navigationHref = url;
+            }
+            catch (e) {
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     Page.prototype.hasCover = function () {
         return !!this._cover;
     };
@@ -261,6 +292,14 @@ var Page = (function () {
     Page.prototype.hasTransparentHeader = function () {
         if (this._metadata) {
             return this._metadata.hasTransparentHeader;
+        }
+        else {
+            return false;
+        }
+    };
+    Page.prototype.isExternalNavigationType = function () {
+        if (this._metadata) {
+            return this._metadata.navigationType === index_1.PageNavigationItemNavigatationStrategy.External;
         }
         else {
             return false;

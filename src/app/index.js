@@ -3,6 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 exports.ORIGIN_URL = new core_1.InjectionToken('ORIGIN_URL');
 exports.APPLICATION_NAME = new core_1.InjectionToken('APPLICATION_NAME');
+var PageNavigationItemNavigatationStrategy;
+(function (PageNavigationItemNavigatationStrategy) {
+    PageNavigationItemNavigatationStrategy["Internal"] = "INTERNAL";
+    PageNavigationItemNavigatationStrategy["External"] = "EXTERNAL";
+})(PageNavigationItemNavigatationStrategy = exports.PageNavigationItemNavigatationStrategy || (exports.PageNavigationItemNavigatationStrategy = {}));
 /**
  * Binding strategies for content editable elements. Can either be set to use innerText value or the innerHTML value of
  * the underlying DOM node.

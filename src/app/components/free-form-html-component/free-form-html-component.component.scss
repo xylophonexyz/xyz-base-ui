@@ -20,7 +20,10 @@
       font-family: monospace;
     }
   }
-  .has-dashed-border {
+  &.has-min-height {
+    min-height: 4rem;
+  }
+  &.has-dashed-border, .has-dashed-border {
     border: 1px dashed $success;
   }
   .action-button-container {

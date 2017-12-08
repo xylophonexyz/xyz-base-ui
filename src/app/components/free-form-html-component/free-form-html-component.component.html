@@ -1,4 +1,6 @@
 <section class="free-form-html-component section"
+         [class.has-min-height]="isEditable() && !editorIsInFocus()"
+         [class.has-dashed-border]="isEditable() && !editorIsInFocus()"
          [class.has-background-light]="editorIsInFocus()">
   <div class="container edit-container"
        [hidden]="!editorIsInFocus()"
