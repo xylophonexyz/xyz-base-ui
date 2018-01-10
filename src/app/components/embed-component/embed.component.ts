@@ -76,11 +76,11 @@ export class UIEmbedComponent extends ConfigurableUIComponent implements OnChang
   }
 
   isFullWidth(): boolean {
-    return /FullWidth/.test(this.layout);
+    return /FullWidth/.test(this.layout.toString());
   }
 
   isLarge(): boolean {
-    return /Large/.test(this.layout);
+    return /Large/.test(this.layout.toString());
   }
 
   protected fallbackLayout() {

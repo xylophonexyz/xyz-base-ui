@@ -30,6 +30,8 @@ import {ComponentService} from '../../providers/component.service';
 import {componentCollectionServiceStub} from '../../../test/stubs/component-collection.stub.spec';
 import {ComponentCollectionService} from '../../providers/component-collection.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {mockPage} from '../../providers/pages.service.spec';
+import {Page} from '../../models/page';
 
 describe('SiteNavigationComponent', () => {
   let component: SiteNavigationComponent;
@@ -114,4 +116,13 @@ describe('SiteNavigationComponent', () => {
     tick();
     expect(nav.displayNavbar).toHaveBeenCalledWith(false);
   }));
+
+  it('should change navigation type from Internal to External', () => {
+    const page: Page = mockPage();
+    expect(page.isExternalNavigationType()).toEqual(false);
+    component.toggleNavigationType(page);
+    expect(page.isExternalNavigationType()).toEqual(true);
+    component.toggleNavigationType(page);
+    expect(page.isExternalNavigationType()).toEqual(false);
+  });
 });

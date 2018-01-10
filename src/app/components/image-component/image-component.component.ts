@@ -110,27 +110,27 @@ export class UIImageComponent extends UIMediaComponent {
   }
 
   isLayoutContain(): boolean {
-    return /Contain/.test(this.layout);
+    return /Contain/.test(this.layout.toString());
   }
 
   isLayoutEdgeToEdge(): boolean {
-    return /EdgeToEdge$/.test(this.layout);
+    return /EdgeToEdge$/.test(this.layout.toString());
   }
 
   isOriginTop(): boolean {
-    return /CoverTop/.test(this.layout);
+    return /CoverTop/.test(this.layout.toString());
   }
 
   isOriginBottom(): boolean {
-    return /CoverBottom/.test(this.layout);
+    return /CoverBottom/.test(this.layout.toString());
   }
 
   isOriginLeft(): boolean {
-    return /ContainLeft/.test(this.layout);
+    return /ContainLeft/.test(this.layout.toString());
   }
 
   isOriginRight(): boolean {
-    return /ContainRight/.test(this.layout);
+    return /ContainRight/.test(this.layout.toString());
   }
 
   protected fallbackLayout(): ImageLayoutOption {

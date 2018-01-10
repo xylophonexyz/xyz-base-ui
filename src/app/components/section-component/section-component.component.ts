@@ -1,9 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {StringMap} from 'quill';
 import {
-  ComponentCollectionDataInterface,
-  ComponentDataInterface,
-  ComponentMedia,
+  ComponentCollectionDataInterface, ComponentDataInterface, ComponentMedia,
   SectionComponentMetadata
 } from '../../index';
 import {NavActionItem} from '../../models/nav-action-item';
@@ -66,10 +64,16 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
     ['clean']
   ];
 
+  bgImagePreview: String;
+
   get bgImageModel(): any {
     try {
-      const collection = this.component.metadata.bgImage;
-      return collection.components[0].media;
+      if (this.bgImagePreview) {
+        return this.bgImagePreview;
+      } else {
+        const collection = this.component.metadata.bgImage;
+        return collection.components[0].media;
+      }
     } catch (e) {
       return null;
     }
@@ -158,27 +162,27 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   isLayoutMedium(): boolean {
-    return /^(Default|SplitDefault)/.test(this.layout);
+    return /^(Default|SplitDefault)/.test(this.layout.toString());
   }
 
   isLayoutFull(): boolean {
-    return /^(Full|SplitFull)/.test(this.layout);
+    return /^(Full|SplitFull)/.test(this.layout.toString());
   }
 
   isLayoutLarge(): boolean {
-    return /^(Large|SplitLarge)/.test(this.layout);
+    return /^(Large|SplitLarge)/.test(this.layout.toString());
   }
 
   isLayoutCentered(): boolean {
-    return /Center$/.test(this.layout);
+    return /Center$/.test(this.layout.toString());
   }
 
   isLayoutRightAligned(): boolean {
-    return /Right$/.test(this.layout);
+    return /Right$/.test(this.layout.toString());
   }
 
   isLayoutSplit(): boolean {
-    return /^Split/.test(this.layout);
+    return /^Split/.test(this.layout.toString());
   }
 
   hasBgImage(): boolean {
@@ -321,7 +325,7 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         collection.components[0].component_collection_id = collection.id;
         // generate a data url for preview
         UIMediaComponent.getDataUrl(file).subscribe(dataUrl => {
-          collection.components[0].media = dataUrl;
+          this.bgImagePreview = dataUrl;
           this.ref.markForCheck();
         });
         // creating the component collection was successful, now upload the file
@@ -345,6 +349,7 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         // dont override the dataUrl preview -- add the final media data when the processing job is complete
         if (!res.media_processing) {
           collection.components[0].media = res.media;
+          this.bgImagePreview = null;
         }
       }, err => {
         collection.components[0].media = {error: err};

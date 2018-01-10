@@ -23,12 +23,15 @@ export type CanonicalComponentType = 'Component' | 'ImageComponent' | 'AudioComp
 /**
  * Page Navigation Types. Can be internally pointing pages, or external urls (also #hashbangs)
  */
-export type PageNavigationType = PageNavigationItemNavigationStrategy.Internal | PageNavigationItemNavigationStrategy.External;
-
 export enum PageNavigationItemNavigationStrategy {
   Internal = 'INTERNAL',
   External = 'EXTERNAL'
 }
+
+/**
+ * Page Navigation Types. Can be internally pointing pages, or external urls (also #hashbangs)
+ */
+export type PageNavigationType = PageNavigationItemNavigationStrategy.Internal | PageNavigationItemNavigationStrategy.External;
 
 /**
  * The payload type for messages transmitted via MessageChannelService

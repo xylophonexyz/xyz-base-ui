@@ -299,7 +299,7 @@ var Page = (function () {
     };
     Page.prototype.isExternalNavigationType = function () {
         if (this._metadata) {
-            return this._metadata.navigationType === index_1.PageNavigationItemNavigatationStrategy.External;
+            return this._metadata.navigationType === index_1.PageNavigationItemNavigationStrategy.External;
         }
         else {
             return false;

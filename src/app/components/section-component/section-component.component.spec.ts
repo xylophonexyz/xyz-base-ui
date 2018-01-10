@@ -109,6 +109,13 @@ describe('UISectionComponent', () => {
       expect(component.bgImageModel).toEqual({url: 'https://cat.jpg'});
     });
 
+    it('should return bgImagePreview is the value is available', () => {
+      component.component = new Component({metadata: {}} as any);
+      expect(component.bgImageModel).toBeNull();
+      component.bgImagePreview = 'http://foo.jpg';
+      expect(component.bgImageModel).toEqual('http://foo.jpg');
+    });
+
     it('should provide a method to determine if the component has a background image', () => {
       component.component = new Component({metadata: {}} as any);
       expect(component.hasBgImage()).toEqual(false);

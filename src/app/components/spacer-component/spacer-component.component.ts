@@ -65,7 +65,7 @@ export class UISpacerComponent extends ConfigurableUIComponent {
   }
 
   isLayoutDots(): boolean {
-    return /Dots/.test(this.layout);
+    return /Dots/.test(this.layout.toString());
   }
 
   protected fallbackLayout(): SpacerLayoutOption {

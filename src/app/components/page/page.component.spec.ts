@@ -41,6 +41,7 @@ import {UITextComponent} from '../text-component/text-component.component';
 
 import {PageComponent} from './page.component';
 import {UIFreeFormHtmlComponent} from '../free-form-html-component/free-form-html-component.component';
+import {PageNavigationItemNavigationStrategy} from '../../index';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -394,6 +395,23 @@ describe('PageComponent', () => {
     expect(component.pageUrl(p1)).toEqual(`/p/${p1.id}/${p1.title.toLowerCase()}`);
     component.page = null;
     expect(component.pageUrl(null)).toEqual('');
+  });
+
+  it('should provide a method to return an external url for a page', () => {
+    const p1 = new Page(Object.assign({}, mockPageData, {
+      metadata: {
+        navigationType: PageNavigationItemNavigationStrategy.External,
+        navigationHref: 'http://foo.com'
+      }
+    }));
+    expect(component.pageUrl(p1)).toEqual('http://foo.com');
+    const p2 = new Page(Object.assign({}, mockPageData, {
+      metadata: {
+        navigationType: PageNavigationItemNavigationStrategy.External,
+        navigationHref: 'foo'
+      }
+    }));
+    expect(component.pageUrl(p2)).toContain('foo');
   });
 
   it('should provide a method to publish or unpublish a page', async(() => {

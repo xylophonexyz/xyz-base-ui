@@ -185,8 +185,8 @@ export class PageComponent implements OnInit, OnDestroy {
    * Initialize the objects that make up this Page from the current request url and query params.
    */
   private loadFromParams() {
-    this.route.params.subscribe(params => {
-      this.route.queryParams.subscribe(queryParams => {
+    this.route.params.subscribe((params: any) => {
+      this.route.queryParams.subscribe((queryParams: any) => {
         if (params.pageId) {
           this.loadPage(params.pageId).map((page: PageDataInterface) => {
             return new Page(page);

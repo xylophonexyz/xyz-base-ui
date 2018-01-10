@@ -91,23 +91,23 @@ export class UITextComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   isCenterAligned() {
-    return /Center$/.test(this.layout);
+    return /Center$/.test(this.layout.toString());
   }
 
   isRightAligned() {
-    return /Right|RightFull$/.test(this.layout);
+    return /Right|RightFull$/.test(this.layout.toString());
   }
 
   isFullWidth() {
-    return /Full$/.test(this.layout);
+    return /Full$/.test(this.layout.toString());
   }
 
   isTitle() {
-    return /^Title/.test(this.layout);
+    return /^Title/.test(this.layout.toString());
   }
 
   isSubtitle() {
-    return /^Subtitle/.test(this.layout);
+    return /^Subtitle/.test(this.layout.toString());
   }
 
   protected fallbackLayout(): TextLayoutOption {

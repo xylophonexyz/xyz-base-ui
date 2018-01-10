@@ -1,4 +1,4 @@
-import {PageDataInterface} from '../index';
+import {PageDataInterface, PageNavigationItemNavigationStrategy} from '../index';
 import {mockPageData} from '../providers/pages.service.spec';
 import {Page} from './page';
 
@@ -31,7 +31,14 @@ describe('Page', () => {
     expect(page.views).toEqual(1);
     expect(page.nods.length).toEqual(0);
     expect(page.tags.length).toEqual(0);
-    expect(page.metadata).toEqual({index: 0, showNav: false, navigationItem: false, hasTransparentHeader: false});
+    expect(page.metadata).toEqual({
+      index: 0,
+      showNav: false,
+      navigationItem: false,
+      hasTransparentHeader: false,
+      navigationType: PageNavigationItemNavigationStrategy.Internal,
+      navigationHref: null
+    });
     expect(page.userId).toBeDefined();
     expect(page.compositionId).toBeDefined();
     expect(page.composition).toBeDefined();
@@ -178,6 +185,24 @@ describe('Page', () => {
       expect(Page.swap(p1, p2, 1)).toEqual(false);
       expect(p1.metadata).toEqual(null);
       expect(p2.metadata.index).toEqual(2);
+    });
+
+    it('should provide a getter for navigation href', () => {
+      const pData1 = Object.assign({}, mockPageData, {metadata: {navigationHref: 'http://foo.com'}});
+      const pData2 = Object.assign({}, mockPageData, {metadata: null});
+      const p1 = new Page(pData1);
+      const p2 = new Page(pData2);
+      expect(p1.navigationHref).toEqual('http://foo.com');
+      expect(p2.navigationHref).toBeNull();
+    });
+
+    it('should provide a method to determine the navigation type', () => {
+      const pData1 = Object.assign({}, mockPageData, {metadata: {navigationHref: 'http://foo.com', navigationType: PageNavigationItemNavigationStrategy.Internal}});
+      const pData2 = Object.assign({}, mockPageData, {metadata: null});
+      const p1 = new Page(pData1);
+      const p2 = new Page(pData2);
+      expect(p1.isExternalNavigationType()).toEqual(false);
+      expect(p2.isExternalNavigationType()).toEqual(false);
     });
   });
 });
