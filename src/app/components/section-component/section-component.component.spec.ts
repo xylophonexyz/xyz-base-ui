@@ -17,6 +17,8 @@ import {UIComponent} from '../component/component.component';
 
 import {SectionLayoutOption, UISectionComponent} from './section-component.component';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 
 describe('UISectionComponent', () => {
   let component: UISectionComponent;
@@ -34,6 +36,8 @@ describe('UISectionComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
       ]
     }).compileComponents();
@@ -79,21 +83,40 @@ describe('UISectionComponent', () => {
       component.component.metadata.bgImage = {
         components: [
           {
-            media: 'base64;blah'
-          }
-        ]
-      };
-      expect(component.bgImage).toEqual('base64;blah');
-      component.component.metadata.bgImage = {
-        components: [
-          {
             media: {url: 'https://cat.jpg'}
           }
         ]
       };
-      expect(component.bgImage).toEqual('https://cat.jpg');
+      let observer = component.mediaUrl.subscribe(url => {
+        expect(url).toEqual('https://cat.jpg');
+      });
+      observer.unsubscribe();
       delete component.component.metadata.bgImage;
-      expect(component.bgImage).toBeNull();
+
+      component.bgImageFile = mockFile(1000, 'foo');
+      observer = component.mediaUrl.subscribe(url => {
+        expect(url).not.toBeNull();
+      });
+      observer.unsubscribe();
+      component.bgImageFile = null;
+
+      component.component.metadata.bgImage = {
+        components: [
+          {
+            media: {asdfasdf: 'https://cat.jpg'}
+          }
+        ]
+      };
+      observer = component.mediaUrl.subscribe(url => {
+        expect(url).toEqual('/assets/img/smpte.jpg');
+      });
+      observer.unsubscribe();
+
+      component.component.metadata.bgImage = null;
+      observer = component.mediaUrl.subscribe(url => {
+        expect(url).toBeNull();
+      });
+      observer.unsubscribe();
     });
 
     it('should provide a binding to the background image if there is one', () => {
@@ -112,8 +135,8 @@ describe('UISectionComponent', () => {
     it('should return bgImagePreview is the value is available', () => {
       component.component = new Component({metadata: {}} as any);
       expect(component.bgImageModel).toBeNull();
-      component.bgImagePreview = 'http://foo.jpg';
-      expect(component.bgImageModel).toEqual('http://foo.jpg');
+      component.bgImageFile = mockFile(1000, 'foo');
+      expect(component.bgImageModel).toEqual(component.bgImageFile);
     });
 
     it('should provide a method to determine if the component has a background image', () => {
@@ -319,6 +342,19 @@ describe('UISectionComponent', () => {
       bgConfig.onInputChange(event);
       expect(component.bgColor).toEqual('#000000');
     });
+
+    it('should provide a NavActionItem to copy the image url to clipboard', fakeAsync(() => {
+      spyOn(component, 'hasBgImage').and.returnValue(true);
+      const copyToClipboard = component.configuration()[3] as NavActionItem;
+      const utilService = getTestBed().get(UtilService);
+      spyOn(utilService, 'copyToClipboard');
+      component.mediaUrl = Observable.create(observer => {
+        observer.next('cat.jpg');
+      });
+      copyToClipboard.onInputClick(null);
+      tick();
+      expect(utilService.copyToClipboard).toHaveBeenCalled();
+    }));
 
     it('should provide a NavActionItem with an input to receive custom text color', () => {
       const textConfig = component.configuration()[1];

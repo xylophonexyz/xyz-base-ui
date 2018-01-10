@@ -1,12 +1,5 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  PLATFORM_ID,
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnChanges, OnDestroy, PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -16,11 +9,7 @@ import {Observable} from 'rxjs/Observable';
 import {Subscription} from 'rxjs/Subscription';
 import {XzRichTextDirective} from '../../directives/xz-rich-text-directive/xz-rich-text.directive';
 import {
-  AvailableComponent,
-  CanonicalComponentType,
-  ComponentDataInterface,
-  ComponentMetadata,
-  LocalComponentType,
+  AvailableComponent, CanonicalComponentType, ComponentDataInterface, ComponentMetadata, LocalComponentType,
   SectionComponentMetadata
 } from '../../index';
 import {Component as XzComponent} from '../../models/component';
@@ -31,6 +20,7 @@ import {ComponentService} from '../../providers/component.service';
 import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {MessageChannelDelegateService} from '../../providers/message-channel.service';
 import {getColorPalette} from '../../util/colors';
+import {UtilService} from '../../providers/util.service';
 
 /**
  * @description
@@ -138,6 +128,7 @@ export class UIComponent implements OnChanges, OnDestroy, HasFooterConfig, HasLa
               protected componentService: ComponentService,
               protected componentCollectionService: ComponentCollectionService,
               protected channel: MessageChannelDelegateService,
+              protected util: UtilService,
               @Inject(PLATFORM_ID) public platformId) {
     this.channelSubscription = channel.messages$.subscribe(message => {
       if (message.topic === UIComponent.GenericMessageTopic) {

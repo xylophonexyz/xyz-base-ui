@@ -1,5 +1,5 @@
 import {ChangeDetectorRef} from '@angular/core';
-import {async, ComponentFixture, getTestBed, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, getTestBed, TestBed, tick} from '@angular/core/testing';
 import {DomSanitizer} from '@angular/platform-browser';
 import {componentCollectionServiceStub} from '../../../test/stubs/component-collection.stub.spec';
 import {componentServiceStub} from '../../../test/stubs/component.service.stub.spec';
@@ -14,6 +14,9 @@ import {SpinnerComponent} from '../spinner/spinner.component';
 
 import {ImageLayoutOption, UIImageComponent} from './image-component.component';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
+import {Observable} from 'rxjs/Observable';
 
 describe('UIImageComponent', () => {
   let component: UIImageComponent;
@@ -28,6 +31,8 @@ describe('UIImageComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
       ]
     })
@@ -107,6 +112,18 @@ describe('UIImageComponent', () => {
       bgConfig.onInputChange(event);
       expect(component.bgColor).toEqual('#000000');
     });
+
+    it('should provide a NavActionItem to copy the image url to clipboard', fakeAsync(() => {
+      const copyToClipboard = component.configuration()[2] as NavActionItem;
+      const utilService = getTestBed().get(UtilService);
+      spyOn(utilService, 'copyToClipboard');
+      component.mediaUrl = Observable.create(observer => {
+        observer.next('cat.jpg');
+      });
+      copyToClipboard.onInputClick(null);
+      tick();
+      expect(utilService.copyToClipboard).toHaveBeenCalled();
+    }));
 
     it('should set a default value for padding', () => {
       expect(component.padding).toEqual(15);

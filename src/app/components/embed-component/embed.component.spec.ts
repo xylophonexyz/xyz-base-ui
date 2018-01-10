@@ -11,6 +11,8 @@ import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {MessageChannelDelegateService} from '../../providers/message-channel.service';
 import {EmbedLayoutOption, UIEmbedComponent} from './embed.component';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 
 describe('UIEmbedComponent', () => {
   let component: UIEmbedComponent;
@@ -25,6 +27,8 @@ describe('UIEmbedComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
       ]
     }).compileComponents();

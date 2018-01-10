@@ -16,6 +16,8 @@ import {mockEvent} from '../component-collection/component-collection.component.
 import {TextLayoutOption} from '../text-component/text-component.component';
 
 import {ConfigurableUIComponent, ConfigurableUIComponentWithToolbar, UIComponent} from './component.component';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 import createSpyObj = jasmine.createSpyObj;
 
 class FakeUIComponent extends UIComponent {
@@ -37,6 +39,8 @@ describe('UIComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         MessageChannelDelegateService,
         ChangeDetectorRef,
+        UtilService,
+        WindowRefService,
         DomSanitizer
       ]
     }).compileComponents();

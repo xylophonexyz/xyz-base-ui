@@ -86,6 +86,17 @@ export class UIImageComponent extends UIMediaComponent {
         onInputBlur: this.onInputBlur.bind(this),
         onInputClick: this.onInputClick.bind(this)
       }),
+      new NavActionItem('Copy Image URL', {
+        isInput: false,
+        isButton: true,
+        hasIcon: true,
+        iconName: 'copy',
+        onInputClick: () => {
+          this.mediaUrl.subscribe(url => {
+            this.util.copyToClipboard(url);
+          });
+        }
+      }),
     ];
   }
 

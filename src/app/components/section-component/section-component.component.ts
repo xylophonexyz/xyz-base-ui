@@ -9,6 +9,9 @@ import {SectionComponent} from '../../models/section-component';
 import {getHexColorString} from '../../util/colors';
 import {ConfigurableUIComponentWithToolbar, UIComponent} from '../component/component.component';
 import {UIMediaComponent} from '../media-component/media-component';
+import {Observable} from 'rxjs/Observable';
+import {Subscriber} from 'rxjs/Subscriber';
+import {isPlatformBrowser} from '@angular/common';
 
 export enum SectionLayoutOption {
   CompactLeft = 'CompactLeft',
@@ -64,12 +67,35 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
     ['clean']
   ];
 
-  bgImagePreview: String;
+  /**
+   * Stores a ref to the background image File object if one is added
+   */
+  bgImageFile: File;
+
+  /**
+   * Observable to provide a url or dataUrl value for the background image if one has been added
+   */
+  mediaUrl: Observable<string> = Observable.create((observer: Subscriber<string>) => {
+    const media = this.bgImageModel;
+    if (media) {
+      if (isPlatformBrowser(this.platformId) && media instanceof File) {
+        observer.next('/assets/img/placeholder.svg');
+        UIMediaComponent.getDataUrl(media).subscribe(dataUrl => {
+          observer.next(dataUrl);
+        });
+      } else if (media.hasOwnProperty('url')) {
+        observer.next(media.url);
+      } else {
+        // placeholder/isProcessing/isFailed image
+        observer.next('/assets/img/smpte.jpg');
+      }
+    }
+  });
 
   get bgImageModel(): any {
     try {
-      if (this.bgImagePreview) {
-        return this.bgImagePreview;
+      if (this.bgImageFile) {
+        return this.bgImageFile;
       } else {
         const collection = this.component.metadata.bgImage;
         return collection.components[0].media;
@@ -77,17 +103,6 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
     } catch (e) {
       return null;
     }
-  }
-
-  get bgImage(): string {
-    if (this.bgImageModel) {
-      if (typeof this.bgImageModel === 'string') {
-        return this.bgImageModel;
-      } else if (this.bgImageModel.hasOwnProperty('url')) {
-        return this.bgImageModel.url;
-      }
-    }
-    return null;
   }
 
   get titleModel(): string {
@@ -190,7 +205,7 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   shouldUseBgImage(): boolean {
-    return this.bgImage && !this.isLayoutSplit();
+    return this.hasBgImage() && !this.isLayoutSplit();
   }
 
   shouldDisableRemoveBgImage(): boolean {
@@ -213,7 +228,7 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   configuration(): NavActionItem[] {
-    return [
+    const items = [
       new NavActionItem(null, {
         isInput: true,
         inputPlaceholder: 'Background Color',
@@ -254,8 +269,23 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         onInputFocus: this.onInputFocus.bind(this),
         onInputBlur: this.onInputBlur.bind(this),
         onInputClick: this.onInputClick.bind(this)
-      })
+      }),
     ];
+    // add a button to copy image URLs from the toolbar if a background image is present
+    if (this.hasBgImage()) {
+      items.push(new NavActionItem('Copy Image URL', {
+        isInput: false,
+        isButton: true,
+        hasIcon: true,
+        iconName: 'copy',
+        onInputClick: () => {
+          this.mediaUrl.subscribe(url => {
+            this.util.copyToClipboard(url);
+          });
+        }
+      }));
+    }
+    return items;
   }
 
   fileDidChange(event: Event) {
@@ -324,10 +354,8 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         collection.components[0].id = record.components[0].id;
         collection.components[0].component_collection_id = collection.id;
         // generate a data url for preview
-        UIMediaComponent.getDataUrl(file).subscribe(dataUrl => {
-          this.bgImagePreview = dataUrl;
-          this.ref.markForCheck();
-        });
+        this.bgImageFile = file;
+        this.ref.markForCheck();
         // creating the component collection was successful, now upload the file
         this.doFileUploadForCollection(collection, file);
       } catch (e) {
@@ -349,7 +377,6 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         // dont override the dataUrl preview -- add the final media data when the processing job is complete
         if (!res.media_processing) {
           collection.components[0].media = res.media;
-          this.bgImagePreview = null;
         }
       }, err => {
         collection.components[0].media = {error: err};

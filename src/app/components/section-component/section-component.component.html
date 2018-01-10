@@ -1,6 +1,6 @@
 <section class="component__section hero"
          [style.background-color]="bgColor"
-         [style.background-image]="shouldUseBgImage() ? 'url(' + bgImage + ')' : ''"
+         [style.background-image]="shouldUseBgImage() ? 'url(' + (mediaUrl | async) + ')' : ''"
          [style.background-position]="'center center'"
          [style.background-repeat]="'no-repeat'"
          [style.background-size]="'cover'"
@@ -22,7 +22,7 @@
            *ngSwitchCase="true">
         <div class="column is-half"
              *ngIf="isLayoutRightAligned()">
-          <img [src]="bgImage"
+          <img [src]="mediaUrl | async"
                *ngIf="hasBgImage()">
         </div>
         <div class="column is-half">
@@ -30,7 +30,7 @@
         </div>
         <div class="column is-half"
              *ngIf="!isLayoutRightAligned()">
-          <img [src]="bgImage"
+          <img [src]="mediaUrl | async"
                *ngIf="hasBgImage()">
         </div>
       </div>

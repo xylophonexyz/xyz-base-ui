@@ -197,7 +197,12 @@ describe('Page', () => {
     });
 
     it('should provide a method to determine the navigation type', () => {
-      const pData1 = Object.assign({}, mockPageData, {metadata: {navigationHref: 'http://foo.com', navigationType: PageNavigationItemNavigationStrategy.Internal}});
+      const pData1 = Object.assign({}, mockPageData, {
+        metadata: {
+          navigationHref: 'http://foo.com',
+          navigationType: PageNavigationItemNavigationStrategy.Internal
+        }
+      });
       const pData2 = Object.assign({}, mockPageData, {metadata: null});
       const p1 = new Page(pData1);
       const p2 = new Page(pData2);

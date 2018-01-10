@@ -12,6 +12,8 @@ import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {MessageChannelDelegateService} from '../../providers/message-channel.service';
 import {FreeFormHtmlLayoutOption, UIFreeFormHtmlComponent} from './free-form-html-component.component';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 
 
 describe('UIFreeFormHtmlComponent', () => {
@@ -30,6 +32,8 @@ describe('UIFreeFormHtmlComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
       ]
     }).compileComponents();

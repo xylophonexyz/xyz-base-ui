@@ -11,8 +11,7 @@ import {AdminComponent} from './components/admin/admin.component';
 import {AppComponent} from './components/app.component';
 import {UIComponentCollectionComponent} from './components/component-collection/component-collection.component';
 import {
-  ConfigurableUIComponent,
-  ConfigurableUIComponentWithToolbar,
+  ConfigurableUIComponent, ConfigurableUIComponentWithToolbar,
   UIComponent
 } from './components/component/component.component';
 import {UIEmbedComponent} from './components/embed-component/embed.component';
@@ -66,6 +65,7 @@ import {SitesService} from './providers/sites.service';
 import {StorageService} from './providers/storage.service';
 import {UserService} from './providers/user.service';
 import {WindowRefService} from './providers/window-ref.service';
+import {UtilService} from './providers/util.service';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -147,6 +147,7 @@ export function getAppTitleFactory() {
     MessageChannelDelegateService,
     ComponentCollectionService,
     UserService,
+    UtilService,
     {provide: ORIGIN_URL, useFactory: () => getBrowserOriginFactory()},
     {provide: APPLICATION_NAME, useFactory: () => getAppTitleFactory()},
   ],

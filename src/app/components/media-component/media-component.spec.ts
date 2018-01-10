@@ -12,6 +12,8 @@ import {MessageChannelDelegateService} from '../../providers/message-channel.ser
 import {UIComponent} from '../component/component.component';
 import {SpinnerComponent} from '../spinner/spinner.component';
 import {UIMediaComponent} from './media-component';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 
 describe('UIMediaComponent', () => {
   let component: UIMediaComponent;
@@ -25,6 +27,8 @@ describe('UIMediaComponent', () => {
         {provide: ComponentService, useValue: componentServiceStub},
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
         DomSanitizer
       ]

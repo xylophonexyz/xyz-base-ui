@@ -13,6 +13,8 @@ import {MessageChannelDelegateService} from '../../providers/message-channel.ser
 
 import {TextLayoutOption, UITextComponent} from './text-component.component';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {UtilService} from '../../providers/util.service';
+import {WindowRefService} from '../../providers/window-ref.service';
 
 describe('UITextComponent', () => {
   let component: UITextComponent;
@@ -30,6 +32,8 @@ describe('UITextComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         MessageChannelDelegateService,
+        UtilService,
+        WindowRefService,
         ChangeDetectorRef,
       ]
     }).compileComponents();
