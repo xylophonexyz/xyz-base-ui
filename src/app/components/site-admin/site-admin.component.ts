@@ -28,7 +28,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
     Pages: 'pages',
     Navigation: 'navigation',
     Theme: 'theme',
-    Advanced: 'advanced'
+    Advanced: 'advanced',
+    Files: 'files'
   };
 
   static readonly SiteAdminSiteDidLoad = 'SiteAdmin::SiteDidLoad';
@@ -67,6 +68,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
         return 'Site Navigation';
       case SiteAdminComponent.SiteAdminPath.Theme:
         return 'Theme Configuration';
+      case SiteAdminComponent.SiteAdminPath.Files:
+        return 'Files';
       case SiteAdminComponent.SiteAdminPath.Advanced:
         return 'Advanced Settings';
       default:

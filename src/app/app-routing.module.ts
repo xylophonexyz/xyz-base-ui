@@ -7,7 +7,7 @@ import {PageUnauthorizedComponent} from './components/page-unauthorized/page-una
 import {PageComponent} from './components/page/page.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {SiteAdminComponent} from './components/site-admin/site-admin.component';
-import {SiteAdvancedSettingsComponent} from './components/site-advanced-settings-component/site-advanced-settings.component';
+import {SiteAdvancedSettingsComponent} from './components/site-advanced-settings/site-advanced-settings.component';
 import {SiteNavigationComponent} from './components/site-navigation/site-navigation.component';
 import {SitePagesComponent} from './components/site-pages/site-pages.component';
 import {SiteSettingsComponent} from './components/site-settings/site-settings.component';
@@ -17,6 +17,7 @@ import {SplashScreenComponent} from './components/splash-screen/splash-screen.co
 import {TokenCallbackComponent} from './components/token-callback/token-callback.component';
 import {AuthGuard} from './guards/auth.guard';
 import {PageGuard} from './guards/page.guard';
+import {SiteFilesComponent} from './components/site-files/site-files.component';
 
 const routes: Routes = [
   {
@@ -82,6 +83,10 @@ const routes: Routes = [
           {
             path: 'theme',
             component: SiteThemeComponent,
+          },
+          {
+            path: 'files',
+            component: SiteFilesComponent,
           },
           {
             path: 'navigation',

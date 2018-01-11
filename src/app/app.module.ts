@@ -31,7 +31,7 @@ import {PlaceholderComponent} from './components/placeholder/placeholder.compone
 import {UISectionComponent} from './components/section-component/section-component.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {SiteAdminComponent} from './components/site-admin/site-admin.component';
-import {SiteAdvancedSettingsComponent} from './components/site-advanced-settings-component/site-advanced-settings.component';
+import {SiteAdvancedSettingsComponent} from './components/site-advanced-settings/site-advanced-settings.component';
 import {SiteNavigationComponent} from './components/site-navigation/site-navigation.component';
 import {SitePagesComponent} from './components/site-pages/site-pages.component';
 import {SiteSettingsComponent} from './components/site-settings/site-settings.component';
@@ -66,6 +66,7 @@ import {StorageService} from './providers/storage.service';
 import {UserService} from './providers/user.service';
 import {WindowRefService} from './providers/window-ref.service';
 import {UtilService} from './providers/util.service';
+import {SiteFilesComponent} from './components/site-files/site-files.component';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -115,6 +116,7 @@ export function getAppTitleFactory() {
     XzRichTextDirective,
     PageErrorComponent,
     SiteAdvancedSettingsComponent,
+    SiteFilesComponent,
   ],
   entryComponents: [],
   imports: [
