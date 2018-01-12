@@ -11,10 +11,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "ng build",
-    "build:server": "npm run compile:server && ng build --prod --aot --build-optimizer --app 1",
+    "build:server": "npm run compile:server && ng build --prod --aot --build-optimizer=false --app 1",
     "compile:server": "tsc src/server.ts --lib es6,dom --target es5",
     "compile:server:dev": "tsc src/server.dev.ts --lib es6,dom --target es5",
-    "build:prod": "ng build --prod --aot --build-optimizer --app 0",
+    "build:prod": "ng build --prod --aot --build-optimizer=false --app 0",
     "build:full": "npm run build:server && npm run build:prod",
     "start": "NODE_ENV=production npm run run:prod",
     "run:prod": "node dist/server/server.js",
@@ -64,7 +64,7 @@
     "zone.js": "^0.7.6"
   },
   "devDependencies": {
-    "@angular/cli": "^1.3.0-rc.5",
+    "@angular/cli": "^1.6.4",
     "@angular/compiler-cli": "^5.0.0",
     "@types/jasmine": "^2.5.47",
     "@types/lodash": "^4.14.64",
@@ -83,6 +83,6 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "2.4.2"
+    "typescript": "2.5.3"
   }
 }

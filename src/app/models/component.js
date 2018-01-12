@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Component = (function () {
+var Component = /** @class */ (function () {
     function Component(params) {
         if (params) {
             this._id = params.id;

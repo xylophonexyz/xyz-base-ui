@@ -4,7 +4,7 @@ var index_1 = require("../index");
 var component_collection_1 = require("./component-collection");
 var composition_1 = require("./composition");
 var user_1 = require("./user");
-var Page = (function () {
+var Page = /** @class */ (function () {
     function Page(params) {
         if (params) {
             this._id = params.id;
