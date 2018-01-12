@@ -1,2 +1,50 @@
 <div class="site--files" *ngIf="site">
+  <h1 class="subtitle">
+    <strong>File Library for {{site.title}}</strong>
+  </h1>
+  <nav class="level" *ngFor="let file of files">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <div class="control has-icons-right">
+            <figure class="image is-128x128" style="height: 100%;">
+              <img [src]="getMediaUrl(file)">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <p class="control">
+          <button class="button is-inverted"
+                  (click)="copyLink(getMediaUrl(file))"
+                  [disabled]="isLoading"
+                  [class.is-loading]="isLoading">
+            <span class="icon">
+              <app-feather-icon icon="copy"></app-feather-icon>
+            </span>
+          </button>
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level" *ngIf="files.length === 0">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <div class="control has-icons-right">
+            No files have been added yet
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div *ngIf="errorMessage">
+    <small>
+      The following errors occurred while attempting to add a custom domain:
+    </small>
+    <p class="has-text-danger"><small>{{errorMessage}}</small></p>
+  </div>
 </div>

@@ -12,6 +12,7 @@ import {MessageChannelDelegateService} from '../../providers/message-channel.ser
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
 import {SitesService} from '../../providers/sites.service';
+import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
 import {ComponentCollectionService} from '../../providers/component-collection.service';
 import {ComponentService} from '../../providers/component.service';
@@ -55,6 +56,7 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
               protected windowRef: WindowRefService,
               protected route: ActivatedRoute,
               protected sanitizer: DomSanitizer,
+              protected util: UtilService,
               @Inject(APPLICATION_NAME) private appTitle) {
   }
 

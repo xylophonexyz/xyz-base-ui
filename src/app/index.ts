@@ -61,6 +61,19 @@ export enum ComponentStatus {
 }
 
 /**
+ * Enum of ComponentCollection types recognized locally by this app instance
+ */
+export enum LocalComponentTypes {
+  ComponentCollection = 'ComponentCollection',
+  Text = 'Text',
+  ImageCollection = 'ImageCollection',
+  Embed = 'Embed',
+  Spacer = 'Spacer',
+  Hero = 'Hero',
+  FreeFormHtml = 'FreeFormHtml'
+}
+
+/**
  * The ComponentCollection types recognized locally by this app instance.
  */
 export type LocalComponentType =
