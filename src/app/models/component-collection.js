@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var component_1 = require("./component");
-var ComponentCollection = (function () {
+var ComponentCollection = /** @class */ (function () {
     function ComponentCollection(params) {
         if (params) {
             this._id = params.id;

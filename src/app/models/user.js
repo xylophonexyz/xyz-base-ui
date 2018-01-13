@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var User = (function () {
+var User = /** @class */ (function () {
     function User(params) {
         this._followers = [];
         this._following = [];

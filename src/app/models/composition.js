@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var colors_1 = require("../util/colors");
 var page_1 = require("./page");
-var Composition = (function () {
+var Composition = /** @class */ (function () {
     function Composition(params) {
         this._pages = [];
         this._compositions = [];
