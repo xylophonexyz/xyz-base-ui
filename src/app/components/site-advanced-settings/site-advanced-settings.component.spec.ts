@@ -11,6 +11,7 @@ import {routerStub} from '../../../test/stubs/router.stub.spec';
 import {AuthService} from '../../providers/auth.service';
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
+import {UtilService} from '../../providers/util.service';
 import {PlaceholderComponent} from '../placeholder/placeholder.component';
 import {SiteAdminComponent} from '../site-admin/site-admin.component';
 
@@ -63,6 +64,7 @@ describe('SiteAdvancedSettingsComponent', () => {
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         {provide: WindowRefService, useValue: windowRefStub},
         {provide: APPLICATION_NAME, useFactory: appTitleFactory},
+        UtilService,
         MessageChannelDelegateService,
       ],
       schemas: [NO_ERRORS_SCHEMA]

@@ -23,6 +23,7 @@ import {MessageChannelDelegateService} from '../../providers/message-channel.ser
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
 import {SitesService} from '../../providers/sites.service';
+import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
 import {PlaceholderComponent} from '../placeholder/placeholder.component';
 import {SiteAdminComponent} from '../site-admin/site-admin.component';
@@ -66,6 +67,7 @@ describe('SiteSettingsComponent', () => {
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         {provide: WindowRefService, useValue: windowRefStub},
         {provide: APPLICATION_NAME, useFactory: appTitleFactory},
+        UtilService,
         MessageChannelDelegateService,
       ],
       schemas: [NO_ERRORS_SCHEMA]

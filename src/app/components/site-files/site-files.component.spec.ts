@@ -1,4 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {UtilService} from '../../providers/util.service';
 
 import {SiteFilesComponent} from './site-files.component';
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
@@ -61,6 +62,7 @@ describe('SiteFilesComponent', () => {
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         {provide: WindowRefService, useValue: windowRefStub},
         {provide: APPLICATION_NAME, useFactory: appTitleFactory},
+        UtilService,
         MessageChannelDelegateService,
       ],
       schemas: [NO_ERRORS_SCHEMA]

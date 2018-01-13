@@ -27,6 +27,7 @@ import {PagesService} from '../../providers/pages.service';
 import {mockPageData} from '../../providers/pages.service.spec';
 import {SitesService} from '../../providers/sites.service';
 import {mockComposition, mockCompositionData} from '../../providers/sites.service.spec';
+import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
 
 import {SiteAdminComponent} from './site-admin.component';
@@ -57,6 +58,7 @@ describe('SiteAdminComponent', () => {
         {provide: DomSanitizer, useValue: mockDomSanitizer},
         {provide: WindowRefService, useValue: windowRefStub},
         {provide: APPLICATION_NAME, useFactory: appTitleFactory},
+        UtilService,
         MessageChannelDelegateService,
       ],
       schemas: []

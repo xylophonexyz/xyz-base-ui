@@ -20,6 +20,7 @@ import {MessageChannelDelegateService} from '../../providers/message-channel.ser
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
 import {SitesService} from '../../providers/sites.service';
+import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
 import {SiteAdminComponent} from '../site-admin/site-admin.component';
 
@@ -55,6 +56,7 @@ describe('SitePagesComponent', () => {
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: ComponentService, useValue: componentServiceStub},
         {provide: FooterDelegateService, useValue: footerNotifierStub},
+        UtilService,
         MessageChannelDelegateService,
         DomSanitizer,
         {provide: WindowRefService, useValue: windowRefStub},

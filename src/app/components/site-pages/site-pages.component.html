@@ -7,12 +7,10 @@
         <div class="card-image">
           <a [routerLink]="'/p/' + page.id"
              [queryParams]="{edit: true}">
-            <figure class="image is-4by3">
+            <figure class="image is-4by3 has-gradient">
               <img [src]="page.cover"
+                   *ngIf="page.hasCover()"
                    alt="Image">
-              <span class="icon is-large">
-                  <app-feather-icon icon="edit-3"></app-feather-icon>
-                </span>
             </figure>
           </a>
         </div>
@@ -109,9 +107,8 @@
     </div>
     <div class="column is-3">
       <div class="card--placeholder">
-        <button class="button is-primary is-fullwidth"
-                (click)="addChildPage()">
-              <span class="icon is-extra-large is-white">
+        <button class="button is-white is-large" (click)="addChildPage()">
+              <span class="icon is-extra-large">
                 <app-feather-icon icon="plus"></app-feather-icon>
               </span>
         </button>

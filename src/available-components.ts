@@ -28,7 +28,7 @@ export const BASE_AVAILABLE_COMPONENTS: AvailableComponent[] = [
   },
   {
     icon: 'more-horizontal',
-    text: 'Empty Space',
+    text: 'Space',
     type: 'ComponentCollection',
     metatype: 'Spacer'
   },

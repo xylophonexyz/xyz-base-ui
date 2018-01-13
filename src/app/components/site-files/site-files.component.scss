@@ -1,2 +1,11 @@
+@import '../../../app/theme/colors.scss';
+
 .site--files {
+  .item {
+    border-bottom: 1px solid $feather-gray;
+    padding: 2rem 0;
+  }
+  .item-descriptor {
+    padding: 1rem;
+  }
 }

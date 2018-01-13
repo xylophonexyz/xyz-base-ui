@@ -1,36 +1,81 @@
-<div class="site--files" *ngIf="site">
+<div class="site--files"
+     *ngIf="site">
   <h1 class="subtitle">
     <strong>File Library for {{site.title}}</strong>
   </h1>
-  <nav class="level" *ngFor="let file of files">
+  <nav class="level item"
+       *ngFor="let file of files">
     <div class="level-left">
       <div class="level-item">
         <div class="field">
           <div class="control has-icons-right">
-            <figure class="image is-128x128" style="height: 100%;">
-              <img [src]="getMediaUrl(file)">
-            </figure>
+            <a [href]="getMediaUrl(file)" target="_blank">
+              <figure class="image is-128x128"
+                      style="height: 100%;">
+                <img [src]="getMediaUrl(file)">
+              </figure>
+            </a>
           </div>
+        </div>
+      </div>
+      <div class="level-right item-descriptor">
+        <div class="field">
+          <p>
+            <small><strong>Name:</strong> {{getFileMetadata(file).name}}</small>
+          </p>
+          <p>
+            <small><strong>Type:</strong> {{getFileMetadata(file).mime}}</small>
+          </p>
+          <p>
+            <small><strong>Dimensions:</strong> {{getFileMetadata(file).meta.width}} x
+              {{getFileMetadata(file).meta.height}}
+            </small>
+          </p>
+          <p>
+            <small><strong>Average color:</strong> {{getFileMetadata(file).meta.average_color}}</small>
+          </p>
+          <p>
+            <small><strong>Aspect ratio:</strong> {{getFileMetadata(file).meta.aspect_ratio}}</small>
+          </p>
+          <p>
+            <small><strong>Last modified:</strong> {{getFileMetadata(file).meta.date_file_modified}}</small>
+          </p>
         </div>
       </div>
     </div>
 
     <div class="level-right">
       <div class="level-item">
-        <p class="control">
-          <button class="button is-inverted"
-                  (click)="copyLink(getMediaUrl(file))"
-                  [disabled]="isLoading"
-                  [class.is-loading]="isLoading">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button is-inverted"
+                    (click)="copyLink(getMediaUrl(file))"
+                    [disabled]="isLoading"
+                    title="Copy URL"
+                    [class.is-loading]="isLoading">
             <span class="icon">
               <app-feather-icon icon="copy"></app-feather-icon>
             </span>
-          </button>
-        </p>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button is-inverted"
+                    [routerLink]="'/p/' + file.pageId"
+                    [queryParams]="{edit: true}"
+                    [disabled]="isLoading"
+                    title="View Page"
+                    [class.is-loading]="isLoading">
+            <span class="icon">
+              <app-feather-icon icon="external-link"></app-feather-icon>
+            </span>
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   </nav>
-  <nav class="level" *ngIf="files.length === 0">
+  <nav class="level"
+       *ngIf="files.length === 0">
     <div class="level-left">
       <div class="level-item">
         <div class="field">
@@ -45,6 +90,8 @@
     <small>
       The following errors occurred while attempting to add a custom domain:
     </small>
-    <p class="has-text-danger"><small>{{errorMessage}}</small></p>
+    <p class="has-text-danger">
+      <small>{{errorMessage}}</small>
+    </p>
   </div>
 </div>
