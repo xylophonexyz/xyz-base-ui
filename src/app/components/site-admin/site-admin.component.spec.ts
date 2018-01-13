@@ -190,6 +190,9 @@ describe('SiteAdminComponent', () => {
 
     route.firstChild.routeConfig.path = 'advanced';
     expect(component.title).toEqual('Advanced Settings');
+
+    route.firstChild.routeConfig.path = 'files';
+    expect(component.title).toEqual('Files');
   });
 
   describe('pages', () => {

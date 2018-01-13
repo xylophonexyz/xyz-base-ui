@@ -61,8 +61,8 @@ export class SiteFilesComponent extends SiteAdminComponent implements OnInit {
 
   private buildFilesList() {
     if (isNull(this._components)) {
-      const pageRequests = this.site.pages.map(page => this.pagesProvider.get(page.id));
       this._components = [];
+      const pageRequests = this.site.pages.map(page => this.pagesProvider.get(page.id));
       Observable.from(pageRequests).concatMap(req => req).subscribe((page: PageDataInterface) => {
         const components: FileItem[] = [];
         page.components.forEach((collection: ComponentCollectionDataInterface) => {
@@ -84,7 +84,6 @@ export class SiteFilesComponent extends SiteAdminComponent implements OnInit {
           });
         });
         this._components = this._components.concat(components);
-        console.log(this._components);
       });
     }
   }
