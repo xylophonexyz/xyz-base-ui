@@ -14,15 +14,18 @@
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <figure class="site-thumb image is-128x128">
+          <figure class="site-thumb image is-128x128" *ngIf="site.hasCover()">
             <img [src]="site.cover"
                  alt="">
           </figure>
+          <app-placeholder [title]="site.title"
+                           [size]="'lg'"
+                           *ngIf="!site.hasCover()">
+          </app-placeholder>
         </div>
         <div class="level-item">
           <h1 class="title">
-            <a class="button is-white is-large"
-               [routerLink]="[settingsUrl(site)]">
+            <a [routerLink]="[settingsUrl(site)]">
               <span>&nbsp;</span>
               <span>&nbsp;</span>
               <span>{{site.title}}</span>
