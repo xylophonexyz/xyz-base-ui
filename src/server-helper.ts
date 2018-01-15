@@ -176,6 +176,33 @@ export function applyCustomDomainMiddleware(app: Express) {
       res.status(400).send(error).end();
     }
   });
+
+  app.delete('/api/domainMappings', bodyParser.json(), (req: Request, res: Response) => {
+    if (req.body) {
+      const target = getConfig('DELETE_KEY_PAIR_SERVICE_ENDPOINT');
+      request({
+        method: 'POST',
+        url: target,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': req.headers.authorization || req.headers.Authorization
+        },
+        body: JSON.stringify({
+          siteId: req.body.siteId,
+          domainName: req.body.domainName
+        })
+      }, (err, _, apiResponse) => {
+        if (err) {
+          res.status(400).send(err).end();
+        } else {
+          res.send(apiResponse).end();
+        }
+      });
+    } else {
+      const error = new Error('Required parameters missing: {domainName, siteId}');
+      res.status(400).send(error).end();
+    }
+  });
 }
 
 /**
