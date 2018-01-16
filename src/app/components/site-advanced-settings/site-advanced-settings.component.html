@@ -26,6 +26,13 @@
           </div>
         </div>
       </div>
+      <div class="level-item">
+        <div class="level-item-divider"></div>
+        <label class="checkbox">
+          <input type="checkbox" [(ngModel)]="isSelfManagedDns">
+          Self-managed DNS
+        </label>
+      </div>
     </div>
 
     <div class="level-right">
@@ -49,12 +56,57 @@
       </div>
     </div>
   </nav>
-  <div *ngIf="site && site.customDomain">
+  <nav class="level" *ngIf="isSelfManagedDns" style="margin-left: 1rem;">
+    <div class="level-left">
+      <div class="level-item">
+        <div>
+          <label class="label">
+            <small><strong>Subdomains. Use @ for the root domain</strong></small>
+          </label>
+          <input class="input"
+                 *ngFor="let _ of domainMappings; let i = index;"
+                 type="text"
+                 placeholder="www"
+                 [(ngModel)]="site.customDomain.domainMappings[i]">
+          <input class="input"
+                 type="text"
+                 placeholder="www"
+                 [(ngModel)]="newDomainMapping">
+        </div>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <div>
+          <p class="control" style="margin-top: 2rem;">
+            <button class="button"
+                    [disabled]="isLoading"
+                    (click)="addDomainMapping()"
+                    [class.is-loading]="isLoading">
+            <span class="icon">
+              <app-feather-icon icon="plus"></app-feather-icon>
+            </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+  <div *ngIf="site && site.customDomain && !isSelfManagedDns">
     <small>
-      Add the following name servers to your DNS provider's configuration page to complete the process:
+      Add the following name servers to your DNS provider's configuration page:
     </small>
     <p *ngFor="let name of site.customDomain.nameServers">
       <strong>{{name}}</strong>
+    </p>
+  </div>
+  <div *ngIf="site && site.customDomain && isSelfManagedDns">
+    <small>
+      Add the following DNS records to your DNS provider's configuration page:
+    </small>
+    <p *ngFor="let record of site.customDomain.requiredDnsRecords">
+      <strong>{{record}}</strong>
     </p>
   </div>
   <div *ngIf="errorMessage">

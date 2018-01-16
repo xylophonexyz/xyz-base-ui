@@ -10,6 +10,8 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
 
   errorMessage: string;
   private _customDomainName: string;
+  private _newDomainMapping: string;
+  private _selfManagedDns: boolean;
 
   get customDomainName(): string {
     if (this.site && this.site.customDomain) {
@@ -21,6 +23,34 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
 
   set customDomainName(name: string) {
     this._customDomainName = name;
+  }
+
+  get isSelfManagedDns(): boolean {
+    if (this.site && this.site.customDomain) {
+      return this.site.customDomain.selfManagedDns;
+    } else {
+      return this._selfManagedDns;
+    }
+  }
+
+  set isSelfManagedDns(value: boolean) {
+    this._selfManagedDns = value;
+  }
+
+  get domainMappings(): string[] {
+    if (this.site && this.site.customDomain) {
+      return this.site.customDomain.domainMappings;
+    } else {
+      return [];
+    }
+  }
+
+  get newDomainMapping(): string {
+    return this._newDomainMapping;
+  }
+
+  set newDomainMapping(value: string) {
+    this._newDomainMapping = value;
   }
 
   ngOnInit() {
@@ -55,6 +85,10 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
       this.isLoading = false;
       this.displayError(err);
     });
+  }
+
+  addDomainMapping() {
+    console.log(this.newDomainMapping);
   }
 
   private displayError(err: any) {

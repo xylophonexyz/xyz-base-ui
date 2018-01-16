@@ -463,7 +463,10 @@ export interface EnvironmentConfig {
 export interface CompositionCustomDomain {
   zoneId: string;
   domainName: string;
-  nameServers: string[];
+  selfManagedDns: boolean;
+  nameServers?: string[];
+  domainMappings?: string[];
+  requiredDnsRecords?: string[];
 }
 
 /**
