@@ -88,15 +88,30 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
     }
   }
 
+  /**
+   * Removes any existing mappings, then rebuilds the mappings from values taken from the _newDomainMappings variable
+   */
   addCustomDomainMappings() {
     this.isLoading = true;
+    let removeRequest: Observable<any>;
+    let createRequest: Observable<any>;
     const requiredDnsRecords: string[] = [];
     const domainMappings: string[] = [];
-    Observable.from(this.domainMappings).concatMap(mapping => {
+    if (this.hasCustomDomain()) {
+      removeRequest = Observable.from(this.site.customDomain.domainMappings).concatMap(mapping => {
+        return this.sitesProvider.removeDomainNameKeyPair(this.site.id, this.customDomainName, mapping);
+      });
+    } else {
+      removeRequest = Observable.create(observer => observer.complete());
+    }
+    createRequest = Observable.from(this.domainMappings).concatMap(mapping => {
       return this.sitesProvider.addDomainNameKeyPair(this.site.id, this.customDomainName, mapping);
-    }).subscribe(res => {
-      requiredDnsRecords.push(res.message);
-      domainMappings.push(res.subdomain);
+    });
+    Observable.from([removeRequest, createRequest]).concatMap(req => req).subscribe((res: any) => {
+      if (res && res.message && res.subdomain) {
+        requiredDnsRecords.push(res.message);
+        domainMappings.push(res.subdomain);
+      }
     }, err => {
       this.isLoading = false;
       this.displayError(err);
