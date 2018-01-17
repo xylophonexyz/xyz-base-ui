@@ -10,15 +10,12 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
 
   errorMessage: string;
   private _customDomainName: string;
-  private _newDomainMapping: string;
-  private _selfManagedDns: boolean;
+  private _newDomainMappings: Set<string> = new Set();
+  private _newDomainMapping = '';
+  private _selfManagedDns = false;
 
   get customDomainName(): string {
-    if (this.site && this.site.customDomain) {
-      return this.site.customDomain.domainName;
-    } else {
-      return null;
-    }
+    return this._customDomainName;
   }
 
   set customDomainName(name: string) {
@@ -26,11 +23,7 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
   }
 
   get isSelfManagedDns(): boolean {
-    if (this.site && this.site.customDomain) {
-      return this.site.customDomain.selfManagedDns;
-    } else {
-      return this._selfManagedDns;
-    }
+    return this._selfManagedDns;
   }
 
   set isSelfManagedDns(value: boolean) {
@@ -38,11 +31,11 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
   }
 
   get domainMappings(): string[] {
-    if (this.site && this.site.customDomain) {
-      return this.site.customDomain.domainMappings;
-    } else {
-      return [];
-    }
+    return Array.from(this._newDomainMappings);
+  }
+
+  set domainMappings(mappings: string[]) {
+    this._newDomainMappings = new Set(mappings);
   }
 
   get newDomainMapping(): string {
@@ -55,40 +48,80 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
 
   ngOnInit() {
     this.onChildInit();
+    if (this.site && this.site.customDomain && this.site.customDomain.domainMappings) {
+      this._newDomainMappings = new Set(this.site.customDomain.domainMappings);
+    }
+    if (this.site && this.site.customDomain && this.site.customDomain.domainName) {
+      this._customDomainName = this.site.customDomain.domainName;
+    }
+    if (this.site && this.site.customDomain) {
+      this._selfManagedDns = this.site.customDomain.selfManagedDns;
+    }
   }
 
   addCustomDomain() {
     if (this.site && this._customDomainName) {
-      this.isLoading = true;
-      this.sitesProvider.addCustomDomain(this.site.id, this._customDomainName).subscribe(res => {
-        this.site.metadata.customDomain = {
-          zoneId: res.createZoneResult.result.id,
-          domainName: res.createZoneResult.result.name,
-          nameServers: res.createZoneResult.result.name_servers
-        };
-        this.errorMessage = null;
-        this.updateSiteMetadata();
-      }, err => {
-        this.isLoading = false;
-        this.displayError(err);
-      });
+      if (this.isSelfManagedDns) {
+        this.addCustomDomainMappings();
+      } else {
+        this.isLoading = true;
+        this.sitesProvider.addCustomDomain(this.site.id, this._customDomainName).subscribe(res => {
+          this.site.metadata.customDomain = {
+            zoneId: res.createZoneResult.result.id,
+            domainName: res.createZoneResult.result.name,
+            nameServers: res.createZoneResult.result.name_servers
+          };
+          this.errorMessage = null;
+          this.updateSiteMetadata();
+        }, err => {
+          this.isLoading = false;
+          this.displayError(err);
+        });
+      }
     }
   }
 
-  removeCustomDomain() {
-    this.isLoading = true;
-    this.sitesProvider.removeCustomDomain(this.site.id).subscribe(() => {
-      this.errorMessage = null;
-      this.site.metadata.customDomain = null;
-      this.updateSiteMetadata();
-    }, err => {
-      this.isLoading = false;
-      this.displayError(err);
-    });
+  addCustomDomainMappings() {
+
   }
 
-  addDomainMapping() {
-    console.log(this.newDomainMapping);
+  removeCustomDomain() {
+    if (this.site && this.site.customDomain) {
+      if (this.isSelfManagedDns) {
+        this.removeCustomDomainMappings();
+      } else {
+        this.isLoading = true;
+        this.sitesProvider.removeCustomDomain(this.site.id).subscribe(() => {
+          this.errorMessage = null;
+          this.site.metadata.customDomain = null;
+          this.updateSiteMetadata();
+        }, err => {
+          this.isLoading = false;
+          this.displayError(err);
+        });
+      }
+    }
+  }
+
+  removeCustomDomainMappings() {
+
+  }
+
+  addNewDomainMapping() {
+    this._newDomainMappings.add(this.newDomainMapping);
+    this.newDomainMapping = null;
+  }
+
+  removeDomainMapping(mapping: string) {
+    this.domainMappings = this.domainMappings.filter(m => m !== mapping);
+  }
+
+  customDomainNameDidChange(): boolean {
+    if (this.site && this.site.customDomain) {
+      return this._customDomainName !== this.site.customDomain.domainName;
+    } else {
+      return true;
+    }
   }
 
   private displayError(err: any) {

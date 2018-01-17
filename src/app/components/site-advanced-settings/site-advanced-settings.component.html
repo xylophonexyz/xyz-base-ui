@@ -37,15 +37,15 @@
 
     <div class="level-right">
       <div class="level-item">
-        <p class="control" *ngIf="!customDomainName">
+        <p class="control" *ngIf="customDomainNameDidChange()">
           <button class="button is-primary is-inverted"
                   (click)="addCustomDomain()"
-                  [disabled]="isLoading"
+                  [disabled]="!customDomainName || isLoading"
                   [class.is-loading]="isLoading">
             <span>Save</span>
           </button>
         </p>
-        <p class="control" *ngIf="customDomainName">
+        <p class="control" *ngIf="!customDomainNameDidChange()">
           <button class="button is-danger is-inverted"
                   (click)="removeCustomDomain()"
                   [disabled]="isLoading"
@@ -56,43 +56,47 @@
       </div>
     </div>
   </nav>
-  <nav class="level" *ngIf="isSelfManagedDns" style="margin-left: 1rem;">
-    <div class="level-left">
-      <div class="level-item">
-        <div>
-          <label class="label">
-            <small><strong>Subdomains. Use @ for the root domain</strong></small>
-          </label>
-          <input class="input"
-                 *ngFor="let _ of domainMappings; let i = index;"
-                 type="text"
-                 placeholder="www"
-                 [(ngModel)]="site.customDomain.domainMappings[i]">
-          <input class="input"
-                 type="text"
-                 placeholder="www"
-                 [(ngModel)]="newDomainMapping">
-        </div>
+  <div class="container" *ngIf="isSelfManagedDns" style="margin-left: 1rem;">
+    <label class="label">
+      <small><strong>Subdomains. Use @ for the root domain</strong></small>
+    </label>
+    <div class="columns" *ngFor="let mapping of domainMappings; let i = index;">
+      <div class="column">
+        <input class="input"
+               type="text"
+               placeholder="www"
+               [(ngModel)]="domainMappings[i]">
+      </div>
+      <div class="column">
+        <button class="button"
+                [disabled]="isLoading"
+                (click)="removeDomainMapping(mapping)"
+                [class.is-loading]="isLoading">
+                <span class="icon">
+                  <app-feather-icon icon="minus"></app-feather-icon>
+                </span>
+        </button>
       </div>
     </div>
-    <div class="level-right">
-      <div class="level-item">
-        <div>
-          <p class="control" style="margin-top: 2rem;">
-            <button class="button"
-                    [disabled]="isLoading"
-                    (click)="addDomainMapping()"
-                    [class.is-loading]="isLoading">
-            <span class="icon">
-              <app-feather-icon icon="plus"></app-feather-icon>
-            </span>
-            </button>
-          </p>
-        </div>
+    <div class="columns">
+      <div class="column">
+        <input class="input"
+               type="text"
+               placeholder="www"
+               [(ngModel)]="newDomainMapping">
+      </div>
+      <div class="column">
+        <button class="button"
+                [disabled]="!newDomainMapping"
+                (click)="addNewDomainMapping()"
+                [class.is-loading]="isLoading">
+          <span class="icon">
+            <app-feather-icon icon="plus"></app-feather-icon>
+          </span>
+        </button>
       </div>
     </div>
-
-  </nav>
+  </div>
   <div *ngIf="site && site.customDomain && !isSelfManagedDns">
     <small>
       Add the following name servers to your DNS provider's configuration page:
@@ -113,6 +117,8 @@
     <small>
       The following errors occurred while attempting to add a custom domain:
     </small>
-    <p class="has-text-danger"><small>{{errorMessage}}</small></p>
+    <p class="has-text-danger">
+      <small>{{errorMessage}}</small>
+    </p>
   </div>
 </div>
