@@ -19,6 +19,7 @@
             <input class="input"
                    type="text"
                    placeholder="example.com"
+                   [disabled]="hasCustomDomain()"
                    [(ngModel)]="customDomainName">
             <span class="icon is-small is-right" *ngIf="errorMessage">
               <app-feather-icon icon="alert-triangle"></app-feather-icon>
@@ -37,7 +38,7 @@
 
     <div class="level-right">
       <div class="level-item">
-        <p class="control" *ngIf="customDomainNameDidChange()">
+        <p class="control" *ngIf="customDomainDidChange()">
           <button class="button is-primary is-inverted"
                   (click)="addCustomDomain()"
                   [disabled]="!customDomainName || isLoading"
@@ -45,7 +46,7 @@
             <span>Save</span>
           </button>
         </p>
-        <p class="control" *ngIf="!customDomainNameDidChange()">
+        <p class="control" *ngIf="hasCustomDomain()">
           <button class="button is-danger is-inverted"
                   (click)="removeCustomDomain()"
                   [disabled]="isLoading"
@@ -65,6 +66,7 @@
         <input class="input"
                type="text"
                placeholder="www"
+               disabled
                [(ngModel)]="domainMappings[i]">
       </div>
       <div class="column">
@@ -97,7 +99,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="site && site.customDomain && !isSelfManagedDns">
+  <div class="section" *ngIf="site && site.customDomain && !isSelfManagedDns">
     <small>
       Add the following name servers to your DNS provider's configuration page:
     </small>
@@ -105,7 +107,7 @@
       <strong>{{name}}</strong>
     </p>
   </div>
-  <div *ngIf="site && site.customDomain && isSelfManagedDns">
+  <div class="section" *ngIf="site && site.customDomain && isSelfManagedDns">
     <small>
       Add the following DNS records to your DNS provider's configuration page:
     </small>
@@ -113,7 +115,7 @@
       <strong>{{record}}</strong>
     </p>
   </div>
-  <div *ngIf="errorMessage">
+  <div class="section" *ngIf="errorMessage">
     <small>
       The following errors occurred while attempting to add a custom domain:
     </small>

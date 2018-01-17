@@ -141,4 +141,26 @@ export class SitesService {
     return this.http.delete(`${this.api.baseUrl}/domains/${siteId}`, {headers});
   }
 
+  addDomainNameKeyPair(siteId: number, domainName: string, subdomain: string): Observable<any> {
+    const headers = this.auth.constructAuthHeader();
+    const payload = {
+      domainName: domainName,
+      subdomain: subdomain,
+      siteId: siteId
+    };
+    return this.http.post(`${this.api.baseUrl}/domainMappings`, payload, {headers}).map((res: Response) => {
+      return res.json();
+    });
+  }
+
+  removeDomainNameKeyPair(siteId: number, domainName: string, subdomain: string): Observable<any> {
+    const headers = this.auth.constructAuthHeader();
+    return this.http.delete(
+      `${this.api.baseUrl}/domainMappings/${siteId}?domainName=${domainName}&subdomain=${subdomain}`,
+      {headers}
+    ).map((res: Response) => {
+      return res.json();
+    });
+  }
+
 }
