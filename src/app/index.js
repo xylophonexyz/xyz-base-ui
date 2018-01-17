@@ -30,6 +30,19 @@ var ComponentStatus;
     ComponentStatus["COMPLETE"] = "COMPLETE";
     ComponentStatus["FAILED"] = "FAILED";
 })(ComponentStatus = exports.ComponentStatus || (exports.ComponentStatus = {}));
+/**
+ * Enum of ComponentCollection types recognized locally by this app instance
+ */
+var LocalComponentTypes;
+(function (LocalComponentTypes) {
+    LocalComponentTypes["ComponentCollection"] = "ComponentCollection";
+    LocalComponentTypes["Text"] = "Text";
+    LocalComponentTypes["ImageCollection"] = "ImageCollection";
+    LocalComponentTypes["Embed"] = "Embed";
+    LocalComponentTypes["Spacer"] = "Spacer";
+    LocalComponentTypes["Hero"] = "Hero";
+    LocalComponentTypes["FreeFormHtml"] = "FreeFormHtml";
+})(LocalComponentTypes = exports.LocalComponentTypes || (exports.LocalComponentTypes = {}));
 var LoginType;
 (function (LoginType) {
     LoginType["LOGIN"] = "LOGIN";

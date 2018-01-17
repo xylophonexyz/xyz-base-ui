@@ -59,7 +59,10 @@ describe('Composition', () => {
     composition.customDomain = {
       zoneId: '123',
       domainName: 'example.com',
-      nameServers: []
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: false
     };
     expect(composition.customDomain).toBeDefined();
     expect(composition.customDomain.zoneId).toEqual('123');

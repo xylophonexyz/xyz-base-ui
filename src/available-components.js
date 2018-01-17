@@ -27,7 +27,7 @@ exports.BASE_AVAILABLE_COMPONENTS = [
     },
     {
         icon: 'more-horizontal',
-        text: 'Empty Space',
+        text: 'Space',
         type: 'ComponentCollection',
         metatype: 'Spacer'
     },

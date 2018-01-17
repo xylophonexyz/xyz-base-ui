@@ -1,4 +1,12 @@
 "use strict";
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var dotenv = require("dotenv");
 var available_components_1 = require("./available-components");
@@ -108,7 +116,7 @@ function applyCustomDomainMiddleware(app) {
                 })
             }, function (err, _, apiResponse) {
                 if (err) {
-                    res.status(400).send(err).end();
+                    res.status(400).send({ error: err.message }).end();
                 }
                 else {
                     res.send(JSON.parse(apiResponse)).end();
@@ -117,35 +125,46 @@ function applyCustomDomainMiddleware(app) {
         }
         else {
             var error = new Error('Required parameters missing: {domainName, siteId}');
-            res.status(400).send(error).end();
+            res.status(400).send({ error: error.message }).end();
         }
     });
     app.post('/api/domainMappings', bodyParser.json(), function (req, res) {
         if (req.body) {
             var target = getConfig('INSERT_KEY_PAIR_SERVICE_ENDPOINT');
-            request({
-                method: 'POST',
-                url: target,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': req.headers.authorization || req.headers.Authorization
-                },
-                body: JSON.stringify({
-                    siteId: req.body.siteId,
-                    domainName: req.body.domainName
-                })
-            }, function (err, _, apiResponse) {
-                if (err) {
-                    res.status(400).send(err).end();
-                }
-                else {
-                    res.send(apiResponse).end();
-                }
-            });
+            var domainName_1 = req.body.domainName;
+            var siteId = req.body.siteId;
+            var subdomain_1 = req.body.subdomain;
+            if (!validateSubdomain(subdomain_1)) {
+                var error = new Error('Invalid domain name provided');
+                res.status(400).send({ error: error.message }).end();
+            }
+            else {
+                request({
+                    method: 'POST',
+                    url: target,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': req.headers.authorization || req.headers.Authorization
+                    },
+                    body: JSON.stringify({ siteId: siteId, domainName: getFullDomainName(domainName_1, subdomain_1) })
+                }, function (err, _, apiResponse) {
+                    if (err) {
+                        res.status(400).send({ error: err.message }).end();
+                    }
+                    else {
+                        try {
+                            res.send(__assign({}, JSON.parse(apiResponse), { domainName: domainName_1, subdomain: subdomain_1 })).end();
+                        }
+                        catch (err) {
+                            res.status(400).send({ error: err.message }).end();
+                        }
+                    }
+                });
+            }
         }
         else {
             var error = new Error('Required parameters missing: {domainName, siteId}');
-            res.status(400).send(error).end();
+            res.status(400).send({ error: error.message }).end();
         }
     });
     app.delete('/api/domains/:siteId', function (req, res) {
@@ -160,7 +179,7 @@ function applyCustomDomainMiddleware(app) {
                 },
             }, function (err, _, apiResponse) {
                 if (err) {
-                    res.status(400).send(err).end();
+                    res.status(400).send({ error: err.message }).end();
                 }
                 else {
                     res.send(apiResponse).end();
@@ -169,9 +188,43 @@ function applyCustomDomainMiddleware(app) {
         }
         else {
             var error = new Error('Required parameters missing: {siteId}');
-            res.status(400).send(error).end();
+            res.status(400).send({ error: error.message }).end();
         }
     });
+    app.delete('/api/domainMappings/:siteId', function (req, res) {
+        if (req.params.siteId) {
+            var target = getConfig('DELETE_KEY_PAIR_SERVICE_ENDPOINT');
+            var siteId = req.params.siteId;
+            var domainName = req.query.domainName;
+            var subdomain = req.query.subdomain;
+            request({
+                method: 'POST',
+                url: target,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': req.headers.authorization || req.headers.Authorization
+                },
+                body: JSON.stringify({ siteId: siteId, domainName: getFullDomainName(domainName, subdomain) })
+            }, function (err, _, apiResponse) {
+                if (err) {
+                    res.status(400).send({ error: err.message }).end();
+                }
+                else {
+                    res.send(apiResponse).end();
+                }
+            });
+        }
+        else {
+            var error = new Error('Required parameters missing: {domainName, siteId, subdomain}');
+            res.status(400).send({ error: error.message }).end();
+        }
+    });
+    function validateSubdomain(subdomain) {
+        return subdomain === '@' || new RegExp('[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?').test(subdomain);
+    }
+    function getFullDomainName(domain, subdomain) {
+        return subdomain === '@' ? domain : subdomain + "." + domain;
+    }
 }
 exports.applyCustomDomainMiddleware = applyCustomDomainMiddleware;
 /**

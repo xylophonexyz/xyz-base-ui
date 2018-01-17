@@ -86,8 +86,13 @@ describe('SiteAdvancedSettingsComponent', () => {
     component.site.customDomain = {
       zoneId: '123',
       domainName: 'example.com',
-      nameServers: []
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: false
     };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
     expect(component.customDomainName).toEqual('example.com');
   });
 
@@ -149,7 +154,10 @@ describe('SiteAdvancedSettingsComponent', () => {
     component.site.customDomain = {
       zoneId: '123',
       domainName: 'example.com',
-      nameServers: []
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: false
     };
     component.removeCustomDomain();
     tick();
@@ -172,7 +180,10 @@ describe('SiteAdvancedSettingsComponent', () => {
     component.site.customDomain = {
       zoneId: '123',
       domainName: 'example.com',
-      nameServers: []
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: false
     };
     component.removeCustomDomain();
     tick();
