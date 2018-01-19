@@ -85,6 +85,10 @@
   color: white;
 }
 
+.has-border-radius {
+  border-radius: $radius;
+}
+
 .popover {
   position: absolute;
   z-index: 10;
