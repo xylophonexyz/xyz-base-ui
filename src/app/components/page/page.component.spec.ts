@@ -41,7 +41,8 @@ import {UITextComponent} from '../text-component/text-component.component';
 
 import {PageComponent} from './page.component';
 import {UIFreeFormHtmlComponent} from '../free-form-html-component/free-form-html-component.component';
-import {PageNavigationItemNavigationStrategy} from '../../index';
+import {PageDataInterface, PageNavigationItemNavigationStrategy} from '../../index';
+import {XzChangeBgColorOnHoverDirective} from '../../directives/xz-change-bg-color-on-hover/xz-change-bg-color-on-hover.directive';
 
 describe('PageComponent', () => {
   let component: PageComponent;
@@ -81,7 +82,8 @@ describe('PageComponent', () => {
         UIFreeFormHtmlComponent,
         UIEmbedComponent,
         ContentEditableModelDirective,
-        XzRichTextMock
+        XzRichTextMock,
+        XzChangeBgColorOnHoverDirective
       ]
     }).compileComponents();
   }));
@@ -495,6 +497,47 @@ describe('PageComponent', () => {
       expect(component.shouldShowSwitchToEditModeBanner()).toEqual(true);
       component.hideBanner = true;
       expect(component.shouldShowSwitchToEditModeBanner()).toEqual(false);
+    });
+  });
+
+  describe('Page static methods', () => {
+    it('should provide a method to return a page title with fallbacks', () => {
+      let page: Page = mockPage();
+      expect(PageComponent.getPageTitle(page)).toEqual(page.title);
+      page.metadata = null;
+      page.title = null;
+      page.composition.title = 'foo';
+      expect(PageComponent.getPageTitle(page)).toEqual('foo');
+      page = mockPage({} as PageDataInterface);
+      page.title = null;
+      expect(PageComponent.getPageTitle(page)).toEqual('');
+    });
+
+    it('should provide a method to return a page description with fallbacks', () => {
+      let page: Page = mockPage();
+      expect(PageComponent.getPageDescription(page)).toEqual(page.description);
+      page.metadata = null;
+      page.description = null;
+      page.composition.title = 'foo';
+      expect(PageComponent.getPageDescription(page)).toEqual('foo');
+      page = mockPage({} as PageDataInterface);
+      page.description = null;
+      expect(PageComponent.getPageTitle(page)).toEqual('');
+    });
+
+    it('should provide a method to return a page cover image with fallbacks', () => {
+      let page: Page = mockPage({cover: 'qux'} as PageDataInterface);
+      expect(PageComponent.getPageCover(page)).toEqual('qux');
+
+      page = mockPage({} as PageDataInterface);
+      page.composition.cover = 'foo';
+      expect(PageComponent.getPageCover(page)).toEqual('foo');
+
+      page = mockPage({composition: {metadata: {favicon: {components: [{media: {url: 'bar'}}]}}}} as PageDataInterface);
+      expect(PageComponent.getPageCover(page)).toEqual('bar');
+
+      page = mockPage({} as PageDataInterface);
+      expect(PageComponent.getPageCover(page)).toEqual(page.cover);
     });
   });
 });

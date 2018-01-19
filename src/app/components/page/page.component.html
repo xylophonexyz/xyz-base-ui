@@ -47,6 +47,10 @@
             <a *ngIf="childPage.title && !childPage.isExternalNavigationType()"
                class="navbar-item full-height"
                [class.is-active]="childPage.id === page.id"
+               xzChangeBgColorOnHover
+               [hoverOnColor]="page.composition.headerHoverColor"
+               [hoverOffColor]="page.composition.headerColor"
+               [hoverEnabled]="!page.hasTransparentHeader()"
                [class.has-transparent-nav]="page.hasTransparentHeader()"
                [style.color]="childPage.id === page.id ? page.composition.primaryColor : page.composition.primaryColorLight"
                [class.is-tab]="page.composition.hasTabbedNav()"
@@ -58,6 +62,10 @@
             <a *ngIf="childPage.title && childPage.isExternalNavigationType()"
                class="navbar-item full-height"
                [class.is-active]="childPage.id === page.id"
+               xzChangeBgColorOnHover
+               [hoverOnColor]="page.composition.headerHoverColor"
+               [hoverOffColor]="page.composition.headerColor"
+               [hoverEnabled]="!page.hasTransparentHeader()"
                [class.has-transparent-nav]="page.hasTransparentHeader()"
                [style.color]="childPage.id === page.id ? page.composition.primaryColor : page.composition.primaryColorLight"
                [class.is-tab]="page.composition.hasTabbedNav()"

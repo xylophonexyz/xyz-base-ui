@@ -188,6 +188,43 @@
     </div>
   </nav>
 
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <p class="subtitle">
+          Header Item Hover color
+        </p>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <small>
+          This is the background color of the navigation items when one is hovered over
+        </small>
+      </div>
+    </div>
+  </nav>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <div class="field">
+          <p class="control">
+            <input class="input"
+                   type="text"
+                   placeholder="#FFFFFF"
+                   [(ngModel)]="site.headerHoverColor">
+          </p>
+        </div>
+      </div>
+      <div class="level-item">
+        <figure class="image is-12x12 has-shadow color-preview"
+                [style.background-color]="site.headerHoverColor"></figure>
+      </div>
+    </div>
+  </nav>
+
   <hr>
 
   <h1 class="subtitle">

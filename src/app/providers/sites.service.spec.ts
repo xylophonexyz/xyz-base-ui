@@ -1,11 +1,6 @@
 import {async, getTestBed, inject, TestBed} from '@angular/core/testing';
 import {
-  BaseRequestOptions,
-  Http,
-  HttpModule,
-  RequestMethod,
-  Response,
-  ResponseOptions,
+  BaseRequestOptions, Http, HttpModule, RequestMethod, Response, ResponseOptions,
   ResponseType
 } from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
@@ -577,11 +572,33 @@ describe('SitesService', () => {
       });
     })));
 
+    it('should add a custom domain key pair', async(inject([SitesService], (service: SitesService) => {
+      mockSucceed();
+      const auth = getTestBed().get(AuthService);
+      service.addDomainNameKeyPair(1, 'example.com', 'www').subscribe((res: any) => {
+        expect(connection.request.url).toEqual('/api/domainMappings');
+        expect(connection.request.method).toEqual(RequestMethod.Post);
+        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
+        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
+      });
+    })));
+
     it('should remove a custom domain', async(inject([SitesService], (service: SitesService) => {
       mockSucceed();
       const auth = getTestBed().get(AuthService);
       service.removeCustomDomain(1).subscribe((res: any) => {
         expect(connection.request.url).toEqual('/api/domains/1');
+        expect(connection.request.method).toEqual(RequestMethod.Delete);
+        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
+        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
+      });
+    })));
+
+    it('should remove a custom domain key par', async(inject([SitesService], (service: SitesService) => {
+      mockSucceed();
+      const auth = getTestBed().get(AuthService);
+      service.removeDomainNameKeyPair(1, 'foo.com', 'www').subscribe((res: any) => {
+        expect(connection.request.url).toEqual('/api/domainMappings/1?domainName=foo.com&subdomain=www');
         expect(connection.request.method).toEqual(RequestMethod.Delete);
         expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
         expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);

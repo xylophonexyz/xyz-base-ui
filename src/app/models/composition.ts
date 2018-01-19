@@ -1,9 +1,6 @@
 import {CompositionCustomDomain, CompositionDataInterface, CompositionInterface, CompositionMetadata} from '../index';
 import {
-  colorIsLight,
-  colorIsValidFullHexString,
-  darkenHexColorString,
-  getHexColorString,
+  colorIsLight, colorIsValidFullHexString, darkenHexColorString, getHexColorString,
   lightenHexColorString
 } from '../util/colors';
 import {Page} from './page';
@@ -16,7 +13,8 @@ export class Composition implements CompositionInterface {
     hasHeaderShadow: true,
     theme: {
       primaryColor: '#000000',
-      headerColor: '#FFFFFF'
+      headerColor: '#FFFFFF',
+      headerHoverColor: '#F5F5F5'
     },
     customDomain: null,
     favicon: null
@@ -170,7 +168,8 @@ export class Composition implements CompositionInterface {
       } else {
         this._metadata.theme = {
           primaryColor: null,
-          headerColor: null
+          headerColor: null,
+          headerHoverColor: null,
         };
         this.primaryColor = color;
       }
@@ -207,9 +206,35 @@ export class Composition implements CompositionInterface {
       } else {
         this._metadata.theme = {
           headerColor: null,
-          primaryColor: null
+          primaryColor: null,
+          headerHoverColor: null,
         };
         this.headerColor = color;
+      }
+    }
+  }
+
+  get headerHoverColor(): string {
+    if (this._metadata && this._metadata.theme) {
+      return this._metadata.theme.headerHoverColor || '';
+    } else {
+      return '';
+    }
+  }
+
+  set headerHoverColor(color: string) {
+    if (this._metadata) {
+      if (this._metadata.theme) {
+        if (colorIsValidFullHexString(color)) {
+          this._metadata.theme.headerHoverColor = getHexColorString(color);
+        }
+      } else {
+        this._metadata.theme = {
+          headerColor: null,
+          primaryColor: null,
+          headerHoverColor: null,
+        };
+        this.headerHoverColor = color;
       }
     }
   }

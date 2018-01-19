@@ -30,6 +30,7 @@ describe('Composition', () => {
     expect(composition.customDomain).toBeDefined();
     expect(composition.primaryColor).toEqual('');
     expect(composition.headerColor).toEqual('');
+    expect(composition.headerHoverColor).toEqual('');
     expect(composition.favicon).toBeDefined();
     expect(composition.pages[0] instanceof Page).toEqual(true);
     expect(composition.cover).toBeDefined();
@@ -151,6 +152,18 @@ describe('Composition', () => {
     expect(composition.headerColor).toEqual('');
     composition.headerColor = 'asdf234';
     expect(composition.headerColor).toEqual('');
+  });
+
+  it('should provide a setter for headerHoverColor', () => {
+    composition = new Composition(Object.assign(compositionData, {metadata: null}));
+    expect(composition.headerHoverColor).toEqual('');
+    composition.headerHoverColor = 'FFEEff';
+    expect(composition.headerHoverColor).toEqual('#FFEEFF');
+
+    composition = new Composition(Object.assign(compositionData, {metadata: null}));
+    expect(composition.headerHoverColor).toEqual('');
+    composition.headerHoverColor = 'asdf234';
+    expect(composition.headerHoverColor).toEqual('');
   });
 
   it('should return a lightened or darkened version of the primary color', () => {

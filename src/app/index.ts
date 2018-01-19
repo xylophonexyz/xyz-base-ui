@@ -417,6 +417,7 @@ export interface CompositionMetadata {
   theme: {
     primaryColor: string;
     headerColor: string;
+    headerHoverColor: string;
   };
   showLogoInHeader: boolean;
   hasHeaderShadow: boolean;

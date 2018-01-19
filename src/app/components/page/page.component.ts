@@ -32,6 +32,26 @@ export class PageComponent implements OnInit, OnDestroy {
   isLoading = false;
   hideBanner = false;
 
+  static getPageCover(page: Page): string {
+    if (page.hasCover()) {
+      return page.cover;
+    } else if (page.composition.hasCover()) {
+      return page.composition.cover;
+    } else if (page.composition.hasFavicon()) {
+      return page.composition.favicon;
+    } else {
+      return page.cover;
+    }
+  }
+
+  static getPageTitle(page: Page): string {
+    return page.title || page.composition.title;
+  }
+
+  static getPageDescription(page: Page): string {
+    return page.description || page.composition.title;
+  }
+
   constructor(private nav: NavbarDelegateService,
               private footer: FooterDelegateService,
               private auth: AuthService,
@@ -282,27 +302,21 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   private setDocumentMetaTags(page: Page) {
-    this.metaService.addTag({name: 'og:type', content: 'article'});
+    this.metaService.updateTag({name: 'og:type', content: 'article'});
     // this.metaService.addTag({name: 'og:url', content: ''}); // TODO: canonicalized from site domain and page slug
-    this.metaService.addTag({name: 'og:site_name', content: page.composition.title});
-    this.metaService.addTag({name: 'twitter:card', content: 'summary'});
-    this.metaService.addTags([
-      {name: 'description', content: page.description},
-      {name: 'og:description', content: page.description},
-      {name: 'twitter:description', content: page.description},
-      {itemprop: 'description', content: page.description},
-    ]);
-    this.metaService.addTags([
-      {name: 'title', content: page.title},
-      {name: 'og:title', content: page.title},
-      {name: 'twitter:title', content: page.title},
-      {itemprop: 'name', content: page.title},
-    ]);
-    this.metaService.addTags([
-      {name: 'og:image', content: page.cover},
-      {name: 'twitter:image', content: page.cover},
-      {itemprop: 'image', content: page.cover},
-    ]);
+    this.metaService.updateTag({name: 'og:site_name', content: page.composition.title});
+    this.metaService.updateTag({name: 'twitter:card', content: 'summary'});
+    this.metaService.updateTag({name: 'description', content: PageComponent.getPageDescription(page)});
+    this.metaService.updateTag({name: 'og:description', content: PageComponent.getPageDescription(page)});
+    this.metaService.updateTag({name: 'twitter:description', content: PageComponent.getPageDescription(page)});
+    this.metaService.updateTag({itemprop: 'description', content: PageComponent.getPageDescription(page)});
+    this.metaService.updateTag({name: 'title', content: PageComponent.getPageTitle(page)});
+    this.metaService.updateTag({name: 'og:title', content: PageComponent.getPageTitle(page)});
+    this.metaService.updateTag({name: 'twitter:title', content: PageComponent.getPageTitle(page)});
+    this.metaService.updateTag({itemprop: 'name', content: PageComponent.getPageTitle(page)});
+    this.metaService.updateTag({name: 'og:image', content: PageComponent.getPageCover(page)});
+    this.metaService.updateTag({name: 'twitter:image', content: PageComponent.getPageCover(page)});
+    this.metaService.updateTag({itemprop: 'image', content: PageComponent.getPageCover(page)});
   }
 
   private addPageSlugToUrl(params: Params, editMode: boolean, page: Page) {
