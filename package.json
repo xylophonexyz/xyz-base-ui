@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "ng build",
-    "build:server": "npm run compile:server && ng build --prod --aot --build-optimizer=false --app 1",
+    "build:server": "npm run compile:server && ng build --aot --build-optimizer=false --app 1",
     "compile:server": "tsc src/server.ts --lib es6,dom --target es5",
     "compile:server:dev": "tsc src/server.dev.ts --lib es6,dom --target es5",
     "build:prod": "ng build --prod --aot --build-optimizer=false --app 0",

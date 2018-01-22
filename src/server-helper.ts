@@ -339,13 +339,13 @@ export function applyAuthProxyMiddleware(app: Express) {
  */
 export function setupAngularRenderer(app: Express) {
   // AppServerModuleNgFactory is generated from our AOT build and will be exported in our main `server` bundle
-  let hash = '';
+  let fileName = '';
   fs.readdirSync(__dirname).forEach(file => {
     if (file.startsWith('main')) {
-      hash = file.split('.')[1];
+      fileName = file;
     }
   });
-  const bundle = require('./main.' + hash + '.bundle');
+  const bundle = require('./' + fileName);
   const AppServerModuleNgFactory = bundle.AppServerModuleNgFactory;
 
   app.engine('html', ngExpressEngine({
@@ -388,7 +388,7 @@ export function applyViewCachingMiddleware(app: Express, memcachedUrl: string) {
         } else {
           const send = res.send;
           res.send = function (body?: any): Response {
-            const expiry = 43200; // 12 hours
+            const expiry = 86400 * 5; // 24 hours * 5 days
             memcached.set(req.url, body.toString(), expiry, () => {
               console.log('Cached view for:', req.url, 'with expiry:', expiry);
             });
