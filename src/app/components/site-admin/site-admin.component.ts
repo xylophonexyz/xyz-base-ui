@@ -81,13 +81,13 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
 
   get navigationItems(): Page[] {
     return this.site.pages.filter(p => {
-      return p.metadata.navigationItem;
+      return p.isNavigationItem();
     });
   }
 
   get pages(): Page[] {
     return this.site.pages.filter(p => {
-      return !p.metadata.navigationItem;
+      return !p.isNavigationItem();
     });
   }
 

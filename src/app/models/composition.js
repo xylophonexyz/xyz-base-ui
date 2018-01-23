@@ -168,7 +168,8 @@ var Composition = /** @class */ (function () {
                 else {
                     this._metadata.theme = {
                         primaryColor: null,
-                        headerColor: null
+                        headerColor: null,
+                        headerHoverColor: null,
                     };
                     this.primaryColor = color;
                 }
@@ -214,9 +215,39 @@ var Composition = /** @class */ (function () {
                 else {
                     this._metadata.theme = {
                         headerColor: null,
-                        primaryColor: null
+                        primaryColor: null,
+                        headerHoverColor: null,
                     };
                     this.headerColor = color;
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Composition.prototype, "headerHoverColor", {
+        get: function () {
+            if (this._metadata && this._metadata.theme) {
+                return this._metadata.theme.headerHoverColor || '';
+            }
+            else {
+                return '';
+            }
+        },
+        set: function (color) {
+            if (this._metadata) {
+                if (this._metadata.theme) {
+                    if (colors_1.colorIsValidFullHexString(color)) {
+                        this._metadata.theme.headerHoverColor = colors_1.getHexColorString(color);
+                    }
+                }
+                else {
+                    this._metadata.theme = {
+                        headerColor: null,
+                        primaryColor: null,
+                        headerHoverColor: null,
+                    };
+                    this.headerHoverColor = color;
                 }
             }
         },
@@ -312,7 +343,8 @@ var Composition = /** @class */ (function () {
         hasHeaderShadow: true,
         theme: {
             primaryColor: '#000000',
-            headerColor: '#FFFFFF'
+            headerColor: '#FFFFFF',
+            headerHoverColor: '#F5F5F5'
         },
         customDomain: null,
         favicon: null
