@@ -122,11 +122,11 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   get titleSize(): string {
-    return this.textSize.toString() + 'rem';
+    return this.textSize.toString() + 'em';
   }
 
   get subtitleSize(): string {
-    return (this.textSize * UISectionComponent.TextSizeRatio).toString() + 'rem';
+    return (this.textSize * UISectionComponent.TextSizeRatio).toString() + 'em';
   }
 
   get textSize(): number {

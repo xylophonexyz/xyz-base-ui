@@ -4,7 +4,7 @@
          [class.has-background-light]="editorIsInFocus()">
   <div class="container edit-container"
        [hidden]="!editorIsInFocus()"
-       [style.min-height]="isEditable() ? '1rem' : 'unset'"
+       [style.min-height]="isEditable() ? '1em' : 'unset'"
        [style.cursor]="isEditable() ? 'pointer' : 'default'">
     <div [xzRichTextModel]="htmlModel"
          (click)="$event.stopImmediatePropagation()"

@@ -5,8 +5,8 @@
          [style.background-size]="isLayoutContain() ? 'contain' : 'cover'"
          [style.width]="isLayoutEdgeToEdge() ? '100vw' : ''"
          [style.max-width]="isLayoutEdgeToEdge() ? '100vw' : ''"
-         [style.padding-top]="padding + 'rem'"
-         [style.padding-bottom]="padding + 'rem'"
+         [style.padding-top]="padding + 'em'"
+         [style.padding-bottom]="padding + 'em'"
          [style.background-position]="backgroundPosition()"
          [style.background-image]="mediaModel ? 'url(' + (mediaUrl | async) + ')' : ''">
   <div *ngIf="shouldShowStatusText()"

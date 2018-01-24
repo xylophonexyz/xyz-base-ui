@@ -375,8 +375,8 @@ describe('UISectionComponent', () => {
       expect(component.textSize).toEqual(UIComponent.BaseTextSize);
       textConfig.onInputChange(event);
       // titleSize, subtitleSize returns the css string
-      expect(component.titleSize).toEqual('4rem');
-      expect(component.subtitleSize).toEqual(4 * UISectionComponent.TextSizeRatio + 'rem');
+      expect(component.titleSize).toEqual('4em');
+      expect(component.subtitleSize).toEqual(4 * UISectionComponent.TextSizeRatio + 'em');
       // cause an error
       component.component.metadata = null;
       expect(component.textSize).toEqual(UIComponent.BaseTextSize);

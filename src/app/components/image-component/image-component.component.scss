@@ -2,10 +2,10 @@
 
 .image-component {
   &.is-compact {
-    padding: 12rem 1.5rem;
+    padding: 12em 1.5em;
   }
   &.is-medium {
-    padding: 15rem 1.5rem;
+    padding: 15em 1.5em;
   }
   &.is-no-padding {
     padding: 0;
@@ -16,7 +16,7 @@
   .notification {
     width: 25%;
     align-self: center;
-    padding: 0.5rem;
+    padding: 0.5em;
     opacity: 0.8;
     margin: 0 auto;
     @media(max-width: $tablet) {

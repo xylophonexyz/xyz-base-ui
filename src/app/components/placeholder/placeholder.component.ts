@@ -19,13 +19,13 @@ export class PlaceholderComponent {
   titleSize() {
     switch (this.size) {
       case 'sm':
-        return '1rem';
+        return '1em';
       case 'md':
-        return '2rem';
+        return '2em';
       case 'lg':
-        return '4rem';
+        return '4em';
       default:
-        return '1rem';
+        return '1em';
     }
   }
 }

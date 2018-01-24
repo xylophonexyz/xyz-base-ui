@@ -5,11 +5,11 @@
   @extend .dashboard--admin;
 
   .section--account {
-    padding-top: 1rem;
-    padding-left: 1rem;
+    padding-top: 1em;
+    padding-left: 1em;
   }
 
-  padding-bottom: 6rem;
+  padding-bottom: 6em;
   .has-shadow {
     box-shadow: 0 2px 3px rgba(10, 10, 10, 0.25);
   }
@@ -17,19 +17,19 @@
     color: #363636;
   }
   .hero-body {
-    padding: 0 3rem;
+    padding: 0 3em;
   }
   .logo--delete {
-    left: 0.25rem;
+    left: 0.25em;
     bottom: 32px;
   }
   .site-settings__heading {
     .hero-body {
-      padding-top: 3rem;
+      padding-top: 3em;
     }
   }
   .container {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5em 0.75em;
   }
   .is-12x12 {
     height: 12px;

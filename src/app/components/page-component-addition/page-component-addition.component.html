@@ -8,6 +8,7 @@
 </div>
 
 <app-modal [show]="shouldShowButtons"
+           [hasOverflowHidden]="true"
            (onHide)="shouldShowButtons = !shouldShowButtons">
   <div class="page-component-addition tile is-ancestor">
     <div class="tile is-4 is-vertical is-parent"

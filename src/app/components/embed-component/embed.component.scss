@@ -5,11 +5,11 @@
     width: 100%;
   }
   .is-large {
-    width: 48rem;
+    width: 48em;
   }
   .embed-container {
     align-self: center;
-    min-width: 32rem;
+    min-width: 32em;
     @media(max-width: $tablet) {
       width: 100%;
       min-width: 100%;

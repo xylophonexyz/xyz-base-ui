@@ -180,7 +180,7 @@ export function positionElements(hostElement: HTMLElement,
 
   targetElement.style.top = `${pos.top}px`;
   targetElement.style.left = `${pos.left}px`;
-  targetElement.style.marginTop = `${(placement === 'top' ? -1 : 1) * 0.5}rem`;
+  targetElement.style.marginTop = `${(placement === 'top' ? -1 : 1) * 0.5}em`;
 
   const arrowPosition = positionService.positionArrow(hostElement, targetElement, arrowElement, appendToBody);
   arrowElement.style.left = `${arrowPosition.left}px`;

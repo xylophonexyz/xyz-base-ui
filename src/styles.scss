@@ -7,6 +7,22 @@
 @import '../node_modules/quill/dist/quill.snow.css';
 @import '../src/app/theme/quill-overrides.scss';
 
+@media(max-width: $tablet) {
+  body {
+    font-size: 0.75rem;
+  }
+  p {
+    br {
+      display: none;
+    }
+  }
+  section {
+    .hero {
+      min-height: 16em;
+    }
+  }
+}
+
 [contenteditable=true]:empty:before {
   content: attr(placeholder);
   display: block;
@@ -30,10 +46,10 @@
 
 .icon {
   svg {
-    height: 1rem;
-    width: 1rem;
+    height: 1em;
+    width: 1em;
     color: rgba(25, 25, 25, 0.8);
-    margin-top: 0.4rem;
+    margin-top: 0.4em;
   }
   &.is-white {
     svg {
@@ -47,14 +63,14 @@
   }
   &.is-large {
     svg {
-      height: 1.5rem;
-      width: 1.5rem;
+      height: 1.2em;
+      width: 1.2em;
     }
   }
   &.is-extra-large {
     svg {
-      height: 3rem;
-      width: 3rem;
+      height: 2em;
+      width: 2em;
     }
   }
   .is-large {
@@ -89,6 +105,10 @@
   border-radius: $radius;
 }
 
+.has-overflow-hidden {
+  overflow: hidden;
+}
+
 .popover {
   position: absolute;
   z-index: 10;
@@ -96,7 +116,7 @@
     width: 100%;
   }
   .box {
-    min-width: 12rem;
+    min-width: 12em;
     padding-left: 0;
     padding-right: 0;
   }
@@ -137,9 +157,9 @@
   width: 100%;
   margin: 0 auto;
   max-width: 722px;
-  padding: 3rem 0;
+  padding: 3em 0;
   @media(max-width: $tablet) {
-    padding: 3rem 1rem;
+    padding: 3em 1em;
   }
 }
 

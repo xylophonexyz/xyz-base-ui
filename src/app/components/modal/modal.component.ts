@@ -8,7 +8,8 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@
 })
 export class ModalComponent {
 
-  @Input() show: boolean;
+  @Input() show = false;
+  @Input() hasOverflowHidden = false;
   @Output() onHide: EventEmitter<any> = new EventEmitter();
 
   emitClose() {

@@ -1,10 +1,9 @@
 .page-component-addition {
-  padding: 1rem 1rem 4rem 1rem;
-  overflow: hidden;
+  padding: 1em 1em 4em 1em;
   .button--add {
     border-radius: 50%;
-    width: 3rem;
-    height: 3rem;
+    width: 3em;
+    height: 3em;
   }
   .tile {
     cursor: pointer;
@@ -15,6 +14,6 @@
   .button--create_component {
     color: rgba(0, 0, 0, 0.65);
     position: relative;
-    padding: 2rem;
+    padding: 2em;
   }
 }
