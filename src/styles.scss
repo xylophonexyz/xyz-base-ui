@@ -9,7 +9,7 @@
 
 @media(max-width: $tablet) {
   body {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
   p {
     br {
@@ -19,6 +19,14 @@
   section {
     .hero {
       min-height: 24em;
+    }
+    .hero-body {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      .container {
+        margin: unset;
+      }
     }
   }
 }
