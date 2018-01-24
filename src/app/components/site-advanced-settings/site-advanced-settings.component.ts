@@ -176,7 +176,7 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
   customDomainDidChange(): boolean {
     if (this.hasCustomDomain()) {
       return !isEqual(this._customDomainName, this.site.customDomain.domainName) ||
-        !isEqual(Array.from(this._newDomainMappings), this.site.customDomain.domainMappings);
+        !isEqual(Array.from(this._newDomainMappings), (this.site.customDomain.domainMappings || []));
     } else {
       return true;
     }
