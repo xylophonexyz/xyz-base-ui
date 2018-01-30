@@ -125,6 +125,26 @@ describe('SiteAdvancedSettingsComponent', () => {
     expect(component.errorMessage).toEqual(null);
   }));
 
+  it('should provide a method to add a custom domain when dns is self managed', fakeAsync(() => {
+    spyOn(component, 'addCustomDomainMappings');
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'example.com',
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+
+    component.addCustomDomain();
+    tick();
+    expect(component.addCustomDomainMappings).toHaveBeenCalled();
+  }));
+
   it('should handle errors when adding a custom domain', fakeAsync(() => {
     const service = getTestBed().get(SitesService);
     spyOn(component, 'updateSiteMetadata');
@@ -150,7 +170,6 @@ describe('SiteAdvancedSettingsComponent', () => {
       });
     });
     component.site = mockComposition();
-    component.site = mockComposition();
     component.site.customDomain = {
       zoneId: '123',
       domainName: 'example.com',
@@ -164,6 +183,189 @@ describe('SiteAdvancedSettingsComponent', () => {
     fixture.detectChanges();
     expect(component.updateSiteMetadata).toHaveBeenCalled();
     expect(component.site.customDomain).toEqual(null);
+    expect(component.errorMessage).toEqual(null);
+  }));
+
+  it('should provide a method to remove a custom domain when dns is self managed', fakeAsync(() => {
+    spyOn(component, 'removeCustomDomainMappings');
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'example.com',
+      nameServers: [],
+      domainMappings: [],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+
+    component.removeCustomDomain();
+    tick();
+    expect(component.removeCustomDomainMappings).toHaveBeenCalled();
+  }));
+
+  it('should remove a custom domain mapping', fakeAsync(() => {
+    const service = getTestBed().get(SitesService);
+    spyOn(component, 'updateSiteMetadata');
+    spyOn(service, 'removeDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.complete();
+      });
+    });
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'example.com',
+      nameServers: [],
+      domainMappings: ['foo', 'bar'],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+    tick();
+
+    component.removeCustomDomainMappings();
+    tick();
+    fixture.detectChanges();
+    expect(component.updateSiteMetadata).toHaveBeenCalled();
+    expect(component.site.customDomain).toEqual(null);
+    expect(component.errorMessage).toEqual(null);
+    expect(component.domainMappings).toEqual([]);
+    expect(component.customDomainName).toEqual(null);
+  }));
+
+  it('should handle errors when removing a custom domain mapping', fakeAsync(() => {
+    const service = getTestBed().get(SitesService);
+    spyOn(service, 'removeDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.error('Foobed up!');
+      });
+    });
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'example.com',
+      nameServers: [],
+      domainMappings: ['foo', 'bar'],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+    tick();
+
+    component.removeCustomDomainMappings();
+    tick();
+    fixture.detectChanges();
+    expect(component.errorMessage).toEqual('Foobed up!');
+  }));
+
+  it('should add a custom domain mapping', fakeAsync(() => {
+    const service = getTestBed().get(SitesService);
+    spyOn(component, 'updateSiteMetadata');
+    spyOn(service, 'removeDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.complete();
+      });
+    });
+    spyOn(service, 'addDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.next({
+          message: 'success1',
+          subdomain: 'bar.com-' + Math.random()
+        });
+        observer.complete();
+      });
+    });
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'baz.qux',
+      nameServers: [],
+      domainMappings: ['removeMe1.com', 'removeMe2.com'],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+    tick();
+
+    component.addCustomDomainMappings();
+    tick();
+    fixture.detectChanges();
+    expect(service.removeDomainNameKeyPair).toHaveBeenCalled();
+    expect(component.updateSiteMetadata).toHaveBeenCalled();
+    expect(component.site.customDomain.domainMappings[0]).toMatch(/bar\.com-\d+/);
+    expect(component.site.customDomain.domainMappings[1]).toMatch(/bar\.com-\d+/);
+    expect(component.site.customDomain.domainName).toEqual('baz.qux');
+    expect(component.errorMessage).toEqual(null);
+  }));
+
+  it('should handle errors when adding a custom domain mapping', fakeAsync(() => {
+    const service = getTestBed().get(SitesService);
+    spyOn(component, 'updateSiteMetadata');
+    spyOn(service, 'removeDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.complete();
+      });
+    });
+    spyOn(service, 'addDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.error('What an error!');
+      });
+    });
+    component.site = mockComposition();
+    component.site.customDomain = {
+      zoneId: '123',
+      domainName: 'baz.qux',
+      nameServers: [],
+      domainMappings: ['removeMe1.com', 'removeMe2.com'],
+      requiredDnsRecords: [],
+      selfManagedDns: true
+    };
+    const channel: MessageChannelDelegateService = getTestBed().get(MessageChannelDelegateService);
+    channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: null});
+    tick();
+
+    component.addCustomDomainMappings();
+    tick();
+    fixture.detectChanges();
+    expect(component.site.customDomain.domainMappings).toEqual(['removeMe1.com', 'removeMe2.com']);
+    expect(component.errorMessage).toEqual('What an error!');
+  }));
+
+  it('should ignore removal of existing domain mappings when the site has no custom domain object', fakeAsync(() => {
+    const service = getTestBed().get(SitesService);
+    spyOn(component, 'updateSiteMetadata');
+    spyOn(service, 'removeDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.complete();
+      });
+    });
+    spyOn(service, 'addDomainNameKeyPair').and.callFake(() => {
+      return Observable.create(observer => {
+        observer.next({
+          message: 'success1',
+          subdomain: 'bar.com-' + Math.random()
+        });
+        observer.complete();
+      });
+    });
+    component.site = mockComposition();
+    component.site.customDomain = null;
+    component.domainMappings = ['bar.com', 'qux.com'];
+    component.customDomainName = 'baz.qux';
+
+    component.addCustomDomainMappings();
+    tick();
+    fixture.detectChanges();
+    expect(service.removeDomainNameKeyPair).not.toHaveBeenCalled();
+    expect(component.updateSiteMetadata).toHaveBeenCalled();
+    expect(component.site.customDomain.domainMappings[0]).toMatch(/bar\.com-\d+/);
+    expect(component.site.customDomain.domainMappings[1]).toMatch(/bar\.com-\d+/);
+    expect(component.site.customDomain.domainName).toEqual('baz.qux');
     expect(component.errorMessage).toEqual(null);
   }));
 
@@ -191,4 +393,48 @@ describe('SiteAdvancedSettingsComponent', () => {
     expect(component.site.customDomain).not.toEqual(null);
     expect(component.errorMessage).toEqual('Foober');
   }));
+
+  it('should provide a getter/setter for selfManagedDns', () => {
+    expect(component.isSelfManagedDns).toEqual(false);
+    component.isSelfManagedDns = true;
+    expect(component.isSelfManagedDns).toEqual(true);
+  });
+
+  it('should provide a getter/setter for domainMappings', () => {
+    expect(component.domainMappings.length).toEqual(0);
+    const set: Set<string> = new Set();
+    set.add('foo');
+    set.add('bar');
+    set.add('bar');
+    set.add('bar');
+    component.domainMappings = Array.from(set);
+    expect(component.domainMappings.length).toEqual(2);
+  });
+
+  it('should provide a getter/setter for newDomainMapping', () => {
+    expect(component.newDomainMapping).toEqual('');
+    component.newDomainMapping = 'foo';
+    expect(component.newDomainMapping).toEqual('foo');
+  });
+
+  it('should provide a method to add a domain mapping', () => {
+    expect(component.domainMappings.length).toEqual(0);
+    component.newDomainMapping = 'foo';
+    component.addNewDomainMapping();
+    expect(component.domainMappings.length).toEqual(1);
+  });
+
+  it('should provide a method to remove a domain mapping', () => {
+    expect(component.domainMappings.length).toEqual(0);
+    component.newDomainMapping = 'foo';
+    component.addNewDomainMapping();
+    component.newDomainMapping = 'bar';
+    component.addNewDomainMapping();
+    component.newDomainMapping = 'baz';
+    component.addNewDomainMapping();
+    expect(component.domainMappings.length).toEqual(3);
+    component.removeDomainMapping('bar');
+    expect(component.domainMappings.length).toEqual(2);
+    expect(component.domainMappings).toEqual(['foo', 'baz']);
+  });
 });

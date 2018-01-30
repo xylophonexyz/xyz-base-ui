@@ -56,4 +56,14 @@ export const sitesServiceStub = {
       observer.next(null);
     });
   },
+  addDomainNameKeyPair: () => {
+    return new Observable(observer => {
+      observer.next({createZoneResult: {result: {}}});
+    });
+  },
+  removeDomainNameKeyPair: () => {
+    return new Observable(observer => {
+      observer.next(null);
+    });
+  },
 };

@@ -13,7 +13,7 @@ import {routerStub} from '../../../test/stubs/router.stub.spec';
 import {sitesServiceStub} from '../../../test/stubs/sites.service.stub.spec';
 import {appTitleFactory} from '../../../test/stubs/tokens.stub.spec';
 import {windowRefStub} from '../../../test/stubs/window-ref.stub.spec';
-import {APPLICATION_NAME} from '../../index';
+import {APPLICATION_NAME, PageNavigationItemNavigationStrategy} from '../../index';
 import {AuthService} from '../../providers/auth.service';
 import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {MessageChannelDelegateService} from '../../providers/message-channel.service';
@@ -30,6 +30,8 @@ import {ComponentService} from '../../providers/component.service';
 import {componentCollectionServiceStub} from '../../../test/stubs/component-collection.stub.spec';
 import {ComponentCollectionService} from '../../providers/component-collection.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {mockComposition} from '../../providers/sites.service.spec';
+import {mockPage, mockPageResponse} from '../../providers/pages.service.spec';
 
 describe('SitePagesComponent', () => {
   let component: SitePagesComponent;
@@ -115,4 +117,16 @@ describe('SitePagesComponent', () => {
     tick();
     expect(nav.displayNavbar).toHaveBeenCalledWith(false);
   }));
+
+  it('should return navigation items for the page', () => {
+    component.site = mockComposition();
+    const p = mockPage(Object.assign({}, mockPageResponse, {
+      metadata: {
+        navigationItem: true,
+        navigationType: PageNavigationItemNavigationStrategy.Internal
+      }
+    }));
+    component.site.pages.push(p);
+    expect(component.navigationItems.length).toEqual(1);
+  });
 });
