@@ -24,4 +24,12 @@ describe('NavbarDelegateService', () => {
       expect(service.shouldDisplay$.next).toHaveBeenCalledWith(false);
     })
   );
+
+  it('should provide a method to notify subscribers of info banner messages', inject(
+    [NavbarDelegateService], (service: NavbarDelegateService) => {
+      spyOn(service.infoBannerMessage$, 'next').and.callThrough();
+      service.setInfoBannerMessage('foo');
+      expect(service.infoBannerMessage$.next).toHaveBeenCalledWith('foo');
+    })
+  );
 });

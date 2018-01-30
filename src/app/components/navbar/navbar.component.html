@@ -1,3 +1,11 @@
+<!-- info banner -->
+<article class="message is-small is-primary" *ngIf="infoBannerMessage">
+  <div class="message-header">
+    <p class="has-text-centered">{{infoBannerMessage}}</p>
+  </div>
+</article>
+
+<!-- application nav -->
 <nav class="navbar-component navbar has-shadow"
      *ngIf="shouldDisplay">
   <div class="navbar-brand">

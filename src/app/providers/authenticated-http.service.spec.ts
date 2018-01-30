@@ -6,6 +6,8 @@ import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
 import {AuthService} from './auth.service';
 
 import {AuthenticatedHttpService} from './authenticated-http.service';
+import {NavbarDelegateService} from './navbar-delegate.service';
+import {navbarNotifierStub} from '../../test/stubs/navbar-notifier.service.stub.spec';
 
 describe('AuthenticatedHttpService', () => {
 
@@ -26,6 +28,7 @@ describe('AuthenticatedHttpService', () => {
           deps: [MockBackend, BaseRequestOptions, Injector]
         },
         {provide: AuthService, useValue: authServiceStub},
+        {provide: NavbarDelegateService, useValue: navbarNotifierStub}
       ],
       imports: [HttpModule]
     });
@@ -35,22 +38,36 @@ describe('AuthenticatedHttpService', () => {
     const authHttp = getTestBed().get(AuthenticatedHttpService);
     const injector = getTestBed().get(Injector);
     const auth = getTestBed().get(AuthService);
+    let numCalls = 0;
     mockBackend = getTestBed().get(MockBackend);
     mockBackend.connections.subscribe(connection => {
-      connection.mockError(new Response(new ResponseOptions({
-        status: 401,
-        type: ResponseType.Error,
-        body: JSON.stringify({
-          errors: ['Unauthorized']
-        })
-      })));
+      if (numCalls === 0) {
+        connection.mockError(new Response(new ResponseOptions({
+          status: 401,
+          type: ResponseType.Error,
+          body: JSON.stringify({
+            errors: ['Unauthorized']
+          })
+        })));
+      } else {
+        connection.mockRespond(new Response(new ResponseOptions({
+          status: 200,
+          type: ResponseType.Basic,
+          body: JSON.stringify({
+            foo: 'bar'
+          })
+        })));
+        done();
+      }
+      numCalls += 1;
     });
     spyOn(injector, 'get').and.returnValue(auth);
     spyOn(authHttp, 'request').and.callThrough();
+    spyOn(authHttp, 'addInfoBannerToNav').and.stub();
+    spyOn(authHttp, 'removeInfoBannerFromNav').and.stub();
     authHttp.get('idc.com').subscribe(null, () => {
       expect(authHttp.request).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
-      done();
     });
   });
 
@@ -78,5 +95,21 @@ describe('AuthenticatedHttpService', () => {
     expect(AuthenticatedHttpService.isTokenRequest(url)).toEqual(true);
     url = 'http://some/other/page';
     expect(AuthenticatedHttpService.isTokenRequest(url)).toEqual(false);
+  });
+
+  it('should provide a method to remove the info banner from the nav', () => {
+    const nav = getTestBed().get(NavbarDelegateService);
+    spyOn(nav, 'setInfoBannerMessage').and.stub();
+    const authHttp = getTestBed().get(AuthenticatedHttpService);
+    authHttp.removeInfoBannerFromNav();
+    expect(nav.setInfoBannerMessage).toHaveBeenCalledWith(null);
+  });
+
+  it('should provide a method to add an info banner from the nav', () => {
+    const nav = getTestBed().get(NavbarDelegateService);
+    spyOn(nav, 'setInfoBannerMessage').and.stub();
+    const authHttp = getTestBed().get(AuthenticatedHttpService);
+    authHttp.addInfoBannerToNav();
+    expect(nav.setInfoBannerMessage).toHaveBeenCalled();
   });
 });

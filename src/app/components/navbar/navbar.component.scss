@@ -4,3 +4,13 @@
     border-radius: 50%;
   }
 }
+.message {
+  cursor: pointer;
+  margin: 0;
+  .message-header {
+    border-radius: 0;
+    p {
+      flex: 1;
+    }
+  }
+}

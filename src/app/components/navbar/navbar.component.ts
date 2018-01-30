@@ -15,8 +15,10 @@ export class NavbarComponent implements OnDestroy {
   shouldDisplay = false;
   shouldShowMenu = false;
   currentUser: User = null;
+  infoBannerMessage: string = null;
   private displaySubscription: Subscription;
   private currentUserSubscription: Subscription;
+  private infoBannerSubscription: Subscription;
 
   constructor(private auth: AuthService,
               private loginService: LoginService,
@@ -27,6 +29,9 @@ export class NavbarComponent implements OnDestroy {
     this.currentUserSubscription = auth.currentUser$.subscribe((currentUser: User) => {
       this.currentUser = currentUser;
     });
+    this.infoBannerSubscription = navbarDisplayService.infoBannerMessage$.subscribe(value => {
+      this.infoBannerMessage = value;
+    });
   }
 
   signOut() {
@@ -36,6 +41,7 @@ export class NavbarComponent implements OnDestroy {
   ngOnDestroy() {
     this.displaySubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
+    this.infoBannerSubscription.unsubscribe();
   }
 
   getProfileImage(): string {

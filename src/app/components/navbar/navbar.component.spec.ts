@@ -41,20 +41,33 @@ describe('NavbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize a subscription to tell it to hide/show', inject([NavbarDelegateService], (nav: NavbarDelegateService) => {
+  it('should initialize a subscription to tell it to hide/show', fakeAsync(inject([NavbarDelegateService], (nav: NavbarDelegateService) => {
     expect((component as any).displaySubscription).toBeDefined();
     expect(component.shouldDisplay).toEqual(false);
     nav.displayNavbar(true);
+    tick();
     expect(component.shouldDisplay).toEqual(true);
-  }));
+  })));
 
   it('should cancel the subscription when the component is unmounted', () => {
     spyOn((component as any).displaySubscription, 'unsubscribe');
     spyOn((component as any).currentUserSubscription, 'unsubscribe');
+    spyOn((component as any).infoBannerSubscription, 'unsubscribe');
     component.ngOnDestroy();
     expect((component as any).displaySubscription.unsubscribe).toHaveBeenCalled();
     expect((component as any).currentUserSubscription.unsubscribe).toHaveBeenCalled();
+    expect((component as any).infoBannerSubscription.unsubscribe).toHaveBeenCalled();
   });
+
+  it('should initialize a subscription to post an info message banner', fakeAsync(
+    inject([NavbarDelegateService], (nav: NavbarDelegateService) => {
+      expect((component as any).infoBannerSubscription).toBeDefined();
+      expect(component.infoBannerMessage).toEqual(null);
+      nav.setInfoBannerMessage('foo');
+      tick();
+      expect(component.infoBannerMessage).toEqual('foo');
+    }
+  )));
 
   it('should provide a method to return a profile image for the current user', fakeAsync(() => {
     const user = new User({
