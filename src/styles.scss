@@ -11,21 +11,12 @@
   body {
     font-size: 0.7rem;
   }
-  p {
-    br {
-      display: none;
-    }
-  }
-  section {
-    .hero {
-      min-height: 24em;
-    }
-    .hero-body {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      .container {
-        margin: unset;
+  .component__section {
+    .ql-editor:not(.ql-blank) {
+      p {
+        br:only-child {
+          display: none;
+        }
       }
     }
   }
@@ -115,6 +106,14 @@
 
 .has-overflow-hidden {
   overflow: hidden;
+}
+
+.has-overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.has-overflow-y-hidden {
+  overflow-y: hidden;
 }
 
 .popover {

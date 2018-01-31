@@ -1,5 +1,10 @@
 .page-component-addition {
   padding: 1em 1em 4em 1em;
+  &.tile {
+    &.is-ancestor {
+      margin: 0;
+    }
+  }
   .button--add {
     border-radius: 50%;
     width: 3em;

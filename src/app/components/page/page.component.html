@@ -40,7 +40,8 @@
       </div>
 
       <div class="navbar-menu"
-           [class.is-active]="menuIsOpen">
+           [class.is-active]="menuIsOpen"
+           [style.background-color]="page.composition.headerColor">
         <div [class.navbar-start]="!page.composition.shouldShowLogoInHeader()"
              [class.navbar-end]="page.composition.shouldShowLogoInHeader()">
           <div *ngFor="let childPage of siteNavigation()">
