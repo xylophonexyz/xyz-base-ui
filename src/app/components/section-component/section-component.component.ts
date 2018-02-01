@@ -1,7 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {StringMap} from 'quill';
 import {
-  ComponentCollectionDataInterface, ComponentDataInterface, ComponentMedia,
+  ComponentCollectionDataInterface,
+  ComponentDataInterface,
+  ComponentMedia,
   SectionComponentMetadata
 } from '../../index';
 import {NavActionItem} from '../../models/nav-action-item';
@@ -338,8 +340,10 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
   }
 
   removeBgImage() {
-    delete this.component.metadata.bgImage;
-    this.saveWithThrottle();
+    if (this.windowRef.nativeWindow.confirm('Are you sure you want to remove this image?')) {
+      delete this.component.metadata.bgImage;
+      this.saveWithThrottle();
+    }
   }
 
   protected fallbackLayout(): SectionLayoutOption {

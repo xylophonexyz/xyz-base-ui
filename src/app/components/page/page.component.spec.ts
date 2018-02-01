@@ -137,6 +137,52 @@ describe('PageComponent', () => {
     });
   }));
 
+  it('should load the pages navigation items on init', async(() => {
+    const auth = getTestBed().get(AuthService);
+    const pagesProvider = getTestBed().get(PagesService);
+    const route = getTestBed().get(ActivatedRoute);
+    const footer = getTestBed().get(FooterDelegateService);
+
+    spyOn(footer, 'displayFooter').and.stub();
+    spyOn(footer, 'setLeftActionItems').and.stub();
+    spyOn(footer, 'clearCenterActionItems').and.stub();
+    spyOn(footer, 'setRightActionItems').and.stub();
+    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+      callback({
+        siteId: 1,
+        pageId: 2
+      });
+    });
+    spyOn(route.data, 'subscribe').and.callFake((callback) => {
+      callback(null);
+    });
+    auth.authenticate.and.callFake(() => {
+      return new Promise(resolve => resolve(new User(mockUserData)));
+    });
+    spyOn(pagesProvider, 'get').and.callThrough();
+    spyOn(component, 'siteNavigation').and.returnValue([
+      new Page({
+        id: 2,
+        metadata: {
+          navigationType: PageNavigationItemNavigationStrategy.Internal
+        }
+      } as PageDataInterface),
+      new Page({
+        id: 3,
+        metadata: {
+          navigationType: PageNavigationItemNavigationStrategy.Internal
+        }
+      } as PageDataInterface),
+    ]);
+
+    component.ngOnInit();
+
+    setTimeout(() => {
+      expect(pagesProvider.get).toHaveBeenCalledWith(2);
+      expect(pagesProvider.get).toHaveBeenCalledWith(3);
+    });
+  }));
+
   it('should load the page from the route cache if it is there', async(() => {
     const auth = getTestBed().get(AuthService);
     const pagesProvider = getTestBed().get(PagesService);

@@ -14,6 +14,7 @@ import {SpacerLayoutOption, UISpacerComponent} from './spacer-component.componen
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
 import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
+import {windowRefStub} from '../../../test/stubs/window-ref.stub.spec';
 
 describe('UISpacerComponent', () => {
   let component: UISpacerComponent;
@@ -27,6 +28,7 @@ describe('UISpacerComponent', () => {
         {provide: ComponentService, useValue: componentServiceStub},
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
+        {provide: WindowRefService, useValue: windowRefStub},
         MessageChannelDelegateService,
         UtilService,
         WindowRefService,

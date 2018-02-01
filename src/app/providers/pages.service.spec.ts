@@ -85,9 +85,11 @@ describe('PagesService', () => {
 
   describe('get', () => {
     let connection;
+    let numCalls = 0;
 
     afterEach(() => {
       connection = null;
+      numCalls = 0;
     });
 
     it('should get a page', async(inject([PagesService], (service: PagesService) => {
@@ -101,6 +103,15 @@ describe('PagesService', () => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
         expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
+      });
+    })));
+
+    it('should cache a page after the first get', async(inject([PagesService], (service: PagesService) => {
+      mockGetSucceed();
+      service.get(mockPageResponse.id).subscribe(() => {
+        service.get(mockPageResponse.id).subscribe(() => {
+          expect(numCalls).toEqual(1);
+        });
       });
     })));
 
@@ -118,6 +129,7 @@ describe('PagesService', () => {
 
     function mockGetSucceed() {
       mockBackend.connections.subscribe(c => {
+        numCalls += 1;
         connection = c;
         connection.mockRespond(new Response(new ResponseOptions({
           body: mockPageResponse
@@ -127,6 +139,7 @@ describe('PagesService', () => {
 
     function mockGetFail() {
       mockBackend.connections.subscribe(c => {
+        numCalls += 1;
         connection = c;
         connection.mockRespond(new Response(new ResponseOptions({
           status: 404,

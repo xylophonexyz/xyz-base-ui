@@ -19,6 +19,7 @@ import {SectionLayoutOption, UISectionComponent} from './section-component.compo
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
 import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
+import {windowRefStub} from '../../../test/stubs/window-ref.stub.spec';
 
 describe('UISectionComponent', () => {
   let component: UISectionComponent;
@@ -35,6 +36,7 @@ describe('UISectionComponent', () => {
         {provide: ComponentService, useValue: componentServiceStub},
         {provide: ComponentCollectionService, useValue: componentCollectionServiceStub},
         {provide: DomSanitizer, useValue: mockDomSanitizer},
+        {provide: WindowRefService, useValue: windowRefStub},
         MessageChannelDelegateService,
         UtilService,
         WindowRefService,
@@ -177,6 +179,7 @@ describe('UISectionComponent', () => {
     });
 
     it('should provide a method to remove an existing background image', () => {
+      const windowRef = getTestBed().get(WindowRefService);
       component.component = new Component({metadata: {}} as any);
       component.component.metadata.bgImage = {
         components: [
@@ -187,6 +190,7 @@ describe('UISectionComponent', () => {
         ]
       };
       spyOn(component as any, 'saveWithThrottle');
+      spyOn(windowRef.nativeWindow, 'confirm').and.returnValue(true);
       expect(component.hasBgImage()).toEqual(true);
       component.removeBgImage();
       expect(component.hasBgImage()).toEqual(false);
