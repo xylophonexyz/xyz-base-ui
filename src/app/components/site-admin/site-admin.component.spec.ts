@@ -14,7 +14,7 @@ import {pagesServiceStub} from '../../../test/stubs/pages.service.stub.spec';
 import {sitesServiceStub} from '../../../test/stubs/sites.service.stub.spec';
 import {appTitleFactory} from '../../../test/stubs/tokens.stub.spec';
 import {windowRefStub} from '../../../test/stubs/window-ref.stub.spec';
-import {APPLICATION_NAME} from '../../index';
+import {APPLICATION_NAME, PageNavigationItemNavigationStrategy} from '../../index';
 import {Composition} from '../../models/composition';
 import {Page} from '../../models/page';
 import {AuthService} from '../../providers/auth.service';
@@ -231,7 +231,8 @@ describe('SiteAdminComponent', () => {
         expect(component.addChildPage).toHaveBeenCalledWith({
           index: 101,
           navigationItem: true,
-          showNav: true
+          showNav: true,
+          navigationType: PageNavigationItemNavigationStrategy.Internal
         });
       });
       tick();

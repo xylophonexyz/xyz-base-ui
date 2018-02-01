@@ -4,6 +4,7 @@ import {Meta, Title} from '@angular/platform-browser';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {sortBy} from 'lodash';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/forkJoin';
 import {Observable} from 'rxjs/Observable';
 import * as getSlug from 'speakingurl';
 import {PageGuard} from '../../guards/page.guard';
@@ -218,6 +219,7 @@ export class PageComponent implements OnInit, OnDestroy {
             this.setDocumentFavicon(page);
             this.initializeFooter();
             this.addPageSlugToUrl(params, this.editMode, page);
+            this.populateCache();
           });
         } else {
           return this.router.navigate(['/404']);
@@ -323,6 +325,13 @@ export class PageComponent implements OnInit, OnDestroy {
     if (PageGuard.shouldRedirectToPageWithSlug(page, editMode, params)) {
       const slug = getSlug(page.title);
       this.location.replaceState(`${this.location.path()}/${slug}`);
+    }
+  }
+
+  private populateCache() {
+    if (!this.editMode && this.page) {
+      const pagesToCache = this.siteNavigation().filter(page => !page.isExternalNavigationType());
+      Observable.forkJoin(pagesToCache.map(page => this.pagesProvider.get(page.id))).subscribe();
     }
   }
 }
