@@ -1,7 +1,12 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {DomSanitizer, Meta, Title} from '@angular/platform-browser';
 import {ActivatedRoute, Router} from '@angular/router';
-import {APPLICATION_NAME, CompositionDataInterface, PageDataInterface} from '../../index';
+import {
+  APPLICATION_NAME,
+  CompositionDataInterface,
+  PageDataInterface,
+  PageNavigationItemNavigationStrategy
+} from '../../index';
 import {Composition} from '../../models/composition';
 import {NavActionItem} from '../../models/nav-action-item';
 import {Page} from '../../models/page';
@@ -150,7 +155,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
     this.addChildPage({
       index: this.getLastPageIndex() + 1,
       navigationItem: true,
-      showNav: true
+      showNav: true,
+      navigationType: PageNavigationItemNavigationStrategy.Internal
     });
   }
 
