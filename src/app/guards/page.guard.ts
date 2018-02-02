@@ -54,7 +54,7 @@ export class PageGuard implements CanActivate {
       const pageId = next.params.pageId;
       const editMode = next.queryParams.edit === 'true';
       const onAuthComplete = (currentUser) => {
-        this.pageProvider.get(pageId).subscribe((page: PageDataInterface) => {
+        this.pageProvider.get(pageId, !editMode).subscribe((page: PageDataInterface) => {
           PageGuard.authorizePage(page, currentUser, editMode).then(() => {
             // cache the page in the route object
             next.data = page;

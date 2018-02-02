@@ -16,10 +16,10 @@ export class PagesService {
               private auth: AuthService) {
   }
 
-  get(id: number): Observable<PageDataInterface> {
+  get(id: number, useCache: boolean = true): Observable<PageDataInterface> {
     const url = `${this.api.baseUrl}/pages/${id}`;
     const headers = this.auth.constructAuthHeader();
-    if (this.pageCache[id]) {
+    if (useCache && this.pageCache[id]) {
       return Observable.create(observer => observer.next(this.pageCache[id]));
     } else {
       return this.http.get(url, {headers}).map((res: Response) => {
