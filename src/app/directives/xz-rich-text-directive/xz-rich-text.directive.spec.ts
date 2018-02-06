@@ -3,6 +3,8 @@ import {async, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {MockPlainClipboard} from '../../../test/stubs/plain-clipboard.stub.spec';
 import {XzRichTextDirective} from './xz-rich-text.directive';
+import {QuillService} from '../../providers/quill.service';
+import {MockQuillService} from '../../providers/quill.service.spec';
 
 @Component({
   template: `
@@ -30,6 +32,9 @@ describe('XzRichTextDirective', () => {
   beforeEach(async(() => {
     fixture = TestBed.configureTestingModule({
       declarations: [TestComponent, XzRichTextDirective],
+      providers: [
+        {provide: QuillService, useClass: MockQuillService},
+      ]
     }).createComponent(TestComponent);
     fixture.detectChanges();
   }));

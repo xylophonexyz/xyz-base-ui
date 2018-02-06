@@ -12,7 +12,9 @@ import * as request from 'request';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
 import * as Memcached from 'memcached';
-import {OAuthToken} from './app/index';
+import {OAuthToken} from './app';
+
+const {provideModuleMap} = require('@nguniversal/module-map-ngfactory-loader');
 
 dotenv.config();
 
@@ -349,10 +351,13 @@ export function setupAngularRenderer(app: Express) {
   const AppServerModuleNgFactory = bundle.AppServerModuleNgFactory;
 
   app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory
+    bootstrap: AppServerModuleNgFactory,
+    providers: [
+      provideModuleMap(bundle.LAZY_MODULE_MAP)
+    ]
   }));
   app.set('view engine', 'html');
-  app.set('views', path.join(__dirname, '/../browser'));
+  app.set('views', getTemplatesPath());
 }
 
 /**
@@ -361,7 +366,7 @@ export function setupAngularRenderer(app: Express) {
  * @param {e.Express} app
  */
 export function applyServeStaticMiddleware(app: Express) {
-  app.use('/', express.static(path.join(__dirname, '/../browser'), {index: false}));
+  app.use('/', express.static(getTemplatesPath(), {index: false}));
 
   app.get('/*', (req, res) => {
     res.render('index', {
@@ -403,4 +408,51 @@ export function applyViewCachingMiddleware(app: Express, memcachedUrl: string) {
       console.log('View cache flushed successfully.');
     });
   }
+}
+
+/**
+ * Add DOM bindings to global scope for server side rendering
+ */
+export function initializeGlobalDOMBindings() {
+  const domino = require('@angular/platform-server/node_modules/domino');
+  const fs = require('fs');
+  const path = require('path');
+  const template = fs.readFileSync(path.join(getTemplatesPath(), 'index.html')).toString();
+  const win = domino.createWindow(template);
+  // some things to note here:
+  // - any reference to ref.nativeElement in angular refers to a domino node
+  // - some of these domino nodes dont have all the methods that libraries would expect
+  // - in some cases it is necessary to polyfill these methods
+
+  // write any polyfills that are needed
+  win.document.getSelection = () => null;
+  // set the rest of the global bindings that are used by the application
+  global['window'] = win;
+  global['document'] = win.document;
+  global['DOMTokenList'] = win.DOMTokenList;
+  global['Node'] = win.Node;
+  global['Text'] = win.Text;
+  global['HTMLElement'] = win.HTMLElement;
+  global['navigator'] = win.navigator;
+  global['MutationObserver'] = getMockMutationObserver();
+}
+
+/**
+ * Return the path of the directory that contains the assets used to render the application templates
+ * @returns {string}
+ */
+export function getTemplatesPath() {
+  return path.join(__dirname, '..', 'browser');
+}
+
+function getMockMutationObserver() {
+  return class {
+    observe(node, options) {
+    }
+    disconnect() {
+    }
+    takeRecords() {
+      return [];
+    }
+  };
 }

@@ -1,4 +1,3 @@
-import {isPlatformBrowser} from '@angular/common';
 import {
   Directive,
   ElementRef,
@@ -12,6 +11,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {isEqual} from 'lodash';
+import {isPlatformBrowser} from '@angular/common';
+import {QuillService} from '../../providers/quill.service';
 
 @Directive({
   selector: '[xzRichTextEnabled]',
@@ -76,15 +77,13 @@ export class XzRichTextDirective implements OnInit, OnChanges {
     return output;
   }
 
-  constructor(private ref: ElementRef, @Inject(PLATFORM_ID) private platformId) {
+  constructor(private ref: ElementRef,
+              private quillService: QuillService,
+              @Inject(PLATFORM_ID) private platformId) {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.initEditor();
-    } else {
-      this.emitTextContent();
-    }
+    this.initEditor();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,7 +100,7 @@ export class XzRichTextDirective implements OnInit, OnChanges {
   }
 
   plainClipboard() {
-    const Quill = require('quill');
+    const Quill = this.quillService.getStatic();
     const Clipboard = Quill.import('modules/clipboard');
     const Delta = Quill.import('delta');
     return class extends Clipboard {
@@ -117,11 +116,10 @@ export class XzRichTextDirective implements OnInit, OnChanges {
   }
 
   private initEditor() {
-    const Quill = require('quill');
     // apply add-in modules
     this.registerAdditionalModules();
     // instantiate editor
-    this.editorRef = new Quill(this.ref.nativeElement, {
+    this.editorRef = this.quillService.getInstance(this.ref.nativeElement, {
       modules: {
         toolbar: this.xzRichTextEditorToolbarOptions
       },
@@ -159,13 +157,12 @@ export class XzRichTextDirective implements OnInit, OnChanges {
   }
 
   private registerAdditionalModules() {
-    if (this.xzUsePlainClipboard) {
+    if (this.xzUsePlainClipboard && isPlatformBrowser(this.platformId)) {
       this.registerPlainClipboard();
     }
   }
 
   private registerPlainClipboard() {
-    const Quill = require('quill');
-    Quill.register('modules/clipboard', this.plainClipboard(), true);
+    this.quillService.getStatic().register('modules/clipboard', this.plainClipboard(), true);
   }
 }

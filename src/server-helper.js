@@ -21,6 +21,7 @@ var request = require("request");
 var compression = require("compression");
 var helmet = require("helmet");
 var Memcached = require("memcached");
+var provideModuleMap = require('@nguniversal/module-map-ngfactory-loader').provideModuleMap;
 dotenv.config();
 var clientOAuthToken = null;
 var clientOAuthTokenPoller = null;
@@ -352,10 +353,13 @@ function setupAngularRenderer(app) {
     var bundle = require('./' + fileName);
     var AppServerModuleNgFactory = bundle.AppServerModuleNgFactory;
     app.engine('html', express_engine_1.ngExpressEngine({
-        bootstrap: AppServerModuleNgFactory
+        bootstrap: AppServerModuleNgFactory,
+        providers: [
+            provideModuleMap(bundle.LAZY_MODULE_MAP)
+        ]
     }));
     app.set('view engine', 'html');
-    app.set('views', path.join(__dirname, '/../browser'));
+    app.set('views', getTemplatesPath());
 }
 exports.setupAngularRenderer = setupAngularRenderer;
 /**
@@ -364,7 +368,7 @@ exports.setupAngularRenderer = setupAngularRenderer;
  * @param {e.Express} app
  */
 function applyServeStaticMiddleware(app) {
-    app.use('/', express.static(path.join(__dirname, '/../browser'), { index: false }));
+    app.use('/', express.static(getTemplatesPath(), { index: false }));
     app.get('/*', function (req, res) {
         res.render('index', {
             req: req,
@@ -408,3 +412,51 @@ function applyViewCachingMiddleware(app, memcachedUrl) {
     }
 }
 exports.applyViewCachingMiddleware = applyViewCachingMiddleware;
+/**
+ * Add DOM bindings to global scope for server side rendering
+ */
+function initializeGlobalDOMBindings() {
+    var domino = require('@angular/platform-server/node_modules/domino');
+    var fs = require('fs');
+    var path = require('path');
+    var template = fs.readFileSync(path.join(getTemplatesPath(), 'index.html')).toString();
+    var win = domino.createWindow(template);
+    // some things to note here:
+    // - any reference to ref.nativeElement in angular refers to a domino node
+    // - some of these domino nodes dont have all the methods that libraries would expect
+    // - in some cases it is necessary to polyfill these methods
+    // write any polyfills that are needed
+    win.document.getSelection = function () { return null; };
+    // set the rest of the global bindings that are used by the application
+    global['window'] = win;
+    global['document'] = win.document;
+    global['DOMTokenList'] = win.DOMTokenList;
+    global['Node'] = win.Node;
+    global['Text'] = win.Text;
+    global['HTMLElement'] = win.HTMLElement;
+    global['navigator'] = win.navigator;
+    global['MutationObserver'] = getMockMutationObserver();
+}
+exports.initializeGlobalDOMBindings = initializeGlobalDOMBindings;
+/**
+ * Return the path of the directory that contains the assets used to render the application templates
+ * @returns {string}
+ */
+function getTemplatesPath() {
+    return path.join(__dirname, '..', 'browser');
+}
+exports.getTemplatesPath = getTemplatesPath;
+function getMockMutationObserver() {
+    return /** @class */ (function () {
+        function class_1() {
+        }
+        class_1.prototype.observe = function (node, options) {
+        };
+        class_1.prototype.disconnect = function () {
+        };
+        class_1.prototype.takeRecords = function () {
+            return [];
+        };
+        return class_1;
+    }());
+}

@@ -41,6 +41,7 @@ var express = require("express");
 var httpProxy = require("http-proxy");
 var core_1 = require("@angular/core");
 var server_helper_1 = require("./server-helper");
+server_helper_1.initializeGlobalDOMBindings();
 core_1.enableProdMode();
 exports.Application = express();
 /**

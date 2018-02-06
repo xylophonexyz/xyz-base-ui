@@ -17,9 +17,11 @@ import {
   applyViewCachingMiddleware,
   doClientAuthHandshake,
   getConfig,
+  initializeGlobalDOMBindings,
   setupAngularRenderer
 } from './server-helper';
 
+initializeGlobalDOMBindings();
 enableProdMode();
 
 export const Application: Express = express();
