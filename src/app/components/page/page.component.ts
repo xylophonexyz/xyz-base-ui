@@ -18,6 +18,7 @@ import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
 import {WindowRefService} from '../../providers/window-ref.service';
+import {ParamMap} from "@angular/router/src/shared";
 
 @Component({
   selector: 'app-page',
@@ -206,14 +207,14 @@ export class PageComponent implements OnInit, OnDestroy {
    * Initialize the objects that make up this Page from the current request url and query params.
    */
   private loadFromParams() {
-    this.route.params.subscribe((params: any) => {
-      this.route.queryParams.subscribe((queryParams: any) => {
-        if (params.pageId) {
-          this.loadPage(params.pageId).map((page: PageDataInterface) => {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
+        if (params.get('pageId')) {
+          this.loadPage(parseInt(params.get('pageId'), 10)).map((page: PageDataInterface) => {
             return new Page(page);
           }).subscribe((page: Page) => {
             this.page = page;
-            this.editMode = queryParams.edit === 'true';
+            this.editMode = queryParams.get('edit') === 'true';
             this.setDocumentTitle(page);
             this.setDocumentMetaTags(page);
             this.setDocumentFavicon(page);
@@ -321,7 +322,7 @@ export class PageComponent implements OnInit, OnDestroy {
     this.metaService.updateTag({itemprop: 'image', content: PageComponent.getPageCover(page)});
   }
 
-  private addPageSlugToUrl(params: Params, editMode: boolean, page: Page) {
+  private addPageSlugToUrl(params: ParamMap, editMode: boolean, page: Page) {
     if (PageGuard.shouldRedirectToPageWithSlug(page, editMode, params)) {
       const slug = getSlug(page.title);
       this.location.replaceState(`${this.location.path()}/${slug}`);

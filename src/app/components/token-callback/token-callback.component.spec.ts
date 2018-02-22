@@ -55,16 +55,19 @@ describe('TokenCallbackComponent', () => {
   it('should navigate to root route if no authorization code is present in params', (done) => {
     const route = getTestBed().get(ActivatedRoute);
     const router = getTestBed().get(Router);
-    route.queryParams.subscribe = (callback) => {
-      callback({});
+    spyOn(route.queryParamMap, 'subscribe').and.callFake(callback => {
+      callback({
+        get: () => {
+          return null;
+        }
+      });
       expect(router.navigate).toHaveBeenCalledWith(['/']);
       done();
       return {
         unsubscribe: () => {
-
         }
       };
-    };
+    });
     fixture.detectChanges();
   });
 

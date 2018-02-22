@@ -1,6 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Params, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, ParamMap, Params, Router, RouterStateSnapshot} from "@angular/router";
 import {isNumber} from 'lodash';
 import {PageDataInterface} from '../index';
 import {Page} from '../models/page';
@@ -29,8 +29,8 @@ export class PageGuard implements CanActivate {
     });
   }
 
-  static shouldRedirectToPageWithSlug(page: Page, editMode: boolean, params: Params): boolean {
-    return page.title && editMode === false && !params.pageSlug;
+  static shouldRedirectToPageWithSlug(page: Page, editMode: boolean, params: ParamMap): boolean {
+    return page.title && editMode === false && !params.get('pageSlug');
   }
 
   constructor(private pageProvider: PagesService,

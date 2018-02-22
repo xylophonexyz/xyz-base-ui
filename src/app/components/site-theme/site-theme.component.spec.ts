@@ -94,13 +94,20 @@ describe('SiteThemeComponent', () => {
 
   it('should fetch data based on params on init', fakeAsync(() => {
     const route = getTestBed().get(ActivatedRoute);
-    spyOn(route.parent.params, 'subscribe').and.callFake((cb) => {
-      return cb({id: 1});
+    spyOn(route.parent.paramMap, 'subscribe').and.callFake(callback => {
+      callback({
+        get: (key) => {
+          const obj = {
+            id: 1,
+          };
+          return obj[key];
+        }
+      });
     });
     fixture.detectChanges();
     component.ngOnInit();
     tick();
-    expect(route.parent.params.subscribe).toHaveBeenCalled();
+    expect(route.parent.paramMap.subscribe).toHaveBeenCalled();
   }));
 
   it('should hide the navbar if the call to authenticate fails', fakeAsync(() => {

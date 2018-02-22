@@ -1,6 +1,6 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {DomSanitizer, Meta, Title} from '@angular/platform-browser';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {
   APPLICATION_NAME,
   CompositionDataInterface,
@@ -271,9 +271,9 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
       this.nav.displayNavbar(false);
     });
     // load the site object
-    this.route.parent.params.subscribe(params => {
-      if (params.id) {
-        this._siteId = +params.id;
+    this.route.parent.paramMap.subscribe((params: ParamMap) => {
+      if (params.get('id')) {
+        this._siteId = +params.get('id');
         this.loadSiteData().then(site => {
           this.channel.sendMessage({topic: SiteAdminComponent.SiteAdminSiteDidLoad, data: site});
         });
@@ -307,8 +307,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
   }
 
   private setFooter() {
-    this.route.queryParams.subscribe(params => {
-      if (params.showFooter && params.navigateToId) {
+    this.route.queryParamMap.subscribe((params: ParamMap) => {
+      if (params.get('showFooter') && params.get('navigateToId')) {
         this.footer.displayFooter(true);
         this.footer.setRightActionItems([
           new NavActionItem('Back to editing ›', {
@@ -316,7 +316,7 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
             hasIcon: false,
             cssClass: 'is-outlined is-success',
             onInputClick: () => {
-              this.router.navigate([`/p/${params.navigateToId}`], {
+              this.router.navigate([`/p/${params.get('navigateToId')}`], {
                 queryParams: {edit: true}
               });
             }

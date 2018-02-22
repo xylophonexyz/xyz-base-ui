@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {AuthService} from '../../providers/auth.service';
 
 @Component({
@@ -17,8 +17,8 @@ export class TokenCallbackComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.queryParams.subscribe((params: any) => {
-      const code = params.code;
+    this.sub = this.route.queryParamMap.subscribe((params: ParamMap) => {
+      const code = params.get('code');
       if (code) {
         this.auth.authenticate(code).then(() => {
           // success

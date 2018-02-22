@@ -33,6 +33,7 @@ import {WindowRefService} from '../../providers/window-ref.service';
 import {SiteAdminComponent} from './site-admin.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
+import {routerStub} from '../../../test/stubs/router.stub.spec';
 
 describe('SiteAdminComponent', () => {
   let component: SiteAdminComponent;
@@ -88,8 +89,16 @@ describe('SiteAdminComponent', () => {
     const route = getTestBed().get(ActivatedRoute);
     const footer = getTestBed().get(FooterDelegateService);
     const router = getTestBed().get(Router);
-    spyOn(route.queryParams, 'subscribe').and.callFake(cb => {
-      cb({showFooter: true, navigateToId: 1});
+    spyOn(route.queryParamMap, 'subscribe').and.callFake(callback => {
+      callback({
+        get: (key) => {
+          const obj = {
+            showFooter: true,
+            navigateToId: 1
+          };
+          return obj[key];
+        }
+      });
     });
     spyOn(footer, 'displayFooter').and.callThrough();
     spyOn(footer, 'setRightActionItems').and.callThrough();
@@ -267,7 +276,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should swap a page with another "upwards"', fakeAsync(() => {
+    it('should swap a page with another \'upwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));
@@ -289,7 +298,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should handle errors when swapping a page with another "upwards"', fakeAsync(() => {
+    it('should handle errors when swapping a page with another \'upwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));
@@ -311,7 +320,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should handle inner errors when swapping a page with another "upwards"', fakeAsync(() => {
+    it('should handle inner errors when swapping a page with another \'upwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));
@@ -337,7 +346,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should swap a page with another "downwards"', fakeAsync(() => {
+    it('should swap a page with another \'downwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));
@@ -359,7 +368,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should handle errors when swapping a page with another "downwards"', fakeAsync(() => {
+    it('should handle errors when swapping a page with another \'downwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));
@@ -381,7 +390,7 @@ describe('SiteAdminComponent', () => {
       tick();
     }));
 
-    it('should handle inner errors when swapping a page with another "downwards"', fakeAsync(() => {
+    it('should handle inner errors when swapping a page with another \'downwards\'', fakeAsync(() => {
       const pagesProvider = getTestBed().get(PagesService);
       const p1 = new Page(Object.assign({}, mockPageData, {metadata: {index: 0}}));
       const p2 = new Page(Object.assign({}, mockPageData, {metadata: {index: 1}}));

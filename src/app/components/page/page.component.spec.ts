@@ -114,10 +114,15 @@ describe('PageComponent', () => {
     spyOn(footer, 'setLeftActionItems').and.stub();
     spyOn(footer, 'clearCenterActionItems').and.stub();
     spyOn(footer, 'setRightActionItems').and.stub();
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     spyOn(route.data, 'subscribe').and.callFake((callback) => {
@@ -131,7 +136,7 @@ describe('PageComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
       expect(pagesProvider.get).toHaveBeenCalled();
     });
@@ -147,10 +152,15 @@ describe('PageComponent', () => {
     spyOn(footer, 'setLeftActionItems').and.stub();
     spyOn(footer, 'clearCenterActionItems').and.stub();
     spyOn(footer, 'setRightActionItems').and.stub();
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     spyOn(route.data, 'subscribe').and.callFake((callback) => {
@@ -193,10 +203,15 @@ describe('PageComponent', () => {
     spyOn(footer, 'setLeftActionItems').and.stub();
     spyOn(footer, 'clearCenterActionItems').and.stub();
     spyOn(footer, 'setRightActionItems').and.stub();
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     spyOn(route.data, 'subscribe').and.callFake((callback) => {
@@ -210,7 +225,7 @@ describe('PageComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
       expect(pagesProvider.get).not.toHaveBeenCalled();
     });
@@ -226,10 +241,15 @@ describe('PageComponent', () => {
     spyOn(footer, 'setLeftActionItems').and.stub();
     spyOn(footer, 'clearCenterActionItems').and.stub();
     spyOn(footer, 'setRightActionItems').and.stub();
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     component.page = mockPage();
@@ -241,7 +261,7 @@ describe('PageComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
       expect(pagesProvider.get).not.toHaveBeenCalled();
     });
@@ -252,18 +272,28 @@ describe('PageComponent', () => {
     const route = getTestBed().get(ActivatedRoute);
     const footer = getTestBed().get(FooterDelegateService);
 
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     spyOn(route.data, 'subscribe').and.callFake((callback) => {
       callback(null);
     });
-    spyOn(route.queryParams, 'subscribe').and.callFake((callback) => {
+    spyOn(route.queryParamMap, 'subscribe').and.callFake((callback) => {
       callback({
-        edit: 'true'
+        get: (key) => {
+          const obj = {
+            edit: 'true'
+          };
+          return obj[key];
+        }
       });
     });
     auth.authenticate.and.callFake(() => {
@@ -287,17 +317,22 @@ describe('PageComponent', () => {
     const route = getTestBed().get(ActivatedRoute);
     const router = getTestBed().get(Router);
 
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: null
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: null
+          };
+          return obj[key];
+        }
       });
     });
 
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(router.navigate).toHaveBeenCalledWith(['/404']);
     });
   }));
@@ -307,10 +342,15 @@ describe('PageComponent', () => {
     const route = getTestBed().get(ActivatedRoute);
     const router = getTestBed().get(Router);
 
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     auth.authenticate.and.callFake(() => {
@@ -320,7 +360,7 @@ describe('PageComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
       expect(router.navigate).toHaveBeenCalled();
     });
@@ -332,10 +372,15 @@ describe('PageComponent', () => {
     const route = getTestBed().get(ActivatedRoute);
     const router = getTestBed().get(Router);
 
-    spyOn(route.params, 'subscribe').and.callFake((callback) => {
+    spyOn(route.paramMap, 'subscribe').and.callFake((callback) => {
       callback({
-        siteId: 1,
-        pageId: 2
+        get: (key) => {
+          const obj = {
+            siteId: 1,
+            pageId: 2
+          };
+          return obj[key];
+        }
       });
     });
     spyOn(route.data, 'subscribe').and.callFake((callback) => {
@@ -353,7 +398,7 @@ describe('PageComponent', () => {
     component.ngOnInit();
 
     setTimeout(() => {
-      expect(route.params.subscribe).toHaveBeenCalled();
+      expect(route.paramMap.subscribe).toHaveBeenCalled();
       expect(auth.authenticate).toHaveBeenCalled();
       expect(router.navigate).toHaveBeenCalled();
     });
