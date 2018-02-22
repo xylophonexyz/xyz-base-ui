@@ -485,7 +485,7 @@ describe('PageComponent', () => {
   it('should provide a method to return a router link url for a page', () => {
     const p1 = new Page(Object.assign({}, mockPageData, {id: 456}));
     component.page = mockPage();
-    expect(component.pageUrl(p1)).toEqual(`/p/${p1.id}/${p1.title.toLowerCase()}`);
+    expect(component.pageUrl(p1)).toEqual(`/${p1.title.toLowerCase()}-${p1.id}`);
     component.page = null;
     expect(component.pageUrl(null)).toEqual('');
   });

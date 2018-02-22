@@ -105,8 +105,7 @@ export class PageComponent implements OnInit, OnDestroy {
       if (page.isExternalNavigationType()) {
         return this.getFormedExternalNavigationUrl(page.navigationHref);
       } else {
-        const slug = getSlug(page.title);
-        return `/p/${page.id}/${slug}`;
+        return PagesService.getPublicPageUrl(page);
       }
     } else {
       return '';
