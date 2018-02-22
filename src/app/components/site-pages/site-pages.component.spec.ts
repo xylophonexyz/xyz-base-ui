@@ -33,6 +33,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {mockComposition} from '../../providers/sites.service.spec';
 import {mockPage, mockPageResponse} from '../../providers/pages.service.spec';
 
+import * as getSlug from 'speakingurl';
+
 describe('SitePagesComponent', () => {
   let component: SitePagesComponent;
   let fixture: ComponentFixture<SitePagesComponent>;
@@ -135,5 +137,15 @@ describe('SitePagesComponent', () => {
     }));
     component.site.pages.push(p);
     expect(component.navigationItems.length).toEqual(1);
+  });
+
+  it('should provide a method to return a public url for a page', () => {
+    const page = mockPage();
+    expect(component.getPublicPageUrl(page)).toEqual(`/${getSlug(page.title)}-${page.id}`);
+  });
+
+  it('should provide a method to return an internal url for a page', () => {
+    const page = mockPage();
+    expect(component.getInternalPageUrl(page)).toEqual(`/p/${page.id}`);
   });
 });

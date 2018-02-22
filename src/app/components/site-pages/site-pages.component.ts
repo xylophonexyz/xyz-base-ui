@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SiteAdminComponent} from '../site-admin/site-admin.component';
 import {Page} from '../../models/page';
+import {PagesService} from '../../providers/pages.service';
 
 @Component({
   selector: 'app-site-pages',
@@ -17,6 +18,14 @@ export class SitePagesComponent extends SiteAdminComponent implements OnInit {
 
   ngOnInit() {
     this.onChildInit();
+  }
+
+  getPublicPageUrl(page: Page): string {
+    return PagesService.getPublicPageUrl(page);
+  }
+
+  getInternalPageUrl(page: Page): string {
+    return PagesService.getInternalPageUrl(page);
   }
 
 }

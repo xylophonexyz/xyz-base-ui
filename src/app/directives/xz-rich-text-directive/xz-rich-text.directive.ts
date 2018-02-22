@@ -147,15 +147,6 @@ export class XzRichTextDirective implements OnInit, OnChanges {
     this.xzRichTextModelChange.emit(this.xzRichTextModel);
   }
 
-  private emitTextContent() {
-    try {
-      const delta = JSON.parse(this.xzRichTextModel);
-      this.xzTextPreview.emit(XzRichTextDirective.textContent(delta));
-    } catch (e) {
-      this.xzTextPreview.emit(null);
-    }
-  }
-
   private registerAdditionalModules() {
     if (this.xzUsePlainClipboard && isPlatformBrowser(this.platformId)) {
       this.registerPlainClipboard();

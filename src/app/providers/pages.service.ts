@@ -5,11 +5,25 @@ import {Observable} from 'rxjs/Observable';
 import {ComponentCollectionDataInterface, PageDataInterface, PageParams} from '../index';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
+import {Page} from '../models/page';
+import * as getSlug from 'speakingurl';
 
 @Injectable()
 export class PagesService {
 
   private pageCache = {};
+
+  static getPublicPageUrl(page: Page): string {
+    if (page.title) {
+      return `/${getSlug(page.title)}-${page.id}`;
+    } else {
+      return this.getInternalPageUrl(page);
+    }
+  }
+
+  static getInternalPageUrl(page: Page): string {
+    return '/p/' + page.id;
+  }
 
   constructor(private http: Http,
               private api: ApiService,

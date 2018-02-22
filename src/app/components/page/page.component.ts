@@ -1,7 +1,7 @@
 import {Location} from '@angular/common';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Meta, Title} from '@angular/platform-browser';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {sortBy} from 'lodash';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/forkJoin';
@@ -18,7 +18,7 @@ import {FooterDelegateService} from '../../providers/footer-delegate.service';
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {PagesService} from '../../providers/pages.service';
 import {WindowRefService} from '../../providers/window-ref.service';
-import {ParamMap} from "@angular/router/src/shared";
+import {ParamMap} from '@angular/router/src/shared';
 
 @Component({
   selector: 'app-page',
@@ -149,8 +149,7 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   navigateToPreview(): void {
-    const slug = getSlug(this.page.title);
-    const url = `/p/${this.page.id}/${slug}`;
+    const url = PagesService.getPublicPageUrl(this.page);
     this.windowRef.nativeWindow.open(url, '_blank');
   }
 
@@ -209,7 +208,7 @@ export class PageComponent implements OnInit, OnDestroy {
   private loadFromParams() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.route.queryParamMap.subscribe((queryParams: ParamMap) => {
-        if (params.get('pageId')) {
+        if (PageGuard.getPageId(params)) {
           this.loadPage(parseInt(params.get('pageId'), 10)).map((page: PageDataInterface) => {
             return new Page(page);
           }).subscribe((page: Page) => {

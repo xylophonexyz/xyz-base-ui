@@ -154,4 +154,9 @@ describe('XzRichTextDirective', () => {
     expect(instance.convert('<h1></h1>')).toBeDefined();
   });
 
+  it('should provide a method to extract raw text from deltas', () => {
+    const textDeltas = {ops: [{insert: 'foo'}, {insert: ' '}, {insert: 'bar'}]};
+    expect(XzRichTextDirective.textContent(textDeltas)).toEqual('foo bar');
+  });
+
 });

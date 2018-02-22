@@ -83,14 +83,14 @@
         </div>
         <footer class="card-footer">
           <a class="card-footer-item"
-             [routerLink]="'/p/' + page.id"
+             [routerLink]="getInternalPageUrl(page)"
              [queryParams]="{edit: true}">
             <span class="icon">
               <app-feather-icon icon="edit-3"></app-feather-icon>
             </span>
           </a>
           <a class="card-footer-item"
-             [routerLink]="'/p/' + page.id"
+             [routerLink]="getPublicPageUrl(page)"
              target="_blank">
             <span class="icon">
               <app-feather-icon icon="zoom-in"></app-feather-icon>

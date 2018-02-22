@@ -53,16 +53,6 @@ const routes: Routes = [
         component: SplashScreenComponent
       },
       {
-        path: 'p/:pageId',
-        component: PageComponent,
-        canActivate: [PageGuard]
-      },
-      {
-        path: 'p/:pageId/:pageSlug',
-        component: PageComponent,
-        canActivate: [PageGuard]
-      },
-      {
         path: 'admin/sites/:id',
         component: SiteAdminComponent,
         canActivate: [AuthGuard],
@@ -119,6 +109,21 @@ const routes: Routes = [
             component: SettingsComponent
           },
         ]
+      },
+      {
+        path: ':pageSlug',
+        component: PageComponent,
+        canActivate: [PageGuard]
+      },
+      {
+        path: 'p/:pageId',
+        component: PageComponent,
+        canActivate: [PageGuard]
+      },
+      {
+        path: 'p/:pageId/:pageSlug',
+        component: PageComponent,
+        canActivate: [PageGuard]
       },
       // set default page ("/") to admin
       {

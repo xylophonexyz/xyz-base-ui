@@ -29,6 +29,23 @@ export class PageGuard implements CanActivate {
     });
   }
 
+  /**
+   * Attempt to resolve the page id from the given route. The id can be contained in one of two locations in the url:
+   * - as the last string in the page slug, e.g. /hello-world-22
+   * - as part of the restful route, e.g. /p/22
+   * @param {Params} params
+   * @returns {number}
+   */
+  static getPageId(params: ParamMap): number {
+    if (params.get('pageSlug')) {
+      const pageId = parseInt(params.get('pageSlug').split('-').pop(), 10);
+      if (isNumber(pageId) && !isNaN(pageId) && pageId > 0) {
+        return pageId;
+      }
+    }
+    return parseInt(params.get('pageId'), 10);
+  }
+
   static shouldRedirectToPageWithSlug(page: Page, editMode: boolean, params: ParamMap): boolean {
     return page.title && editMode === false && !params.get('pageSlug');
   }
@@ -51,8 +68,8 @@ export class PageGuard implements CanActivate {
    */
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise(resolve => {
-      const pageId = next.params.pageId;
-      const editMode = next.queryParams.edit === 'true';
+      const pageId = PageGuard.getPageId(next.paramMap);
+      const editMode = next.queryParamMap.get('edit') === 'true';
       const onAuthComplete = (currentUser) => {
         this.pageProvider.get(pageId, !editMode).subscribe((page: PageDataInterface) => {
           PageGuard.authorizePage(page, currentUser, editMode).then(() => {
@@ -78,6 +95,7 @@ export class PageGuard implements CanActivate {
   }
 
   private redirect(redirectPath: string = '/') {
+    console.log(redirectPath);
     if (isPlatformBrowser(this.platformId)) {
       this.router.navigate([redirectPath]);
     }

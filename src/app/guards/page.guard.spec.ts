@@ -34,12 +34,22 @@ describe('PageGuard', () => {
     const user = new User(userData);
     const page = new Page(Object.assign({}, mockPageData, {published: false, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -63,12 +73,60 @@ describe('PageGuard', () => {
     const otherUser = new User(otherUserData);
     const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
+      }
+    } as any;
+
+    spyOn(pageProvider, 'get').and.callFake(() => {
+      return new BehaviorSubject<any>(page);
+    });
+    authProvider.authenticate.and.callFake(() => {
+      return new Promise(resolve => resolve(otherUser));
+    });
+
+    guard.canActivate(routeSnapshot, null).then(val => {
+      expect(val).toEqual(true);
+    });
+  })));
+
+  it('should allow access to public pages through the page slug', async(inject([PageGuard], (guard: PageGuard) => {
+    const pageProvider = getTestBed().get(PagesService);
+    const authProvider = getTestBed().get(AuthService);
+    const userData = Object.assign({}, mockUserData, {id: 1});
+    const otherUserData = Object.assign({}, mockUserData, {id: 2});
+    const otherUser = new User(otherUserData);
+    const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
+    const routeSnapshot = {
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageSlug: 'my-title-' + page.id
+          };
+          return obj[key];
+        }
+      },
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -90,12 +148,22 @@ describe('PageGuard', () => {
     const userData = Object.assign({}, mockUserData, {id: 1});
     const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -118,12 +186,22 @@ describe('PageGuard', () => {
     const user = new User(userData);
     const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: 'true'
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: 'true'
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -149,12 +227,22 @@ describe('PageGuard', () => {
     const otherUser = new User(otherUserData);
     const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: 'true'
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: 'true'
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -178,12 +266,22 @@ describe('PageGuard', () => {
     const userData = Object.assign({}, mockUserData, {id: 1});
     const page = new Page(Object.assign({}, mockPageData, {published: true, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: 'true'
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: 'true'
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -207,12 +305,22 @@ describe('PageGuard', () => {
     const userData = Object.assign({}, mockUserData, {id: 1});
     const page = new Page(Object.assign({}, mockPageData, {published: false, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -236,12 +344,22 @@ describe('PageGuard', () => {
     const userData = Object.assign({}, mockUserData, {id: 1});
     const page = new Page(Object.assign({}, mockPageData, {published: false, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -265,12 +383,22 @@ describe('PageGuard', () => {
     const userData = Object.assign({}, mockUserData, {id: 1});
     const page = new Page(Object.assign({}, mockPageData, {published: false, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 
@@ -295,12 +423,22 @@ describe('PageGuard', () => {
     const user = new User(userData);
     const page = new Page(Object.assign({}, mockPageData, {published: false, user: userData}));
     const routeSnapshot = {
-      params: {
-        pageId: page.id,
-        pageSlug: 'myTitle'
+      paramMap: {
+        get: key => {
+          const obj = {
+            pageId: page.id,
+            pageSlug: 'myTitle'
+          };
+          return obj[key];
+        }
       },
-      queryParams: {
-        edit: false
+      queryParamMap: {
+        get: key => {
+          const obj = {
+            edit: false
+          };
+          return obj[key];
+        }
       }
     } as any;
 

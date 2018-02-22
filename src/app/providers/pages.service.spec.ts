@@ -1,13 +1,5 @@
 import {async, getTestBed, inject, TestBed} from '@angular/core/testing';
-import {
-  BaseRequestOptions,
-  Http,
-  HttpModule,
-  RequestMethod,
-  Response,
-  ResponseOptions,
-  ResponseType
-} from '@angular/http';
+import {BaseRequestOptions, Http, HttpModule, RequestMethod, Response, ResponseOptions, ResponseType} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
 import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
@@ -20,6 +12,7 @@ import {AuthService} from './auth.service';
 
 import {PagesService} from './pages.service';
 import {mockCompositionData} from './sites.service.spec';
+import * as getSlug from 'speakingurl';
 
 export const mockPageResponse = {
   id: 1,
@@ -493,5 +486,23 @@ describe('PagesService', () => {
         })));
       });
     }
+  });
+
+  describe('static methods', () => {
+    it('should provide a method to return an internal url', () => {
+      const page = mockPage();
+      expect(PagesService.getInternalPageUrl(page)).toEqual(`/p/${page.id}`);
+    });
+
+    it('should provide a method to return an a public url', () => {
+      const page = mockPage();
+      expect(PagesService.getPublicPageUrl(page)).toEqual(`/${getSlug(page.title)}-${page.id}`);
+    });
+
+    it('should fallback to an internal url if a page title is not avaialbel', () => {
+      const page = mockPage();
+      page.title = null;
+      expect(PagesService.getPublicPageUrl(page)).toEqual(`/p/${page.id}`);
+    });
   });
 });
