@@ -70,6 +70,7 @@ import {UtilService} from './providers/util.service';
 import {SiteFilesComponent} from './components/site-files/site-files.component';
 import {XzChangeBgColorOnHoverDirective} from './directives/xz-change-bg-color-on-hover/xz-change-bg-color-on-hover.directive';
 import {QuillService} from './providers/quill.service';
+import { AboutPageComponent } from './components/about-page/about-page.component';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -121,6 +122,7 @@ export function getAppTitleFactory() {
     SiteAdvancedSettingsComponent,
     SiteFilesComponent,
     XzChangeBgColorOnHoverDirective,
+    AboutPageComponent,
   ],
   entryComponents: [],
   imports: [

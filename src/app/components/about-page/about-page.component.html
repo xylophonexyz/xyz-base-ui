@@ -1,0 +1,146 @@
+<nav class="navbar is-transparent">
+  <div class="navbar-brand">
+    <a class="navbar-item"
+       routerLink="/">
+      <img src="favicon.png"
+           alt="Logo">
+    </a>
+    <div class="navbar-burger burger"
+         [class.is-active]="shouldShowMenu"
+         xzToggleOnClick
+         [(toggle)]="shouldShowMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div class="navbar-menu"
+       [class.is-active]="shouldShowMenu">
+    <div class="navbar-end">
+      <a class="navbar-item"
+         (click)="showLogin()">Sign in / Sign up</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero is-small is-secondary has-text-centered">
+  <div class="hero-body">
+    <div class="container">
+      <img src="../../../assets/img/splash.jpg" alt="">
+      <small class="has-text-grey">Illustration by Cam Floyd</small>
+      <div style="padding: 2rem 4rem 8rem 4rem">
+        <h1 class="title">
+          Discover. Uncover. Explore
+        </h1>
+        <h2 class="subtitle">
+          Tell your story with {{applicationName}}, the simple way to represent yourself on the web.
+        </h2>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-medium has-text-right is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Be Inspirational.</h1>
+      <h2 class="subtitle">
+        Merla is designed to make building a website for your brand or business fun and easy.
+
+        It offers far more flexibility than most existing web design tools,
+
+        yet is delightfully simple to use. We think you'll fall in love with it's component
+
+        based graphical interface, intuitive editing features, and minimalist design elements.
+
+        <br>
+        <br>
+        Oh, and your users might just fall in love with your new look.
+
+        <br>
+        <br>
+        <button class="button is-white" (click)="showLogin()">Get started</button>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-medium is-light is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Feel the Power.</h1>
+      <h2 class="subtitle">
+        Merla provides you with everything you need to make your presence known on the web.
+        From custom domains, media management utilities, and hassle-free SEO, you can focus on what matters and know
+        that the rest is taken care of.
+        <br>
+        <br>
+        Some of the features include:
+      </h2>
+      <ul>
+        <li>Unlimited pages</li>
+        <li>Support for direct media uploads</li>
+        <li>Support for embeddable content</li>
+        <li>Full HTML customization</li>
+        <li>Custom domains</li>
+        <li>Google SEO, Facebook OpenGraph, Twitter Cards support</li>
+        <li>An OAuth 2.0 based REST API for full featured apps built on top of the platform</li>
+        <li>24/7 support</li>
+        <li>Pay for what you use</li>
+      </ul>
+
+      <br>
+      <br>
+      <button class="button is-white" (click)="showLogin()">Get started</button>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-warning is-bold is-medium has-text-centered">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Cross-Pollinate.</h1>
+      <h2 class="subtitle">
+        At the heart of Merla is a community of craftsmen, artists, merchants, traders, and more. Each individual within
+        has something unique to offer one another. Our aim is to connect folks who can help each other produce their vision.
+        We are working on tools that will put the right person right at your fingertips, right when you need them.
+        We call this cross-pollination.
+        <br>
+        <br>
+        Available soon.
+
+        <br>
+        <br>
+        <button class="button is-white" (click)="showLogin()">Get started</button>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-dark is-bold is-medium">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">Open Source.</h1>
+      <h2 class="subtitle">
+        We believe in the value of open source, and 100% of the technology used to bring our dream to you is available
+        for download. Whether you're an engineer, tinkerer, or otherwise, we hope that this will inspire you to
+        build great things for and with the Merla community.
+        <br>
+        <br>
+        <a href="https://github.com/xylophonexyz">View on GitHub</a>
+      </h2>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        <strong>Merla</strong> by <a href="https://www.xylophonexyz.com">Xylophone, Inc</a>. &copy; 2018. All Rights Reserved.
+        Merla is currently in public beta. Use is governed by the <a href="https://www.xylophonexyz.com/merla-terms-of-service">Terms</a>
+        and <a href="https://www.xylophonexyz.com/merla-privacy-policy">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</footer>

@@ -18,6 +18,7 @@ import {TokenCallbackComponent} from './components/token-callback/token-callback
 import {AuthGuard} from './guards/auth.guard';
 import {PageGuard} from './guards/page.guard';
 import {SiteFilesComponent} from './components/site-files/site-files.component';
+import {AboutPageComponent} from './components/about-page/about-page.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
       {
         path: 'login',
         component: SplashScreenComponent
+      },
+      {
+        path: 'about',
+        component: AboutPageComponent
       },
       {
         path: 'admin/sites/:id',
