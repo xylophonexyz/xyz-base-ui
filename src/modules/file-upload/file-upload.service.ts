@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
 import {FileUploadConfig} from './file-upload-config';
 import {FileUploadOptions, UploadRequestQueue} from './index';
 import {HttpClient} from '@angular/common/http';

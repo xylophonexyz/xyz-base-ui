@@ -1,11 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {StringMap} from 'quill';
-import {
-  ComponentCollectionDataInterface,
-  ComponentDataInterface,
-  ComponentMedia,
-  SectionComponentMetadata
-} from '../../index';
+import {ComponentCollectionDataInterface, ComponentDataInterface, ComponentMedia, SectionComponentMetadata} from '../../index';
 import {NavActionItem} from '../../models/nav-action-item';
 import {SectionComponent} from '../../models/section-component';
 import {getHexColorString} from '../../util/colors';

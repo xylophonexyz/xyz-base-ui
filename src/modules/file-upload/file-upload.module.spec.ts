@@ -3,11 +3,13 @@ import {FileUploadConfig} from './file-upload-config';
 import {FileUploadTestingModule} from './file-upload-testing.module';
 import {FileUploadModule} from './file-upload.module';
 import {FileUploadService} from './file-upload.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('FileUploadModule', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FileUploadModule]
+      imports: [FileUploadModule, HttpClientTestingModule, HttpClientModule]
     });
   });
 
@@ -67,7 +69,9 @@ describe('FileUploadModule forRoot()', () => {
           currentPartSizeParamName: 'curr',
           fileParamName: 'FILE_UPLOAD',
           fileNameParamName: 'filename'
-        })
+        }),
+        HttpClientTestingModule,
+        HttpClientModule
       ]
     });
   });

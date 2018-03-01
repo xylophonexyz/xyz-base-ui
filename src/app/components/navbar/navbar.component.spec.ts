@@ -61,13 +61,13 @@ describe('NavbarComponent', () => {
 
   it('should initialize a subscription to post an info message banner', fakeAsync(
     inject([NavbarDelegateService], (nav: NavbarDelegateService) => {
-      expect((component as any).infoBannerSubscription).toBeDefined();
-      expect(component.infoBannerMessage).toEqual(null);
-      nav.setInfoBannerMessage('foo');
-      tick();
-      expect(component.infoBannerMessage).toEqual('foo');
-    }
-  )));
+        expect((component as any).infoBannerSubscription).toBeDefined();
+        expect(component.infoBannerMessage).toEqual(null);
+        nav.setInfoBannerMessage('foo');
+        tick();
+        expect(component.infoBannerMessage).toEqual('foo');
+      }
+    )));
 
   it('should provide a method to return a profile image for the current user', fakeAsync(() => {
     const user = new User({

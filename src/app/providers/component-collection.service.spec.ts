@@ -1,5 +1,5 @@
 import {fakeAsync, getTestBed, inject, TestBed, tick} from '@angular/core/testing';
-import {BaseRequestOptions, Http, HttpModule, RequestMethod, ResponseOptions, ResponseType} from '@angular/http';
+import {BaseRequestOptions, Http, RequestMethod, ResponseOptions, ResponseType} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
 import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
@@ -9,6 +9,8 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 
 import {ComponentCollectionService} from './component-collection.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('ComponentCollectionService', () => {
   let mockBackend: MockBackend;
@@ -29,7 +31,7 @@ describe('ComponentCollectionService', () => {
         {provide: ApiService, useValue: apiServiceStub},
         ComponentCollectionService
       ],
-      imports: [HttpModule, FileUploadTestingModule]
+      imports: [HttpClientTestingModule, HttpClientModule, FileUploadTestingModule]
     });
 
     mockBackend = getTestBed().get(MockBackend);

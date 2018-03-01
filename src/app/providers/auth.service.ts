@@ -1,6 +1,6 @@
 import {isPlatformServer} from '@angular/common';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {Headers, Http, Response} from '@angular/http';
+import {Response} from '@angular/http';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {AuthorizationCode, OAuthToken, UserDataInterface} from '../index';

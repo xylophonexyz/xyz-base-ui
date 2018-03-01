@@ -1,5 +1,5 @@
 import {async, getTestBed, inject, TestBed} from '@angular/core/testing';
-import {BaseRequestOptions, Http, HttpModule, RequestMethod, Response, ResponseOptions, ResponseType} from '@angular/http';
+import {BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
 import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
@@ -13,6 +13,8 @@ import {AuthService} from './auth.service';
 import {PagesService} from './pages.service';
 import {mockCompositionData} from './sites.service.spec';
 import * as getSlug from 'speakingurl';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 export const mockPageResponse = {
   id: 1,
@@ -64,9 +66,9 @@ describe('PagesService', () => {
         },
         {provide: ApiService, useValue: apiServiceStub},
         {provide: AuthService, useValue: authServiceStub},
-        PagesService,
+        PagesService
       ],
-      imports: [HttpModule]
+      imports: [HttpClientTestingModule, HttpClientModule]
     });
 
     mockBackend = getTestBed().get(MockBackend);
@@ -85,17 +87,17 @@ describe('PagesService', () => {
       numCalls = 0;
     });
 
-    it('should get a page', async(inject([PagesService], (service: PagesService) => {
+    it('should get a page', async(inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
       mockGetSucceed();
       const auth = getTestBed().get(AuthService);
       service.get(mockPageResponse.id).subscribe((res: PageDataInterface) => {
         expect(res.id).toEqual(mockPageResponse.id);
         expect(res.title).toEqual(mockPageResponse.title);
         expect(res.description).toEqual(mockPageResponse.description);
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
+      });
+      backend.expectOne({
+        url: '/api/pages/1',
+        method: 'GET'
       });
     })));
 

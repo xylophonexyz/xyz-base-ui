@@ -16,32 +16,23 @@ import {mockPageData} from '../../providers/pages.service.spec';
 import {ModalComponent} from '../modal/modal.component';
 
 import {PageUIComponentCollectionAdditionComponent} from './page-component-addition.component';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 describe('PageUIComponentCollectionAdditionComponent', () => {
   let component: PageUIComponentCollectionAdditionComponent;
   let fixture: ComponentFixture<PageUIComponentCollectionAdditionComponent>;
-  let mockBackend;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PageUIComponentCollectionAdditionComponent, ModalComponent],
       providers: [
-        MockBackend,
-        BaseRequestOptions,
-        {
-          provide: Http,
-          useFactory: (backend: MockBackend, options: BaseRequestOptions) => {
-            return new Http(backend, options);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
         {provide: PagesService, useValue: pagesServiceStub},
         {provide: ComponentService, useValue: componentServiceStub},
         MessageChannelDelegateService
       ],
-      imports: [FeatherModule]
+      imports: [FeatherModule, HttpClientTestingModule, HttpClientModule]
     }).compileComponents();
-    mockBackend = getTestBed().get(MockBackend);
   }));
 
   beforeEach(() => {
@@ -63,16 +54,13 @@ describe('PageUIComponentCollectionAdditionComponent', () => {
         'metatype': 'Hero'
       }
     ];
-    mockBackend.connections.subscribe(connection => {
-      connection.mockRespond(new Response(new ResponseOptions({
-        body: JSON.stringify(buttons)
-      })));
-      expect(connection.request.url).toEqual('/me/components');
+    const backend = getTestBed().get(HttpTestingController);
+    const request = backend.expectOne({
+      url: '/me/components',
+      method: 'GET'
     });
-    const http = getTestBed().get(Http);
-    spyOn(http, 'get').and.callThrough();
     component.ngOnInit();
-    expect(http.get).toHaveBeenCalled();
+    request.flush(buttons);
     expect(component.componentAddButtons).toEqual(buttons);
   }));
 

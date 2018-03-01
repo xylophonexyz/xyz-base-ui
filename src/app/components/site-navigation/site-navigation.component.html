@@ -46,7 +46,8 @@
       <div class="level-item" *ngIf="willEditPage(page)">
         <div class="level-item-divider"></div>
         <label class="checkbox">
-          <input type="checkbox" [checked]="pageCopy.isExternalNavigationType()" (click)="toggleNavigationType(pageCopy)">
+          <input type="checkbox" [checked]="pageCopy.isExternalNavigationType()"
+                 (click)="toggleNavigationType(pageCopy)">
           Link to external site or url?
         </label>
       </div>

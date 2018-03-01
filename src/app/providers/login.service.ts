@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {LoginType} from '../index';
 import {ApiService} from './api.service';

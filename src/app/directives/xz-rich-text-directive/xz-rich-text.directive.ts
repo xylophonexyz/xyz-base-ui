@@ -1,15 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  PLATFORM_ID,
-  SimpleChanges
-} from '@angular/core';
+import {Directive, ElementRef, EventEmitter, Inject, Input, OnChanges, OnInit, Output, PLATFORM_ID, SimpleChanges} from '@angular/core';
 import {isEqual} from 'lodash';
 import {isPlatformBrowser} from '@angular/common';
 import {QuillService} from '../../providers/quill.service';

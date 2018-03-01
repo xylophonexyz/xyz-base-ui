@@ -1,8 +1,5 @@
 import {CompositionCustomDomain, CompositionDataInterface, CompositionInterface, CompositionMetadata} from '../index';
-import {
-  colorIsLight, colorIsValidFullHexString, darkenHexColorString, getHexColorString,
-  lightenHexColorString
-} from '../util/colors';
+import {colorIsLight, colorIsValidFullHexString, darkenHexColorString, getHexColorString, lightenHexColorString} from '../util/colors';
 import {Page} from './page';
 
 export class Composition implements CompositionInterface {

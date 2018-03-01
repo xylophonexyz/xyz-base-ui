@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AboutPageComponent } from './about-page.component';
+import {AboutPageComponent} from './about-page.component';
 import {ToggleOnClickDirective} from '../../directives/toggle-on-click/toggle-on-click.directive';
 import {NavbarDelegateService} from '../../providers/navbar-delegate.service';
 import {appTitleFactory} from '../../../test/stubs/tokens.stub.spec';
@@ -40,7 +40,7 @@ describe('AboutPageComponent', () => {
         ToggleOnClickDirective
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

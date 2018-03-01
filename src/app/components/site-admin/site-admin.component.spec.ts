@@ -33,7 +33,6 @@ import {WindowRefService} from '../../providers/window-ref.service';
 import {SiteAdminComponent} from './site-admin.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {mockDomSanitizer} from '../../../test/stubs/dom-sanitizer.stub.spec';
-import {routerStub} from '../../../test/stubs/router.stub.spec';
 
 describe('SiteAdminComponent', () => {
   let component: SiteAdminComponent;

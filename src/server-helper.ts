@@ -449,8 +449,10 @@ function getMockMutationObserver() {
   return class {
     observe(node, options) {
     }
+
     disconnect() {
     }
+
     takeRecords() {
       return [];
     }

@@ -1,10 +1,4 @@
-import {
-  PageDataInterface,
-  PageInterface,
-  PageMetadata,
-  PageNavigationItemNavigationStrategy,
-  PageNavigationType
-} from '../index';
+import {PageDataInterface, PageInterface, PageMetadata, PageNavigationItemNavigationStrategy, PageNavigationType} from '../index';
 import {ComponentCollection} from './component-collection';
 import {Composition} from './composition';
 import {User} from './user';

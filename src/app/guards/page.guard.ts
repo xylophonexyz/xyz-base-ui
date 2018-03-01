@@ -1,6 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, ParamMap, Params, Router, RouterStateSnapshot} from "@angular/router";
+import {ActivatedRouteSnapshot, CanActivate, ParamMap, Params, Router, RouterStateSnapshot} from '@angular/router';
 import {isNumber} from 'lodash';
 import {PageDataInterface} from '../index';
 import {Page} from '../models/page';

@@ -1,11 +1,13 @@
 import {fakeAsync, getTestBed, inject, TestBed} from '@angular/core/testing';
-import {BaseRequestOptions, Headers, Http, ResponseOptions} from '@angular/http';
+import {BaseRequestOptions, Http, ResponseOptions} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {Observable} from 'rxjs/Observable';
 import {FileUploadConfig} from './file-upload-config';
 import {FileUploadModule} from './file-upload.module';
 import {FileUploadService} from './file-upload.service';
 import {UploadRequestQueue} from './index';
+import {HttpClientModule, HttpHeaders} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 export function mockFile(size, name): File {
   const data = new Uint32Array(size);
@@ -19,7 +21,7 @@ describe('FileUploadService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FileUploadModule],
+      imports: [FileUploadModule, HttpClientTestingModule, HttpClientModule],
       providers: [
         MockBackend,
         BaseRequestOptions,
@@ -67,7 +69,7 @@ describe('FileUploadService', () => {
       spyOn(service, 'processUploadRequestQueue').and.callThrough();
       service.upload(file, {
         url: 'my/endpoint',
-        headers: new Headers(),
+        headers: new HttpHeaders(),
         partSize: 1
       }).then(() => {
         expect(service.processUploadRequestQueue).toHaveBeenCalled();
@@ -82,7 +84,7 @@ describe('FileUploadService', () => {
         spyOn(service, 'processUploadRequestQueue').and.callThrough();
         service.upload(file, {
           url: 'my/endpoint',
-          headers: new Headers(),
+          headers: new HttpHeaders(),
           partSize: 1
         }).then(() => {
           expect(service.processUploadRequestQueue).toHaveBeenCalled();
@@ -104,7 +106,7 @@ describe('FileUploadService', () => {
         });
         service.uploadPart(file, 500, {
           url: 'my/endpoint',
-          headers: new Headers(),
+          headers: new HttpHeaders(),
           partSize: 1
         }).then(() => {
           expect(http.post).toHaveBeenCalled();
@@ -126,7 +128,7 @@ describe('FileUploadService', () => {
         });
         service.uploadPart(file, 500, {
           url: 'my/endpoint',
-          headers: new Headers(),
+          headers: new HttpHeaders(),
           partSize: 1
         }).catch(() => {
           expect(http.post).toHaveBeenCalled();

@@ -4,7 +4,10 @@ import 'rxjs/add/operator/concatMap';
 import {Observable} from 'rxjs/Observable';
 import {isNull} from 'lodash';
 import {
-  ComponentCollectionDataInterface, ComponentDataInterface, LocalComponentTypes, PageDataInterface,
+  ComponentCollectionDataInterface,
+  ComponentDataInterface,
+  LocalComponentTypes,
+  PageDataInterface,
   SectionComponentMetadata,
 } from '../../index';
 import {Component as XzComponent} from '../../models/component';

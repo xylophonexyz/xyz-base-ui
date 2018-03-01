@@ -10,11 +10,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AdminComponent} from './components/admin/admin.component';
 import {AppComponent} from './components/app.component';
 import {UIComponentCollectionComponent} from './components/component-collection/component-collection.component';
-import {
-  ConfigurableUIComponent,
-  ConfigurableUIComponentWithToolbar,
-  UIComponent
-} from './components/component/component.component';
+import {ConfigurableUIComponent, ConfigurableUIComponentWithToolbar, UIComponent} from './components/component/component.component';
 import {UIEmbedComponent} from './components/embed-component/embed.component';
 import {FooterComponent} from './components/footer/footer.component';
 import {UIFreeFormHtmlComponent} from './components/free-form-html-component/free-form-html-component.component';
@@ -70,7 +66,7 @@ import {UtilService} from './providers/util.service';
 import {SiteFilesComponent} from './components/site-files/site-files.component';
 import {XzChangeBgColorOnHoverDirective} from './directives/xz-change-bg-color-on-hover/xz-change-bg-color-on-hover.directive';
 import {QuillService} from './providers/quill.service';
-import { AboutPageComponent } from './components/about-page/about-page.component';
+import {AboutPageComponent} from './components/about-page/about-page.component';
 import {HttpClientModule} from '@angular/common/http';
 
 export function getBrowserOriginFactory() {

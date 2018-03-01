@@ -1,8 +1,5 @@
 import {async, getTestBed, inject, TestBed} from '@angular/core/testing';
-import {
-  BaseRequestOptions, Http, HttpModule, RequestMethod, Response, ResponseOptions,
-  ResponseType
-} from '@angular/http';
+import {BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {Observable} from 'rxjs/Observable';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
@@ -18,6 +15,8 @@ import {PagesService} from './pages.service';
 import {mockPageResponse} from './pages.service.spec';
 
 import {SitesService} from './sites.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 export const mockCompositionResponse: CompositionDataInterface = {
   id: 1,
@@ -61,9 +60,9 @@ describe('SitesService', () => {
         {provide: ApiService, useValue: apiServiceStub},
         {provide: ComponentService, useValue: componentServiceStub},
         {provide: PagesService, useValue: pagesServiceStub},
-        {provide: AuthService, useValue: authServiceStub},
+        {provide: AuthService, useValue: authServiceStub}
       ],
-      imports: [HttpModule]
+      imports: [HttpClientTestingModule, HttpClientModule]
     });
 
     mockBackend = getTestBed().get(MockBackend);

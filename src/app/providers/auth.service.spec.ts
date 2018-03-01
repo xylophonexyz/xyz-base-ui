@@ -1,5 +1,5 @@
 import {async, fakeAsync, getTestBed, inject, TestBed, tick} from '@angular/core/testing';
-import {BaseRequestOptions, Http, HttpModule, Response, ResponseOptions, ResponseType} from '@angular/http';
+import {BaseRequestOptions, Http, Response, ResponseOptions, ResponseType} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {Observable} from 'rxjs/Observable';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
@@ -12,6 +12,8 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {LoginService} from './login.service';
 import {StorageService} from './storage.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('AuthService', () => {
 
@@ -41,7 +43,7 @@ describe('AuthService', () => {
         {provide: StorageService, useValue: storageStub},
         {provide: LoginService, useValue: loginServiceStub}
       ],
-      imports: [HttpModule]
+      imports: [HttpClientTestingModule, HttpClientModule]
     });
     mockBackend = getTestBed().get(MockBackend);
   });

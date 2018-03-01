@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Headers, Http, Response} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Observable';
 import {FileUploadService} from '../../modules/file-upload/file-upload.service';

@@ -51,10 +51,10 @@
   </div>
   <div *ngSwitchCase="'FreeFormHtml'">
     <app-free-form-html-component *ngFor="let component of componentCollection.components"
-                        [component]="component"
-                        [page]="page"
-                        [editable]="editable"
-                        [showOptions]="childShouldShowOptions">
+                                  [component]="component"
+                                  [page]="page"
+                                  [editable]="editable"
+                                  [showOptions]="childShouldShowOptions">
     </app-free-form-html-component>
   </div>
   <div *ngSwitchDefault>

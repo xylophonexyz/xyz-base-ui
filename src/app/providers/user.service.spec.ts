@@ -1,5 +1,5 @@
 import {getTestBed, inject, TestBed} from '@angular/core/testing';
-import {BaseRequestOptions, Http, HttpModule, RequestMethod, Response, ResponseOptions} from '@angular/http';
+import {BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions} from '@angular/http';
 import {MockBackend, MockConnection} from '@angular/http/testing';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
 import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
@@ -8,6 +8,8 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 
 import {UserService} from './user.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('UserService', () => {
 
@@ -27,9 +29,9 @@ describe('UserService', () => {
           deps: [MockBackend, BaseRequestOptions]
         },
         {provide: ApiService, useValue: apiServiceStub},
-        {provide: AuthService, useValue: authServiceStub}
+        {provide: AuthService, useValue: authServiceStub},
       ],
-      imports: [HttpModule]
+      imports: [HttpClientTestingModule, HttpClientModule]
     });
     mockBackend = getTestBed().get(MockBackend);
   });

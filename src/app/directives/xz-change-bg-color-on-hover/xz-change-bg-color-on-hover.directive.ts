@@ -5,7 +5,8 @@ import {Directive, ElementRef, HostListener, Input} from '@angular/core';
 })
 export class XzChangeBgColorOnHoverDirective {
 
-  constructor(private elementRef: ElementRef) { }
+  constructor(private elementRef: ElementRef) {
+  }
 
   @Input() hoverOnColor = '';
   @Input() hoverOffColor = '';
@@ -24,7 +25,6 @@ export class XzChangeBgColorOnHoverDirective {
       this.elementRef.nativeElement.style.backgroundColor = this.hoverOffColor;
     }
   }
-
 
 
 }
