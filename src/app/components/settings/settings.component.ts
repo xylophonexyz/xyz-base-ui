@@ -51,7 +51,7 @@ export class SettingsComponent implements OnInit {
 
   removePhoto(): void {
     this.currentUser.avatar = null;
-    this.updateUser();
+    this.updateUserPhoto();
   }
 
   fileDidChange(event: Event): void {
@@ -87,7 +87,8 @@ export class SettingsComponent implements OnInit {
 
   private updateUserPhoto() {
     this.isLoading = true;
-    this.userService.updateUserPhoto(this.currentUser.id, this.currentUser.avatar).subscribe(() => {
+    const photo = this.currentUser.hasAvatar() ? this.currentUser.avatar : null;
+    this.userService.updateUserPhoto(this.currentUser.id, photo).subscribe(() => {
       this.isLoading = false;
     }, () => {
       this.isLoading = false;
