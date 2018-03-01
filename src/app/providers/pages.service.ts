@@ -7,6 +7,7 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {Page} from '../models/page';
 import * as getSlug from 'speakingurl';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class PagesService {
@@ -25,7 +26,7 @@ export class PagesService {
     return '/p/' + page.id;
   }
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private api: ApiService,
               private auth: AuthService) {
   }
@@ -36,9 +37,9 @@ export class PagesService {
     if (useCache && this.pageCache[id]) {
       return Observable.create(observer => observer.next(this.pageCache[id]));
     } else {
-      return this.http.get(url, {headers}).map((res: Response) => {
-        this.updatePageCache(id, res.json());
-        return res.json() as PageDataInterface;
+      return this.http.get(url, {headers}).map((res: Object) => {
+        this.updatePageCache(id, res);
+        return res as PageDataInterface;
       });
     }
   }
@@ -46,21 +47,21 @@ export class PagesService {
   create(params: PageParams): Observable<PageDataInterface> {
     const url = `${this.api.baseUrl}/pages`;
     const headers = this.auth.constructAuthHeader();
-    return this.http.post(url, JSON.stringify(params), {headers}).map((res: Response) => {
-      return res.json() as PageDataInterface;
+    return this.http.post(url, JSON.stringify(params), {headers}).map((res: Object) => {
+      return res as PageDataInterface;
     });
   }
 
   update(id: number, params: PageParams): Observable<PageDataInterface> {
     const url = `${this.api.baseUrl}/pages/${id}`;
     const headers = this.auth.constructAuthHeader();
-    return this.http.put(url, JSON.stringify(params), {headers}).map((res: Response) => {
-      this.updatePageCache(id, res.json());
-      return res.json() as PageDataInterface;
+    return this.http.put(url, JSON.stringify(params), {headers}).map((res: Object) => {
+      this.updatePageCache(id, res);
+      return res as PageDataInterface;
     });
   }
 
-  destroy(id: number): Observable<Response> {
+  destroy(id: number): Observable<Object> {
     const headers = this.auth.constructAuthHeader();
     this.updatePageCache(id);
     return this.http.delete(`${this.api.baseUrl}/pages/${id}`, {headers});
@@ -70,12 +71,12 @@ export class PagesService {
     const url = `${this.api.baseUrl}/pages/${pageId}/collections`;
     const headers = this.auth.constructAuthHeader();
     this.updatePageCache(pageId);
-    return this.http.post(url, JSON.stringify(payload), {headers}).map((res: Response) => {
-      return res.json() as ComponentCollectionDataInterface;
+    return this.http.post(url, JSON.stringify(payload), {headers}).map((res: Object) => {
+      return res as ComponentCollectionDataInterface;
     });
   }
 
-  removeComponentCollection(pageId: number, componentCollectionId: number): Observable<Response> {
+  removeComponentCollection(pageId: number, componentCollectionId: number): Observable<Object> {
     const url = `${this.api.baseUrl}/pages/${pageId}/collections/${componentCollectionId}`;
     const headers = this.auth.constructAuthHeader();
     this.updatePageCache(pageId);

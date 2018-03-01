@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {FileUploadConfig} from './file-upload-config';
 import {FileUploadOptions, UploadRequestQueue} from './index';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class FileUploadService {
 
-  constructor(private config: FileUploadConfig, private http: Http) {
+  constructor(private config: FileUploadConfig, private http: HttpClient) {
   }
 
   processUploadRequestQueue(queue: UploadRequestQueue) {
@@ -65,7 +66,7 @@ export class FileUploadService {
       formData.append(this.config.partNumberParamName, Math.ceil(byteOffset / partSize).toString());
       formData.append(this.config.totalSizeParamName, file.size.toString());
 
-      this.http.post(options.url, formData, {headers: options.headers}).subscribe((res: Response) => {
+      this.http.post(options.url, formData, {headers: options.headers}).subscribe((res: Object) => {
         resolve(res);
       }, (err) => {
         reject(err);

@@ -7,6 +7,7 @@ import {AuthorizationCode, OAuthToken, UserDataInterface} from '../index';
 import {User} from '../models/user';
 import {ApiService} from './api.service';
 import {StorageService} from './storage.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 export interface AuthStrategy {
   authenticate: () => Promise<User | Error>;
@@ -29,7 +30,7 @@ export class AuthService {
     return new Date().getTime() > ((token.created_at + token.expires_in) * 1000);
   }
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private api: ApiService,
               private storage: StorageService,
               @Inject(PLATFORM_ID) private platformId) {
@@ -63,14 +64,14 @@ export class AuthService {
     }
   }
 
-  constructAuthHeader(): Headers {
+  constructAuthHeader(): HttpHeaders {
     if (this.token) {
-      return new Headers({
+      return new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.accessToken}`
       });
     } else {
-      return new Headers({
+      return new HttpHeaders({
         'Content-Type': 'application/json',
       });
     }
@@ -83,6 +84,7 @@ export class AuthService {
    * re-retrieved. If no auth code is provided and a current user object is cached, return the cached current user.
    * If no current user is cached, go and fetch the current user and cache.
    * @param authCode
+   * @param doReauth
    * @returns {Promise<any>}
    */
   authenticate(authCode?: AuthorizationCode, doReauth?: boolean): Promise<User | Error> {
@@ -121,16 +123,16 @@ export class AuthService {
    * @param token
    * @returns {Promise<T>}
    */
-  authenticateWithToken(token: OAuthToken): Observable<Response> {
-    const headers = new Headers({
+  authenticateWithToken(token: OAuthToken): Observable<Object> {
+    const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token.access_token}`
     });
     return this.http.get(`${this.api.baseUrl}/me`, {headers});
   }
 
-  authenticateWithRefreshToken(token: OAuthToken): Observable<Response> {
-    const headers = new Headers({'Content-Type': 'application/json'});
+  authenticateWithRefreshToken(token: OAuthToken): Observable<Object> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     const body = JSON.stringify({refresh_token: token.refresh_token, grant_type: 'refresh_token'});
     return this.http.post(this.api.authTokenUrl, body, {headers});
   }
@@ -140,8 +142,8 @@ export class AuthService {
    * @param code
    * @returns {Promise<T>}
    */
-  authenticateWithCode(code: string): Observable<Response> {
-    const headers = new Headers({'Content-Type': 'application/json'});
+  authenticateWithCode(code: string): Observable<Object> {
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     const body = JSON.stringify({code: code, grant_type: 'authorization_code'});
     return this.http.post(this.api.authTokenUrl, body, {headers});
   }
@@ -194,17 +196,17 @@ export class AuthService {
   private doAuthWithToken(token: OAuthToken, retry?: boolean): Promise<User | Error> {
     return new Promise((resolve, reject) => {
       // authenticate the user by token
-      this.authenticateWithToken(token).subscribe((res: Response) => {
+      this.authenticateWithToken(token).subscribe((res: Object) => {
         // success - set the current user and resolve the authentication result
-        const currentUser = res.json() as UserDataInterface;
+        const currentUser = res as UserDataInterface;
         this.onTokenSuccess(token).then(() => {
           resolve(new User(currentUser));
         }).catch(reject);
-      }, (err: Response) => {
+      }, (err: any) => {
         // if authentication fails with 401 and a refresh token is present, try a reauth before giving up
         if (err.status === 401 && token.refresh_token && !retry) {
-          this.authenticateWithRefreshToken(token).subscribe((res: Response) => {
-            this.doAuthWithToken(res.json() as OAuthToken, true).then(resolve).catch(reject);
+          this.authenticateWithRefreshToken(token).subscribe((res: Object) => {
+            this.doAuthWithToken(res as OAuthToken, true).then(resolve).catch(reject);
           }, () => {
             reject(err);
           });

@@ -7,11 +7,12 @@ import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
 import {ComponentService} from './component.service';
 import {PagesService} from './pages.service';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable()
 export class SitesService {
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private api: ApiService,
               private auth: AuthService,
               private pagesProvider: PagesService,
@@ -22,8 +23,8 @@ export class SitesService {
   all(): Observable<CompositionDataInterface[]> {
     const url = `${this.api.baseUrl}/me/compositions`;
     const headers = this.auth.constructAuthHeader();
-    return this.http.get(url, {headers}).map((res: Response) => {
-      return res.json() as CompositionDataInterface[];
+    return this.http.get(url, {headers}).map((res: Object) => {
+      return res as CompositionDataInterface[];
     });
   }
 
@@ -31,8 +32,8 @@ export class SitesService {
     const url = `${this.api.baseUrl}/compositions`;
     const headers = this.auth.constructAuthHeader();
     return new Observable(observer => {
-      this.http.post(url, JSON.stringify(params), {headers}).map((res: Response) => {
-        return res.json() as CompositionDataInterface;
+      this.http.post(url, JSON.stringify(params), {headers}).map((res: Object) => {
+        return res as CompositionDataInterface;
       }).subscribe((c: CompositionDataInterface) => {
         this.pagesProvider.create({
           composition_id: c.id,
@@ -61,16 +62,16 @@ export class SitesService {
   get(id: number): Observable<CompositionDataInterface> {
     const url = `${this.api.baseUrl}/compositions/${id}`;
     const headers = this.auth.constructAuthHeader();
-    return this.http.get(url, {headers}).map((res: Response) => {
-      return res.json() as CompositionDataInterface;
+    return this.http.get(url, {headers}).map((res: Object) => {
+      return res as CompositionDataInterface;
     });
   }
 
   update(id: number, params: CompositionParams): Observable<CompositionDataInterface> {
     const url = `${this.api.baseUrl}/compositions/${id}`;
     const headers = this.auth.constructAuthHeader();
-    return this.http.put(url, JSON.stringify(params), {headers}).map((res: Response) => {
-      return res.json() as CompositionDataInterface;
+    return this.http.put(url, JSON.stringify(params), {headers}).map((res: Object) => {
+      return res as CompositionDataInterface;
     });
   }
 
@@ -106,12 +107,12 @@ export class SitesService {
     const url = `${this.api.baseUrl}/compositions/${id}/pages/${pageId}`;
     const headers = this.auth.constructAuthHeader();
     if (shouldLink) {
-      return this.http.post(url, null, {headers}).map((res: Response) => {
-        return res.json() as CompositionDataInterface;
+      return this.http.post(url, null, {headers}).map((res: Object) => {
+        return res as CompositionDataInterface;
       });
     } else {
-      return this.http.delete(url, {headers}).map((res: Response) => {
-        return res.json() as CompositionDataInterface;
+      return this.http.delete(url, {headers}).map((res: Object) => {
+        return res as CompositionDataInterface;
       });
     }
   }
@@ -120,7 +121,7 @@ export class SitesService {
     return this.update(id, {publish: shouldPublish} as CompositionParams);
   }
 
-  destroy(id: number): Observable<Response> {
+  destroy(id: number): Observable<Object> {
     const headers = this.auth.constructAuthHeader();
     return this.http.delete(`${this.api.baseUrl}/compositions/${id}`, {headers});
   }
@@ -131,12 +132,12 @@ export class SitesService {
       domainName: domainName,
       siteId: siteId
     };
-    return this.http.post(`${this.api.baseUrl}/domains`, payload, {headers}).map((res: Response) => {
-      return res.json();
+    return this.http.post(`${this.api.baseUrl}/domains`, payload, {headers}).map((res: Object) => {
+      return res as CreateZoneResponse;
     });
   }
 
-  removeCustomDomain(siteId: number): Observable<Response> {
+  removeCustomDomain(siteId: number): Observable<Object> {
     const headers = this.auth.constructAuthHeader();
     return this.http.delete(`${this.api.baseUrl}/domains/${siteId}`, {headers});
   }
@@ -148,9 +149,7 @@ export class SitesService {
       subdomain: subdomain,
       siteId: siteId
     };
-    return this.http.post(`${this.api.baseUrl}/domainMappings`, payload, {headers}).map((res: Response) => {
-      return res.json();
-    });
+    return this.http.post(`${this.api.baseUrl}/domainMappings`, payload, {headers});
   }
 
   removeDomainNameKeyPair(siteId: number, domainName: string, subdomain: string): Observable<any> {
@@ -158,9 +157,7 @@ export class SitesService {
     return this.http.delete(
       `${this.api.baseUrl}/domainMappings/${siteId}?domainName=${domainName}&subdomain=${subdomain}`,
       {headers}
-    ).map((res: Response) => {
-      return res.json();
-    });
+    );
   }
 
 }

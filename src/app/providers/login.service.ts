@@ -4,11 +4,12 @@ import {Router} from '@angular/router';
 import {LoginType} from '../index';
 import {ApiService} from './api.service';
 import {AuthService} from './auth.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable()
 export class LoginService {
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private api: ApiService,
               private router: Router,
               private auth: AuthService) {
@@ -42,7 +43,7 @@ export class LoginService {
    */
   sendLoginRequest(email: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const headers = new Headers({'Content-Type': 'application/json'});
+      const headers = new HttpHeaders({'Content-Type': 'application/json'});
       const body = JSON.stringify({email: email});
       this.http.post(this.api.authCodeUrl, body, {headers}).subscribe(resolve, reject);
     });
@@ -57,7 +58,7 @@ export class LoginService {
    */
   doRegistration(email: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      const headers = new Headers({'Content-Type': 'application/json'});
+      const headers = new HttpHeaders({'Content-Type': 'application/json'});
       const body = JSON.stringify({email: email});
       this.http.post(`${this.api.baseUrl}/users`, body, {headers}).subscribe(() => {
         this.sendLoginRequest(email).then(resolve).catch(reject);
@@ -74,7 +75,7 @@ export class LoginService {
   doEmailCheck(email: string): Promise<undefined> {
     return new Promise((resolve, reject) => {
       const endpoint = `${this.api.baseUrl}/users/check`;
-      const headers = new Headers({'Content-Type': 'application/json'});
+      const headers = new HttpHeaders({'Content-Type': 'application/json'});
       const body = JSON.stringify({email: email});
       this.http.post(endpoint, body, {headers}).subscribe(() => resolve(), () => reject());
     });
