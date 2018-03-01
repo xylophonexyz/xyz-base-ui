@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
-import {Http} from '@angular/http';
 import {AvailableComponent, ComponentCollectionDataInterface, ComponentDataInterface} from '../../index';
 import {ComponentCollection} from '../../models/component-collection';
 import {Page} from '../../models/page';
@@ -7,6 +6,7 @@ import {ComponentService} from '../../providers/component.service';
 import {MessageChannelDelegateService} from '../../providers/message-channel.service';
 import {PagesService} from '../../providers/pages.service';
 import {UIComponent} from '../component/component.component';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-page-component-addition',
@@ -20,7 +20,7 @@ export class PageUIComponentCollectionAdditionComponent implements OnInit {
   shouldShowButtons = false;
   componentAddButtons = null;
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private pagesService: PagesService,
               private channel: MessageChannelDelegateService,
               private componentService: ComponentService) {
@@ -28,7 +28,7 @@ export class PageUIComponentCollectionAdditionComponent implements OnInit {
 
   ngOnInit() {
     this.http.get('/me/components').subscribe(res => {
-      this.componentAddButtons = res.json() as AvailableComponent[];
+      this.componentAddButtons = res as AvailableComponent[];
     });
   }
 
