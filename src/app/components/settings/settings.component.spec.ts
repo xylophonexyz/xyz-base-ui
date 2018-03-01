@@ -111,7 +111,7 @@ describe('SettingsComponent', () => {
 
     it('should clear any photo and update', () => {
       const userService = getTestBed().get(UserService);
-      spyOn(userService, 'update').and.callThrough();
+      spyOn(userService, 'updateUserPhoto').and.callThrough();
 
       currentUser.avatar = photoData;
       component.currentUser = currentUser;
@@ -120,7 +120,7 @@ describe('SettingsComponent', () => {
 
       component.removePhoto();
       expect(component.currentUser.avatar).not.toEqual(photoData);
-      expect(userService.update).toHaveBeenCalled();
+      expect(userService.updateUserPhoto).toHaveBeenCalled();
     });
 
     it('should handle errors when updating the photo', () => {

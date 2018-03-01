@@ -78,7 +78,7 @@
             </div>
           </div>
           <div class="content">
-            <small *ngIf="page.description">{{page.description}}<br><br></small>
+            <small>{{page.description || 'No description provided'}}<br><br></small>
           </div>
         </div>
         <footer class="card-footer">
