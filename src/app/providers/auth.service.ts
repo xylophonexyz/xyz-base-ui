@@ -232,8 +232,8 @@ export class AuthService {
     if (shouldAuthWithTokenRequest) {
       // define the token retrieval method as oauth-token request based
       getToken = () => new Promise((resolve, reject) => {
-        this.authenticateWithCode(authCode).subscribe((res: Response) => {
-          resolve(res.json() as OAuthToken);
+        this.authenticateWithCode(authCode).subscribe((res: Object) => {
+          resolve(res as OAuthToken);
         }, (err) => {
           reject(err);
         });
@@ -286,8 +286,8 @@ export class AuthService {
     return {
       authenticate: () => {
         return new Promise((resolve, reject) => {
-          this.authenticateWithRefreshToken(token).subscribe((res: Response) => {
-            const newToken = res.json() as OAuthToken;
+          this.authenticateWithRefreshToken(token).subscribe((res: Object) => {
+            const newToken = res as OAuthToken;
             this.doAuthWithToken(newToken).then(resolve).catch(reject);
           });
         });
@@ -360,6 +360,11 @@ export class AuthService {
     return this.storage.set(AuthService.OAUTH_TOKEN_KEY, token);
   }
 
+  /**
+   * Handle successful authentication
+   * @param {OAuthToken} token
+   * @returns {Promise<any>}
+   */
   private onTokenSuccess(token: OAuthToken): Promise<any> {
     // the authentication was successful, store the token
     this.setToken(token);
