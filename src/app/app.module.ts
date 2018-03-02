@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {Http, HttpModule} from '@angular/http';
 import {BrowserModule, Meta, Title} from '@angular/platform-browser';
 import {MomentModule} from 'angular2-moment';
 import {FeatherModule} from '../modules/feather/feather.module';
@@ -49,7 +48,7 @@ import {PageGuard} from './guards/page.guard';
 import {APPLICATION_NAME, ORIGIN_URL} from './index';
 import {ApiService} from './providers/api.service';
 import {AuthService} from './providers/auth.service';
-import {AuthenticatedHttpService} from './providers/authenticated-http.service';
+import {AuthInterceptor} from './providers/auth-interceptor.service';
 import {ComponentCollectionService} from './providers/component-collection.service';
 import {ComponentService} from './providers/component.service';
 import {FooterDelegateService} from './providers/footer-delegate.service';
@@ -67,7 +66,7 @@ import {SiteFilesComponent} from './components/site-files/site-files.component';
 import {XzChangeBgColorOnHoverDirective} from './directives/xz-change-bg-color-on-hover/xz-change-bg-color-on-hover.directive';
 import {QuillService} from './providers/quill.service';
 import {AboutPageComponent} from './components/about-page/about-page.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -126,7 +125,6 @@ export function getAppTitleFactory() {
     BrowserModule.withServerTransition({appId: 'xyz-ui'}),
     FormsModule,
     HttpClientModule,
-    HttpModule,
     AppRoutingModule,
     FileUploadModule,
     MomentModule,
@@ -134,7 +132,7 @@ export function getAppTitleFactory() {
     FeatherModule
   ],
   providers: [
-    {provide: Http, useClass: AuthenticatedHttpService},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     Title,
     Meta,
     StorageService,
