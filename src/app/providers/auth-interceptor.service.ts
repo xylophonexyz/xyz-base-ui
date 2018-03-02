@@ -3,11 +3,10 @@ import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/filter';
 import {Observable} from 'rxjs/Observable';
 import {AuthService} from './auth.service';
 import {NavbarDelegateService} from './navbar-delegate.service';
-import {HttpBackend, HttpErrorResponse, HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -16,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
     return /oauth\/token$/.test(url);
   }
 
-  constructor(private injector: Injector, private backend: HttpBackend) {
+  constructor(private injector: Injector) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -32,7 +31,7 @@ export class AuthInterceptor implements HttpInterceptor {
               if (request.headers) {
                 request.headers.set('Authorization', `Bearer ${auth.accessToken}`);
               }
-              this.backend.handle(request).filter(event => event.type === HttpEventType.Response).subscribe(res => {
+              next.handle(request).do(res => {
                 this.removeInfoBannerFromNav();
                 resolve(res);
               }, reject);
