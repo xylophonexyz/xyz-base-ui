@@ -6,7 +6,7 @@ import {FileUploadConfig} from './file-upload-config';
 import {FileUploadModule} from './file-upload.module';
 import {FileUploadService} from './file-upload.service';
 import {UploadRequestQueue} from './index';
-import {HttpClientModule, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHeaders} from '@angular/common/http';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 export function mockFile(size, name): File {
@@ -93,7 +93,7 @@ describe('FileUploadService', () => {
 
     it('should upload a file in a multi-part request', fakeAsync(
       inject([FileUploadService], (service: FileUploadService) => {
-        const http = getTestBed().get(Http);
+        const http = getTestBed().get(HttpClient);
         const file = mockFile(1000, 'myFile.jpg');
         spyOn(service, 'sliceFile').and.callThrough();
         spyOn(http, 'post').and.callFake(() => {
@@ -115,7 +115,7 @@ describe('FileUploadService', () => {
 
     it('should handle errors when upload a file in a multi-part request', fakeAsync(
       inject([FileUploadService], (service: FileUploadService) => {
-        const http = getTestBed().get(Http);
+        const http = getTestBed().get(HttpClient);
         const file = mockFile(1000, 'myFile.jpg');
         spyOn(service, 'sliceFile').and.callThrough();
         spyOn(http, 'post').and.callFake(() => {
