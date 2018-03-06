@@ -38,7 +38,9 @@ describe('LoginService', () => {
               r();
             });
           });
-          spyOn(service, 'sendLoginRequest').and.callThrough();
+          spyOn(service, 'sendLoginRequest').and.callFake(() => {
+            return new Promise(resolve => resolve());
+          });
           service.doLogin('myemail@example.com').then(() => {
             expect(service.sendLoginRequest).toHaveBeenCalled();
           });

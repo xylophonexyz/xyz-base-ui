@@ -1,6 +1,4 @@
 import {async, getTestBed, inject, TestBed} from '@angular/core/testing';
-import {BaseRequestOptions, Http, RequestMethod, Response, ResponseOptions, ResponseType} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
 import {apiServiceStub} from '../../test/stubs/api.service.stub.spec';
 import {authServiceStub} from '../../test/stubs/auth.service.stub.spec';
 import {PageDataInterface} from '../index';
@@ -50,28 +48,15 @@ export function mockPage(data: PageDataInterface = mockPageResponse) {
 
 describe('PagesService', () => {
 
-  let mockBackend: MockBackend;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        MockBackend,
-        BaseRequestOptions,
-        {
-          provide: Http,
-          useFactory: (backend: MockBackend, options: BaseRequestOptions) => {
-            return new Http(backend, options);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
         {provide: ApiService, useValue: apiServiceStub},
         {provide: AuthService, useValue: authServiceStub},
         PagesService
       ],
       imports: [HttpClientTestingModule, HttpClientModule]
     });
-
-    mockBackend = getTestBed().get(MockBackend);
   }));
 
   it('should ...', inject([PagesService], (service: PagesService) => {
@@ -79,415 +64,219 @@ describe('PagesService', () => {
   }));
 
   describe('get', () => {
-    let connection;
-    let numCalls = 0;
 
-    afterEach(() => {
-      connection = null;
-      numCalls = 0;
-    });
-
-    it('should get a page', async(inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.get(mockPageResponse.id).subscribe((res: PageDataInterface) => {
-        expect(res.id).toEqual(mockPageResponse.id);
-        expect(res.title).toEqual(mockPageResponse.title);
-        expect(res.description).toEqual(mockPageResponse.description);
-      });
-      backend.expectOne({
-        url: '/api/pages/1',
-        method: 'GET'
-      });
-    })));
-
-    it('should cache a page after the first get', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      service.get(mockPageResponse.id).subscribe(() => {
-        service.get(mockPageResponse.id).subscribe(() => {
-          expect(numCalls).toEqual(1);
+    it('should get a page', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.get(mockPageResponse.id).subscribe((res: PageDataInterface) => {
+          expect(res.id).toEqual(mockPageResponse.id);
+          expect(res.title).toEqual(mockPageResponse.title);
+          expect(res.description).toEqual(mockPageResponse.description);
         });
-      });
-    })));
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'GET'
+        }).flush(mockPageResponse);
+      })));
 
-    it('should return an error if a page fails to get', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.get(mockPageResponse.id).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
+    it('should cache a page after the first get', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.get(mockPageResponse.id).subscribe(() => {
+          service.get(mockPageResponse.id).subscribe(() => {
+          });
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'GET'
+        }).flush(mockPageResponse);
+      })));
 
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        numCalls += 1;
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          body: mockPageResponse
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        numCalls += 1;
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 404,
-          type: ResponseType.Error,
-          body: JSON.stringify({
-            errors: ['Not found']
-          })
-        })));
-      });
-    }
+    it('should return an error if a page fails to get', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.get(mockPageResponse.id).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'GET'
+        }).flush({errors: ['Not found']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('create', () => {
-    let connection;
 
-    afterEach(() => {
-      connection = null;
-    });
-
-    it('should create a page', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.create({
-        title: 'MyTitle',
-        description: 'My Descript',
-        published: false,
-        composition_id: 1,
-        metadata: {}
-      }).subscribe((res: any) => {
-        expect(res.id).toEqual(mockPageResponse.id);
-        expect(res.title).toEqual(mockPageResponse.title);
-        expect(connection.request.url).toEqual('/api/pages');
-        expect(connection.request.getBody()).toEqual(JSON.stringify({
+    it('should create a page', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.create({
           title: 'MyTitle',
           description: 'My Descript',
           published: false,
           composition_id: 1,
           metadata: {}
-        }));
-        expect(connection.request.method).toEqual(RequestMethod.Post);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
+        }).subscribe((res: any) => {
+          expect(res.id).toEqual(mockPageResponse.id);
+          expect(res.title).toEqual(mockPageResponse.title);
+        });
+        backend.expectOne({
+          url: '/api/pages',
+          method: 'POST'
+        }).flush(mockPageResponse);
+      })));
 
-    it('should create a page with a cover/logo image', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.create({
-        title: 'MyTitle',
-        description: 'My Descript',
-        published: false,
-        composition_id: 1,
-        metadata: {}
-      }).subscribe((res: any) => {
-        expect(res.id).toEqual(mockPageResponse.id);
-        expect(res.title).toEqual(mockPageResponse.title);
-        expect(connection.request.url).toEqual('/api/pages');
-        expect(connection.request.getBody()).toEqual(JSON.stringify({
+    it('should create a page with a cover/logo image', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.create({
           title: 'MyTitle',
           description: 'My Descript',
           published: false,
           composition_id: 1,
           metadata: {}
-        }));
-        expect(connection.request.method).toEqual(RequestMethod.Post);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
+        }).subscribe((res: any) => {
+          expect(res.id).toEqual(mockPageResponse.id);
+          expect(res.title).toEqual(mockPageResponse.title);
+        });
+        backend.expectOne({
+          url: '/api/pages',
+          method: 'POST'
+        }).flush(mockPageResponse);
+      })));
 
-    it('should return an error if a page fails to create', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.create({
-        title: 'MyTitle',
-        description: 'My Descript',
-        published: false,
-        composition_id: 1,
-        metadata: {}
-      }).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages');
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify(mockPageResponse)
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 400,
-          body: JSON.stringify({
-            errors: ['Bad request']
-          })
-        })));
-      });
-    }
+    it('should return an error if a page fails to create', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.create({
+          title: 'MyTitle',
+          description: 'My Descript',
+          published: false,
+          composition_id: 1,
+          metadata: {}
+        }).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages',
+          method: 'POST'
+        }).flush({errors: ['Bad request']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('update', () => {
-    let connection;
 
-    afterEach(() => {
-      connection = null;
-    });
-
-    it('should update a composition', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.update(1, {
-        title: 'MyPage2',
-        description: 'New Description2',
-        published: false
-      }).subscribe((res: any) => {
-        expect(res.id).toEqual(mockPageResponse.id);
-        expect(res.title).toEqual(mockPageResponse.title);
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.getBody()).toEqual(JSON.stringify({
+    it('should update a composition', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.update(1, {
           title: 'MyPage2',
           description: 'New Description2',
           published: false
-        }));
-        expect(connection.request.method).toEqual(RequestMethod.Put);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
+        }).subscribe((res: any) => {
+          expect(res.id).toEqual(mockPageResponse.id);
+          expect(res.title).toEqual(mockPageResponse.title);
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'PUT'
+        }).flush(mockPageResponse);
+      })));
 
-    it('should update a pages cover/logo image', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.update(1, {
-        title: 'MySite',
-        description: 'New Description',
-        published: false
-      }).subscribe((res: any) => {
-        expect(res.id).toEqual(mockPageResponse.id);
-        expect(res.title).toEqual(mockPageResponse.title);
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.getBody()).toEqual(JSON.stringify({
+    it('should update a pages cover/logo image', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.update(1, {
           title: 'MySite',
           description: 'New Description',
           published: false
-        }));
-        expect(connection.request.method).toEqual(RequestMethod.Put);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
+        }).subscribe((res: any) => {
+          expect(res.id).toEqual(mockPageResponse.id);
+          expect(res.title).toEqual(mockPageResponse.title);
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'PUT'
+        }).flush(mockPageResponse);
+      })));
 
-    it('should return an error if a composition fails to update', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.update(1, {
-        title: 'MySite',
-        description: 'New Description',
-        published: false
-      }).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify(mockPageResponse)
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 400,
-          body: JSON.stringify({
-            errors: ['Bad request']
-          })
-        })));
-      });
-    }
+    it('should return an error if a composition fails to update', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.update(1, {
+          title: 'MySite',
+          description: 'New Description',
+          published: false
+        }).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'PUT'
+        }).flush({errors: ['Bad request']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('destroy', () => {
-    let connection;
 
-    afterEach(() => {
-      connection = null;
-    });
+    it('should delete a page', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.destroy(1).subscribe();
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'DELETE'
+        }).flush(null);
+      })));
 
-    it('should delete a page', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.destroy(1).subscribe((res: any) => {
-        expect(res.status).toEqual(200);
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.method).toEqual(RequestMethod.Delete);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    it('should return an error if a page fails to delete', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.destroy(1).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages/1');
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 200,
-          body: JSON.stringify(mockPageResponse)
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 400,
-          body: JSON.stringify({
-            errors: ['Bad request']
-          })
-        })));
-      });
-    }
+    it('should return an error if a page fails to delete', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.destroy(1).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages/1',
+          method: 'DELETE'
+        }).flush({errors: ['Bad Request']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('addComponentCollection', () => {
-    let connection;
 
-    afterEach(() => {
-      connection = null;
-    });
+    it('should add a component collection', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.addComponentCollection(1, mockComponentCollectionData).subscribe((res: any) => {
+        });
+        backend.expectOne({
+          url: '/api/pages/1/collections',
+          method: 'POST'
+        }).flush(mockComponentCollectionData);
+      })));
 
-    it('should add a component collection', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.addComponentCollection(1, mockComponentCollectionData).subscribe((res: any) => {
-        expect(connection.request.url).toEqual('/api/pages/1/collections');
-        expect(connection.request.method).toEqual(RequestMethod.Post);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    it('should return an error if a component collection fails to add', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.addComponentCollection(1, mockComponentCollectionData).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages/1/collections');
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 200,
-          body: JSON.stringify(mockComponentCollectionData)
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 400,
-          body: JSON.stringify({
-            errors: ['Bad request']
-          })
-        })));
-      });
-    }
+    it('should return an error if a component collection fails to add', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.addComponentCollection(1, mockComponentCollectionData).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages/1/collections',
+          method: 'POST'
+        }).flush({errors: ['Bad Request']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('removeComponentCollection', () => {
-    let connection;
 
-    afterEach(() => {
-      connection = null;
-    });
+    it('should remove a component collection', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        service.removeComponentCollection(1, 12).subscribe();
+        backend.expectOne({
+          url: '/api/pages/1/collections/12',
+          method: 'DELETE'
+        }).flush(mockComponentCollectionData);
+      })));
 
-    it('should remove a component collection', async(inject([PagesService], (service: PagesService) => {
-      mockGetSucceed();
-      const auth = getTestBed().get(AuthService);
-      service.removeComponentCollection(1, 12).subscribe((res: any) => {
-        expect(connection.request.url).toEqual('/api/pages/1/collections/12');
-        expect(connection.request.method).toEqual(RequestMethod.Delete);
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    it('should return an error if a component collection fails to remove', async(inject([PagesService], (service: PagesService) => {
-      mockGetFail();
-      const auth = getTestBed().get(AuthService);
-      service.removeComponentCollection(1, 12).subscribe(null, err => {
-        expect(err).toBeDefined();
-        expect(connection.request.url).toEqual('/api/pages/1/collections/12');
-        expect(connection.request.headers.get('Content-Type')).toEqual('application/json');
-        expect(connection.request.headers.get('Authorization')).toEqual(`Bearer ${auth.accessToken}`);
-      });
-    })));
-
-    function mockGetSucceed() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 200,
-          body: JSON.stringify(mockComponentCollectionData)
-        })));
-      });
-    }
-
-    function mockGetFail() {
-      mockBackend.connections.subscribe(c => {
-        connection = c;
-        connection.mockRespond(new Response(new ResponseOptions({
-          status: 400,
-          body: JSON.stringify({
-            errors: ['Bad request']
-          })
-        })));
-      });
-    }
+    it('should return an error if a component collection fails to remove', async(
+      inject([PagesService, HttpTestingController], (service: PagesService, backend: HttpTestingController) => {
+        const auth = getTestBed().get(AuthService);
+        service.removeComponentCollection(1, 12).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        backend.expectOne({
+          url: '/api/pages/1/collections/12',
+          method: 'DELETE'
+        }).flush({errors: ['Bad Request']}, {status: 400, statusText: '400'});
+      })));
   });
 
   describe('static methods', () => {

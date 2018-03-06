@@ -121,24 +121,40 @@ describe('ComponentService', () => {
       }))
     );
 
-    it('should handle errors when "processing" a component', (done) => {
+    it('should handle errors when "processing" a component', async(
       inject([ComponentService, HttpTestingController], (service: ComponentService, backend: HttpTestingController) => {
-        service.process(1).subscribe(null, (err) => {
-          expect(err.status).toEqual(400);
-          done();
-        });
         spyOn(service, 'get').and.callFake(() => {
           return new Observable(subscriber => {
             subscriber.next(mockComponent);
           });
+        });
+        service.process(1).subscribe(null, (err) => {
+          expect(err.status).toEqual(400);
         });
         const request = backend.expectOne({
           url: '/api/components/1/process',
           method: 'POST'
         });
         request.flush({errors: ['Bad Request']}, {status: 400, statusText: '400'});
-      })();
-    });
+      })));
+
+    it('should handle errors when "processing" a component', async(
+      inject([ComponentService, HttpTestingController], (service: ComponentService, backend: HttpTestingController) => {
+        // in this test, the first request succeeds, but the request to `get` the component and check status fails
+        spyOn(service, 'get').and.callFake(() => {
+          return new Observable(subscriber => {
+            subscriber.error(new Error('Failed to process!'));
+          });
+        });
+        service.process(1).subscribe(null, err => {
+          expect(err).toBeDefined();
+        });
+        const processRequest = backend.expectOne({
+          url: '/api/components/1/process',
+          method: 'POST'
+        });
+        processRequest.flush(null);
+      })));
 
     it('should poll if a component is not yet ready', fakeAsync(
       inject([ComponentService, HttpTestingController], (service: ComponentService, backend: HttpTestingController) => {
