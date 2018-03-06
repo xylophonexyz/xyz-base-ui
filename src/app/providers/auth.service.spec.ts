@@ -51,16 +51,11 @@ describe('AuthService', () => {
 
   describe('Getters', () => {
 
-    it('should provide a getter for the current user', async(
+    it('should provide a getter for the current user', fakeAsync(
       inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
-        service.authenticate(mockAuthCode).then(() => {
-          expect(service.currentUser).toBeDefined();
-        });
-
-        backend.expectOne({
-          url: '/oauth/token',
-          method: 'POST'
-        }).flush(tokenResponse);
+        const user = new User(null);
+        service['_currentUser'] = user;
+        expect(service.currentUser).toBeDefined();
       })));
 
     it('should provide a getter for the oauth token', async(
@@ -77,17 +72,10 @@ describe('AuthService', () => {
 
     it('should provide a getter for the access token', async(
       inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
-        service.authenticate(mockAuthCode).then(() => {
-          expect(service.accessToken).toEqual(service.token.access_token);
-          service.clear().then(() => {
-            expect(service.accessToken).toEqual('');
-          });
-        });
-
-        backend.expectOne({
-          url: '/oauth/token',
-          method: 'POST'
-        }).flush(tokenResponse);
+        service['_oauthToken'] = null;
+        expect(service.accessToken).toEqual('');
+        service['_oauthToken'] = tokenResponse;
+        expect(service.accessToken).toEqual('5678');
       })));
   });
 
@@ -95,20 +83,16 @@ describe('AuthService', () => {
 
     it('should provide a method to construct default http headers with the auth header', async(
       inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
+
         let headers = service.constructAuthHeader();
         expect(headers.get('Content-Type')).toEqual('application/json');
         expect(headers.get('Authorization')).toEqual(null);
 
-        service.authenticate(mockAuthCode).then(() => {
-          headers = service.constructAuthHeader();
-          expect(headers.get('Content-Type')).toEqual('application/json');
-          expect(headers.get('Authorization')).toEqual(`Bearer ${tokenResponse.access_token}`);
-        });
+        service['_oauthToken'] = tokenResponse;
 
-        backend.expectOne({
-          url: '/oauth/token',
-          method: 'POST'
-        }).flush(tokenResponse);
+        headers = service.constructAuthHeader();
+        expect(headers.get('Content-Type')).toEqual('application/json');
+        expect(headers.get('Authorization')).toEqual(`Bearer ${tokenResponse.access_token}`);
       })));
 
     it('should provide a method to authenticate with a code', async(
@@ -231,7 +215,11 @@ describe('AuthService', () => {
 
     it('should send authentication request with the token requested', async(
       inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
-        spyOn(service, 'authenticateWithToken').and.callThrough();
+        spyOn(service, 'authenticateWithToken').and.callFake(() => {
+          return Observable.create(observer => {
+            observer.next(mockUserResponse);
+          });
+        });
         service.authenticate(mockAuthCode).then(() => {
           expect(service.authenticateWithToken).toHaveBeenCalled();
         });
@@ -292,7 +280,11 @@ describe('AuthService', () => {
           });
         }));
 
-        spyOn(service, 'authenticateWithRefreshToken').and.callThrough();
+        spyOn(service, 'authenticateWithRefreshToken').and.callFake(() => {
+          return Observable.create(observer => {
+            observer.next(tokenResponse);
+          });
+        });
         service.authenticate().then(() => {
           expect(service.authenticateWithRefreshToken).toHaveBeenCalled();
         });
@@ -468,5 +460,69 @@ describe('AuthService', () => {
         reject(null);
       }));
       service.authenticate().catch(() => null);
+    })));
+
+  it('should handle authentication request failures', async(
+    inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
+      spyOn(service, 'authenticateWithToken').and.callFake(() => {
+        return Observable.create(observer => {
+          observer.error({status: 401});
+        });
+      });
+      spyOn(service, 'authenticateWithRefreshToken').and.callFake(() => {
+        return Observable.create(observer => {
+          observer.next(tokenResponse);
+        });
+      });
+      service.authenticate(mockAuthCode).then(() => {
+        expect(service.authenticateWithToken).toHaveBeenCalled();
+      }, err => {
+
+      });
+      backend.expectOne({
+        url: '/oauth/token',
+        method: 'POST'
+      }).flush(tokenResponse);
+    })));
+
+  it('should handle authentication request failures', async(
+    inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
+      spyOn(service, 'authenticateWithToken').and.callFake(() => {
+        return Observable.create(observer => {
+          observer.error({status: 404});
+        });
+      });
+      service.authenticate(mockAuthCode).then(() => {
+        expect(service.authenticateWithToken).toHaveBeenCalled();
+      }, err => {
+        expect(err).toBeDefined();
+      });
+      backend.expectOne({
+        url: '/oauth/token',
+        method: 'POST'
+      }).flush(tokenResponse);
+    })));
+
+  it('should handle authentication request failures', async(
+    inject([HttpTestingController, AuthService], (backend: HttpTestingController, service: AuthService) => {
+      spyOn(service, 'authenticateWithToken').and.callFake(() => {
+        return Observable.create(observer => {
+          observer.error({status: 401});
+        });
+      });
+      spyOn(service, 'authenticateWithRefreshToken').and.callFake(() => {
+        return Observable.create(observer => {
+          observer.error({error: 'error'});
+        });
+      });
+      service.authenticate(mockAuthCode).then(() => {
+        expect(service.authenticateWithToken).toHaveBeenCalled();
+      }, err => {
+        expect(err).toBeDefined();
+      });
+      backend.expectOne({
+        url: '/oauth/token',
+        method: 'POST'
+      }).flush(tokenResponse);
     })));
 });
