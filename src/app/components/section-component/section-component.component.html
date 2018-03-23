@@ -51,8 +51,7 @@
       [xzRichTextEditorToolbarOptions]="textEditorToolbarOptions"
       xzRichTextPlaceholderText="Title..."
       (click)="didFocusField($event)"
-      [style.font-size]="titleSize"
-      [style.color]="textColor">{{titlePreview}}</h1>
+      [style.font-size]="titleSize"><span [style.font-size]="titleSize">{{titlePreview}}</span></h1>
   <h2 class="subtitle"
       [xzRichTextModel]="subtitleModel"
       (xzRichTextModelChange)="subtitleDidChange($event)"
@@ -61,8 +60,7 @@
       [xzRichTextEditorToolbarOptions]="textEditorToolbarOptions"
       xzRichTextPlaceholderText="Subtitle..."
       (click)="didFocusField($event)"
-      [style.font-size]="subtitleSize"
-      [style.color]="textColor">{{subtitlePreview}}</h2>
+      [style.font-size]="subtitleSize"><span [style.font-size]="subtitleSize">{{subtitlePreview}}</span></h2>
 </ng-template>
 
 <ng-template #bgImageActionTmpl>
