@@ -56,7 +56,7 @@ export class UIImageComponent extends UIMediaComponent {
   }
 
   configuration(): NavActionItem[] {
-    return [
+    const items = [
       new NavActionItem(null, {
         isInput: true,
         inputPlaceholder: 'Background Color',
@@ -86,7 +86,9 @@ export class UIImageComponent extends UIMediaComponent {
         onInputBlur: this.onInputBlur.bind(this),
         onInputClick: this.onInputClick.bind(this)
       }),
-      new NavActionItem('Copy Image URL', {
+    ];
+    if (this.mediaModel && this.mediaModel.hasOwnProperty('url')) {
+      items.push(new NavActionItem('Copy Image URL', {
         isInput: false,
         isButton: true,
         hasIcon: true,
@@ -96,8 +98,9 @@ export class UIImageComponent extends UIMediaComponent {
             this.util.copyToClipboard(url);
           });
         }
-      }),
-    ];
+      }));
+    }
+    return items;
   }
 
   backgroundPosition(): string {

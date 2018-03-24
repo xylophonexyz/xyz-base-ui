@@ -269,7 +269,7 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
       }),
     ];
     // add a button to copy image URLs from the toolbar if a background image is present
-    if (this.hasBgImage()) {
+    if (this.hasBgImage() && !this.bgImageFile) {
       items.push(new NavActionItem('Copy Image URL', {
         isInput: false,
         isButton: true,
@@ -381,8 +381,9 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
         collection.components[0].media = {error: err};
         collection.components[0].media_processing = false;
       }, () => {
-        this.saveWithThrottle();
+        this.bgImageFile = null;
         this.ref.markForCheck();
+        this.saveWithThrottle();
       });
     } catch (e) {
       console.log('Error uploading file for component', e);
