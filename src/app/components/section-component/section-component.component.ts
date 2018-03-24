@@ -148,21 +148,16 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
       SectionLayoutOption.DefaultRight,
       SectionLayoutOption.LargeRight,
       SectionLayoutOption.FullRight,
+      SectionLayoutOption.SplitCompactImageRightTextLeft,
+      SectionLayoutOption.SplitCompactImageLeftTextRight,
+      SectionLayoutOption.SplitDefaultImageRightTextLeft,
+      SectionLayoutOption.SplitDefaultImageLeftTextRight,
+      SectionLayoutOption.SplitLargeImageRightTextLeft,
+      SectionLayoutOption.SplitLargeImageLeftTextRight,
+      SectionLayoutOption.SplitFullImageRightTextLeft,
+      SectionLayoutOption.SplitFullImageLeftTextRight,
     ];
-    if (this.hasBgImage()) {
-      return options.concat([
-        SectionLayoutOption.SplitCompactImageRightTextLeft,
-        SectionLayoutOption.SplitCompactImageLeftTextRight,
-        SectionLayoutOption.SplitDefaultImageRightTextLeft,
-        SectionLayoutOption.SplitDefaultImageLeftTextRight,
-        SectionLayoutOption.SplitLargeImageRightTextLeft,
-        SectionLayoutOption.SplitLargeImageLeftTextRight,
-        SectionLayoutOption.SplitFullImageRightTextLeft,
-        SectionLayoutOption.SplitFullImageLeftTextRight,
-      ]) as [SectionLayoutOption];
-    } else {
-      return options;
-    }
+    return options;
   }
 
   get layout(): SectionLayoutOption {

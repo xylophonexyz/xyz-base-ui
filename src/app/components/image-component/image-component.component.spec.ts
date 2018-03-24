@@ -116,6 +116,7 @@ describe('UIImageComponent', () => {
     });
 
     it('should provide a NavActionItem to copy the image url to clipboard', fakeAsync(() => {
+      component.component.media = {url: 'foo'};
       const copyToClipboard = component.configuration()[2] as NavActionItem;
       const utilService = getTestBed().get(UtilService);
       spyOn(utilService, 'copyToClipboard');

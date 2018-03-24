@@ -444,7 +444,15 @@ describe('UISectionComponent', () => {
         SectionLayoutOption.CompactRight,
         SectionLayoutOption.DefaultRight,
         SectionLayoutOption.LargeRight,
-        SectionLayoutOption.FullRight
+        SectionLayoutOption.FullRight,
+        SectionLayoutOption.SplitCompactImageRightTextLeft,
+        SectionLayoutOption.SplitCompactImageLeftTextRight,
+        SectionLayoutOption.SplitDefaultImageRightTextLeft,
+        SectionLayoutOption.SplitDefaultImageLeftTextRight,
+        SectionLayoutOption.SplitLargeImageRightTextLeft,
+        SectionLayoutOption.SplitLargeImageLeftTextRight,
+        SectionLayoutOption.SplitFullImageRightTextLeft,
+        SectionLayoutOption.SplitFullImageLeftTextRight,
       ]);
     });
 
