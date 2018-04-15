@@ -16,15 +16,3 @@ before_script:
 - sleep 3
 script: npm run test:singleRun
 before_deploy: npm run build:full
-deploy:
-- provider: gae
-  on: master
-  skip_cleanup: true
-  keyfile: xyz-base-0db172f7ba1c.json
-  project: xyz-base
-- provider: heroku
-  on: develop
-  skip_cleanup: true
-  app: xyz-base-staging
-  api_key:
-    secure: qnvmd1PR9mr5/3ZZx4u9P1T9EW8DON/nYLJ/UjFepZLz9iU2MT5YSZfBEYmSX7XjRU9LvxU/u93efFAVYcIo4d+u+ak9baqCA75YvdKwLNcQ2P2512ct4QgHPA/0MOD59Nv4uT8VLmncAOvqdeninTBOxGCr5sV0NkFMzeH4phCYTLZLnPsb2Hocsdd2SRf5ATMX2D8Wex+8FpDkrSOpnQFYNxKYHnY1KqsxqAyCELSJOuCB7Sv1/ZqnHXv1w3TqiPjoHVkiEI4/2suiQrelAovezbZ3ZGDBrtNEn3MQWA+NHzSQxqAyPiRFYmj8JehpNG3x2w1h+nPSI1BSO8ltU73TwhIoY5VgZkXzDGI2ROi23VWpWHH8rp8jHSApEJ2CzRaSWR5r6ULe6MHoMhreGqpaEkjdbCQfH8fDw3qb9pAiwlRCrK5+ZwzqIKT/+w39JDVzmaiFyWnTU52su2zLpZeYGC8dx4kTrQ3UGSFAu1Dq7ZkaHyjUqIT9YH2g9+OfpORr+I5GyxkyVS7BAOKGefNRubDisdKkTFCVTn0PAqF0AH1dWjTozhcy/LBDxCTG/PpdhaxRcPsO+r7/MJ/4p7qys268gD5M9/maHVEIR+GXpVckwCVFBjv4+mnmlxGH8kGiPwOa0ddRombdfHGyaHh2kkmU1oidJwPSCbjnl8k=
