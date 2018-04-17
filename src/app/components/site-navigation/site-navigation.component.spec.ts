@@ -33,6 +33,7 @@ import {ComponentCollectionService} from '../../providers/component-collection.s
 import {DomSanitizer} from '@angular/platform-browser';
 import {mockPage} from '../../providers/pages.service.spec';
 import {Page} from '../../models/page';
+import {Observable} from 'rxjs/Observable';
 
 describe('SiteNavigationComponent', () => {
   let component: SiteNavigationComponent;
@@ -134,4 +135,56 @@ describe('SiteNavigationComponent', () => {
     component.toggleNavigationType(page);
     expect(page.isExternalNavigationType()).toEqual(false);
   });
+
+  it('should provide a means to open a modal for selecting an existing page', () => {
+    expect(component.pageSelectionModalActive).toEqual(false);
+    component.openPageSelectionModal();
+    expect(component.pageSelectionModalActive).toEqual(true);
+  });
+
+  it('should provide a method to set the page selection when setting a navigation item', () => {
+    const page: Page = mockPage();
+    expect(component.existingPageAsChildPageSelection).toEqual(null);
+    component.toggleExistingPageAsChildPageSelection(page);
+    expect(component.existingPageAsChildPageSelection).toEqual(page);
+    component.toggleExistingPageAsChildPageSelection(page);
+    expect(component.existingPageAsChildPageSelection).toEqual(null);
+  });
+
+  it('should provide a method to determine if a page matches', () => {
+    const page: Page = mockPage();
+    expect(component.isPageSelectedAsExistingPageAsChildPageSelection(page)).toEqual(false);
+    component.toggleExistingPageAsChildPageSelection(page);
+    expect(component.isPageSelectedAsExistingPageAsChildPageSelection(page)).toEqual(true);
+  });
+
+  it('should set an existing page to a navigation item', fakeAsync(() => {
+    const page: Page = mockPage();
+    const pagesProvider: PagesService = getTestBed().get(PagesService);
+    spyOn(pagesProvider, 'update').and.callFake(() => {
+      return Observable.create(observer => observer.complete());
+    });
+    expect(page.isNavigationItem()).toEqual(false);
+    component.existingPageAsChildPageSelection = page;
+    component.setExistingPageAsChildPage();
+    tick();
+    expect(page.isNavigationItem()).toEqual(true);
+    expect(pagesProvider.update).toHaveBeenCalled();
+    expect(component.isLoading).toEqual(false);
+  }));
+
+  it('should unset an existing page as a navigation item', fakeAsync(() => {
+    const page: Page = mockPage();
+    const pagesProvider: PagesService = getTestBed().get(PagesService);
+    spyOn(pagesProvider, 'update').and.callFake(() => {
+      return Observable.create(observer => observer.complete());
+    });
+    page.metadata.navigationItem = true;
+    expect(page.isNavigationItem()).toEqual(true);
+    component.unlinkAsNavigationItem(page);
+    tick();
+    expect(page.isNavigationItem()).toEqual(false);
+    expect(pagesProvider.update).toHaveBeenCalled();
+    expect(component.isLoading).toEqual(false);
+  }));
 });

@@ -4,3 +4,9 @@ $danger: #FF736C;
 $light: #F5F5F5;
 $muted: darken(rgba(10, 10, 10, 0.1), 80);
 $feather-gray: lighten(rgba(10, 10, 10, 0.4), 80);
+
+$modal-card-head-background-color: white;
+$modal-card-head-border-bottom: 1px solid $feather-gray;
+$modal-card-foot-border-top: 1px solid $feather-gray;
+$modal-card-head-radius: 3px;
+$modal-card-foot-radius: 3px;

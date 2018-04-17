@@ -57,7 +57,7 @@ export class Composition implements CompositionInterface {
 
       if (params.pages && params.pages.length) {
         this._pages = params.pages.map(p => {
-          return new Page(p);
+          return new Page({...p, composition_id: params.id});
         }).sort(Page.sortFn);
       }
 

@@ -74,7 +74,7 @@ export class Page implements PageInterface {
       this._metadata = params.metadata;
       this._userId = params.user ? params.user.id : (params.user_id ? params.user_id : null);
       this._user = new User(params.user);
-      this._compositionId = params.composition ? params.composition.id : null;
+      this._compositionId = params.composition_id || (params.composition ? params.composition.id : null);
       this._composition = new Composition(params.composition);
       this._tags = params.tags;
       this._errors = params.errors;
