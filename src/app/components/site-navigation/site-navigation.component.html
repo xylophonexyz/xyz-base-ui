@@ -200,7 +200,9 @@
           </p>
           <ul class="menu-list">
             <li *ngFor="let page of pages" (click)="toggleExistingPageAsChildPageSelection(page)">
-              <a [class.is-active]="isPageSelectedAsExistingPageAsChildPageSelection(page)">{{page.title}}</a>
+              <a [class.is-active]="isPageSelectedAsExistingPageAsChildPageSelection(page)">
+                {{page.title || page.bestGuessTitle}}
+              </a>
             </li>
             <li *ngIf="pages.length === 0">
               No pages available. Try creating a new one.
