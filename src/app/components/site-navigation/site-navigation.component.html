@@ -67,11 +67,13 @@
         <p class="control"
            *ngIf="willEditPage(page)">
           <button class="button is-primary is-inverted"
+                  title="Save changes"
                   [class.is-loading]="isLoading"
                   (click)="updatePageName(page)">
             <span>Save</span>
           </button>
           <button class="button is-white"
+                  title="Cancel editing"
                   (click)="setEditModeOnPage(null)">
             Cancel
           </button>
@@ -80,32 +82,45 @@
              *ngIf="!willEditPage(page)">
           <p class="control">
             <button class="button"
+                    title="Show edit options"
                     (click)="setEditModeOnPage(page)">
               Edit
             </button>
           </p>
           <p class="control">
             <button class="button has-text-dark"
+                    title="Move this page further up the list"
                     (click)="swapPageUpwards(page)">
-                    <span class="icon">
-                      <app-feather-icon icon="corner-left-up"></app-feather-icon>
-                    </span>
+              <span class="icon">
+                <app-feather-icon icon="corner-left-up"></app-feather-icon>
+              </span>
             </button>
           </p>
           <p class="control">
             <button class="button has-text-dark"
+                    title="Move this page further down the list"
                     (click)="swapPageDownwards(page)">
-                    <span class="icon">
-                      <app-feather-icon icon="corner-right-down"></app-feather-icon>
-                    </span>
+              <span class="icon">
+                <app-feather-icon icon="corner-right-down"></app-feather-icon>
+              </span>
             </button>
           </p>
           <p class="control">
             <button class="button has-text-dark"
+                    title="Unlink from navigation"
+                    (click)="unlinkAsNavigationItem(page)">
+              <span class="icon">
+                <app-feather-icon icon="unlock"></app-feather-icon>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button has-text-dark"
+                    title="Delete this page"
                     (click)="removePage(page.id)">
-                    <span class="icon">
-                      <app-feather-icon icon="trash-2"></app-feather-icon>
-                    </span>
+              <span class="icon">
+                <app-feather-icon icon="trash-2"></app-feather-icon>
+              </span>
             </button>
           </p>
         </div>
@@ -130,14 +145,79 @@
         <div class="field has-addons">
           <p class="control">
             <button class="button is-white"
+                    title="Add a new page as a navigation item"
                     (click)="addChildPageAsNavItem()">
-                    <span class="icon is-large">
-                      <app-feather-icon icon="plus"></app-feather-icon>
-                    </span>
+              <span class="icon is-large">
+                <app-feather-icon icon="plus"></app-feather-icon>
+              </span>
             </button>
           </p>
         </div>
       </div>
     </div>
   </nav>
+
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <figure class="image is-64x64 text-muted"
+                style="background: #9a9a9a;">
+        </figure>
+      </div>
+      <div class="level-item">
+        <p>Use existing...</p>
+      </div>
+    </div>
+
+    <div class="level-right">
+      <div class="level-item">
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button is-white"
+                    title="Add an existing page as a navigation item"
+                    (click)="openPageSelectionModal()">
+              <span class="icon is-large">
+                <app-feather-icon icon="plus"></app-feather-icon>
+              </span>
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="modal" [class.is-active]="pageSelectionModalActive">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Choose page...</p>
+        <button class="delete" aria-label="close" (click)="pageSelectionModalActive = false"></button>
+      </header>
+      <section class="modal-card-body">
+        <aside class="menu">
+          <p class="menu-label">
+            Pages
+          </p>
+          <ul class="menu-list">
+            <li *ngFor="let page of pages" (click)="toggleExistingPageAsChildPageSelection(page)">
+              <a [class.is-active]="isPageSelectedAsExistingPageAsChildPageSelection(page)">
+                {{page.title || page.bestGuessTitle}}
+              </a>
+            </li>
+            <li *ngIf="pages.length === 0">
+              No pages available. Try creating a new one.
+            </li>
+          </ul>
+        </aside>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-primary"
+                [class.is-loading]="isLoading"
+                (click)="setExistingPageAsChildPage()"
+                [disabled]="!existingPageAsChildPageSelection">Select
+        </button>
+        <button class="button" (click)="pageSelectionModalActive = false">Cancel</button>
+      </footer>
+    </div>
+  </div>
 </div>
