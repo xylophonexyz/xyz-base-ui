@@ -184,6 +184,7 @@ export interface CompositionDataInterface {
   compositions: CompositionDataInterface[];
   pages: PageDataInterface[];
   errors?: any[];
+  user: UserDataInterface;
 }
 
 /**

@@ -67,6 +67,7 @@ import {XzChangeBgColorOnHoverDirective} from './directives/xz-change-bg-color-o
 import {QuillService} from './providers/quill.service';
 import {AboutPageComponent} from './components/about-page/about-page.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {OwnershipGuard} from './guards/ownership.guard';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -143,6 +144,7 @@ export function getAppTitleFactory() {
     ApiService,
     AuthService,
     AuthGuard,
+    OwnershipGuard,
     PageGuard,
     SitesService,
     PagesService,

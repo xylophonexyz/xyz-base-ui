@@ -19,6 +19,7 @@ import {AuthGuard} from './guards/auth.guard';
 import {PageGuard} from './guards/page.guard';
 import {SiteFilesComponent} from './components/site-files/site-files.component';
 import {AboutPageComponent} from './components/about-page/about-page.component';
+import {OwnershipGuard} from './guards/ownership.guard';
 
 const routes: Routes = [
   {
@@ -60,7 +61,7 @@ const routes: Routes = [
       {
         path: 'admin/sites/:id',
         component: SiteAdminComponent,
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard, OwnershipGuard],
         children: [
           {
             path: '',
