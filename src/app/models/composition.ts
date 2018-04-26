@@ -1,4 +1,4 @@
-import {CompositionCustomDomain, CompositionDataInterface, CompositionInterface, CompositionMetadata} from '../index';
+import {CompositionCustomDomain, CompositionDataInterface, CompositionInterface, CompositionMetadata, UserDataInterface} from "../index";
 import {colorIsLight, colorIsValidFullHexString, darkenHexColorString, getHexColorString, lightenHexColorString} from '../util/colors';
 import {Page} from './page';
 
@@ -29,6 +29,7 @@ export class Composition implements CompositionInterface {
   private _metadata: CompositionMetadata;
   private _pages: Page[];
   private _errors: any[];
+  private _user: UserDataInterface;
 
   constructor(params: CompositionDataInterface) {
 
@@ -44,6 +45,7 @@ export class Composition implements CompositionInterface {
       this._cover = params.cover;
       this._metadata = params.metadata || {};
       this._errors = params.errors;
+      this._user = params.user;
 
       if (params.published_on) {
         this._publishedOn = new Date(params.published_on);
@@ -311,7 +313,8 @@ export class Composition implements CompositionInterface {
       cover: this._cover,
       metadata: this._metadata,
       compositions: this._compositions ? this._compositions.map(c => c.asJson()) : [],
-      pages: this._pages ? this._pages.map(p => p.asJson()) : []
+      pages: this._pages ? this._pages.map(p => p.asJson()) : [],
+      user: this._user
     };
   }
 }

@@ -15,6 +15,7 @@ import {mockPageResponse} from './pages.service.spec';
 import {SitesService} from './sites.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {HttpClientModule} from '@angular/common/http';
+import {mockUserData} from '../models/user.spec';
 
 export const mockCompositionResponse: CompositionDataInterface = {
   id: 1,
@@ -28,7 +29,8 @@ export const mockCompositionResponse: CompositionDataInterface = {
   cover: {media: {url: null}},
   compositions: [],
   pages: [],
-  errors: []
+  errors: [],
+  user: mockUserData
 };
 
 export const mockCompositionData = Object.assign({}, mockCompositionResponse);

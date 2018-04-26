@@ -8,7 +8,6 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
 import {SitesService} from '../providers/sites.service';
 import {CompositionDataInterface} from '../index';
-import {current} from 'codelyzer/util/syntaxKind';
 import {User} from '../models/user';
 
 @Injectable()
