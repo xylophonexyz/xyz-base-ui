@@ -165,15 +165,17 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
   }
 
   clearDnsLookupCache() {
-    this.isLoading = true;
-    Observable.from(this.domainMappings).concatMap(mapping => {
-      return this.sitesProvider.clearDnsLookupCache(this.site.id, this.customDomainName, mapping);
-    }).subscribe(null, err => {
-      this.isLoading = false;
-      this.displayError(err);
-    }, () => {
-      this.isLoading = false;
-    });
+    if (this.hasCustomDomain()) {
+      this.isLoading = true;
+      Observable.from(this.site.customDomain.domainMappings).concatMap(mapping => {
+        return this.sitesProvider.clearDnsLookupCache(this.site.id, this.customDomainName, mapping);
+      }).subscribe(null, err => {
+        this.isLoading = false;
+        this.displayError(err);
+      }, () => {
+        this.isLoading = false;
+      });
+    }
   }
 
   addNewDomainMapping() {

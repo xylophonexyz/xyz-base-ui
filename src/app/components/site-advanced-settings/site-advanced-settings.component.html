@@ -124,31 +124,33 @@
     </p>
   </div>
 
-  <hr>
-  <h1 class="subtitle">
-    <strong>Clear DNS Lookup Cache</strong>
-  </h1>
-  <nav class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <small>
-          Clear the DNS lookup cache. This can be used if you are having trouble connecting to your site through the
-          custom site name.
-        </small>
-      </div>
-    </div>
-  </nav>
-  <nav class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <div class="field">
-          <p class="control">
-            <button class="button" [class.is-loading]="isLoading" (click)="clearDnsLookupCache()">
-              Clear
-            </button>
-          </p>
+  <div *ngIf="hasCustomDomain()">
+    <hr>
+    <h1 class="subtitle">
+      <strong>Clear DNS Lookup Cache</strong>
+    </h1>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <small>
+            Clear the DNS lookup cache. This can be used if you are having trouble connecting to your site through the
+            custom site name.
+          </small>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <div class="field">
+            <p class="control">
+              <button class="button" [class.is-loading]="isLoading" (click)="clearDnsLookupCache()">
+                Clear
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
 </div>
