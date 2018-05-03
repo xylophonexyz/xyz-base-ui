@@ -167,7 +167,8 @@ export class SiteAdvancedSettingsComponent extends SiteAdminComponent implements
   clearDnsLookupCache() {
     if (this.hasCustomDomain()) {
       this.isLoading = true;
-      Observable.from(this.site.customDomain.domainMappings).concatMap(mapping => {
+      const domainMappings = this.site.customDomain.domainMappings || ['', 'wwww'];
+      Observable.from(domainMappings).concatMap(mapping => {
         return this.sitesProvider.clearDnsLookupCache(this.site.id, this.customDomainName, mapping);
       }).subscribe(null, err => {
         this.isLoading = false;
