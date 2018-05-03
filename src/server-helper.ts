@@ -247,7 +247,7 @@ export function applyCustomDomainMiddleware(app: Express) {
   }
 
   function getFullDomainName(domain, subdomain) {
-    return subdomain === '@' ? domain : `${subdomain}.${domain}`;
+    return subdomain === '@' ? domain : `${subdomain ? (subdomain + '.') : ''}${domain}`;
   }
 }
 
