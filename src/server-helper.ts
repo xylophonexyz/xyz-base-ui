@@ -215,6 +215,33 @@ export function applyCustomDomainMiddleware(app: Express) {
     }
   });
 
+  app.delete('/api/domainMappings/:siteId/cache', (req: Request, res: Response) => {
+    if (req.params.siteId) {
+      const target = getConfig('CLEAR_LANDING_PAGE_ID_SERVICE_ENDPOINT');
+      const siteId = req.params.siteId;
+      const domainName = req.query.domainName;
+      const subdomain = req.query.subdomain;
+      request({
+        method: 'POST',
+        url: target,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': req.headers.authorization || req.headers.Authorization
+        },
+        body: JSON.stringify({siteId, domainName: getFullDomainName(domainName, subdomain)})
+      }, (err, _, apiResponse) => {
+        if (err) {
+          res.status(400).send({error: err.message}).end();
+        } else {
+          res.send(apiResponse).end();
+        }
+      });
+    } else {
+      const error = new Error('Required parameters missing: {domainName, siteId, subdomain}');
+      res.status(400).send({error: error.message}).end();
+    }
+  });
+
   function validateSubdomain(subdomain) {
     return subdomain === '@' || new RegExp('[A-Za-z0-9](?:[A-Za-z0-9\\-]{0,61}[A-Za-z0-9])?').test(subdomain);
   }

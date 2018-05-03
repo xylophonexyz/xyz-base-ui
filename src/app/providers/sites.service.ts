@@ -151,6 +151,14 @@ export class SitesService {
     return this.http.post(`${this.api.baseUrl}/domainMappings`, payload, {headers});
   }
 
+  clearDnsLookupCache(siteId: number, domainName: string, subdomain: string): Observable<any> {
+    const headers = this.auth.constructAuthHeader();
+    return this.http.delete(
+      `${this.api.baseUrl}/domainMappings/${siteId}/cache?domainName=${domainName}&subdomain=${subdomain}`,
+      {headers}
+    );
+  }
+
   removeDomainNameKeyPair(siteId: number, domainName: string, subdomain: string): Observable<any> {
     const headers = this.auth.constructAuthHeader();
     return this.http.delete(
