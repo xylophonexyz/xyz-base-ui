@@ -228,7 +228,7 @@ export function applyCustomDomainMiddleware(app: Express) {
           'Content-Type': 'application/json',
           'Authorization': req.headers.authorization || req.headers.Authorization
         },
-        body: JSON.stringify({siteId, domainName: wrapFullDomainName(getFullDomainName(domainName, subdomain), subdomain)})
+        body: JSON.stringify({siteId, domainName: getFullDomainName(domainName, subdomain)})
       }, (err, _, apiResponse) => {
         if (err) {
           res.status(400).send({error: err.message}).end();
@@ -247,15 +247,7 @@ export function applyCustomDomainMiddleware(app: Express) {
   }
 
   function getFullDomainName(domain, subdomain) {
-    return subdomain === '@' ? domain : `${subdomain}.${domain}`;
-  }
-
-  function wrapFullDomainName(fullDomain, subdomain) {
-    if (subdomain) {
-      return '"' + fullDomain + '"';
-    } else {
-      return fullDomain;
-    }
+    return subdomain === '@' ? domain : subdomain + '.' + domain;
   }
 }
 
