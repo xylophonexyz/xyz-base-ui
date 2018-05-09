@@ -41,7 +41,23 @@ export class UITextComponent extends ConfigurableUIComponentWithToolbar {
     }
   }
 
-  get layoutOptions(): [TextLayoutOption] {
+  get layoutOptions(): [
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption,
+    TextLayoutOption
+    ] {
     return [
       TextLayoutOption.NormalLeftFull,
       TextLayoutOption.NormalLeft,

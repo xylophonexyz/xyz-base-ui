@@ -30,7 +30,20 @@ export class UIImageComponent extends UIMediaComponent {
 
   @Input() component: ImageComponent = new ImageComponent(null);
 
-  get layoutOptions(): [ImageLayoutOption] {
+  get layoutOptions(): [
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption,
+    ImageLayoutOption
+    ] {
     return [
       ImageLayoutOption.Contain,
       ImageLayoutOption.ContainLeft,

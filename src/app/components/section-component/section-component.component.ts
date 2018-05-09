@@ -134,8 +134,29 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
     }
   }
 
-  get layoutOptions(): [SectionLayoutOption] {
-    const options: [SectionLayoutOption] = [
+  get layoutOptions(): [
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption,
+    SectionLayoutOption
+    ] {
+    return [
       SectionLayoutOption.CompactLeft,
       SectionLayoutOption.DefaultLeft,
       SectionLayoutOption.LargeLeft,
@@ -157,7 +178,6 @@ export class UISectionComponent extends ConfigurableUIComponentWithToolbar {
       SectionLayoutOption.SplitFullImageRightTextLeft,
       SectionLayoutOption.SplitFullImageLeftTextRight,
     ];
-    return options;
   }
 
   get layout(): SectionLayoutOption {

@@ -1,6 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
 import {loginDisplayNotifierStub} from '../../../test/stubs/login-display-notifier.service.stub.spec';
 import {loginServiceStub} from '../../../test/stubs/login.service.stub.spec';
 import {appTitleFactory} from '../../../test/stubs/tokens.stub.spec';
@@ -10,6 +9,7 @@ import {LoginService} from '../../providers/login.service';
 import {ModalComponent} from '../modal/modal.component';
 
 import {LoginComponent} from './login.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -17,7 +17,7 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpClientModule],
       providers: [
         {provide: LoginModalDelegateService, useValue: loginDisplayNotifierStub},
         {provide: LoginService, useValue: loginServiceStub},

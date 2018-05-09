@@ -1,10 +1,10 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
 import {FileUploadConfig} from './file-upload-config';
 import {FileUploadService} from './file-upload.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
-  imports: [HttpModule],
+  imports: [HttpClientModule],
   declarations: [],
   providers: [
     FileUploadConfig,

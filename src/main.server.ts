@@ -6,7 +6,7 @@ export function getServerOriginFactory(): () => string {
 
 export function getServerConfig(): EnvironmentConfig {
   return {
-    PORT: process.env.PORT,
+    PORT: Number.parseInt(process.env.PORT),
     API_ENDPOINT: process.env.API_ENDPOINT,
     API_VERSION: process.env.API_VERSION,
     CLIENT_ID: process.env.CLIENT_ID,

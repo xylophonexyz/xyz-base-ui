@@ -16,7 +16,7 @@ export enum SpacerLayoutOption {
 })
 export class UISpacerComponent extends ConfigurableUIComponent {
 
-  get layoutOptions(): [SpacerLayoutOption] {
+  get layoutOptions(): [SpacerLayoutOption, SpacerLayoutOption] {
     return [
       SpacerLayoutOption.Dots,
       SpacerLayoutOption.Empty,

@@ -22,7 +22,7 @@ export class UIEmbedComponent extends ConfigurableUIComponent implements OnChang
     return this.component.media;
   }
 
-  get layoutOptions(): [EmbedLayoutOption] {
+  get layoutOptions(): [EmbedLayoutOption, EmbedLayoutOption, EmbedLayoutOption] {
     return [
       EmbedLayoutOption.Contain,
       EmbedLayoutOption.Large,

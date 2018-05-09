@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv';
 import {getAvailableComponents} from './available-components';
 import {ngExpressEngine} from '@nguniversal/express-engine';
+import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import {Express, Request, Response} from 'express';
 import * as url from 'url';
 import * as oauth2 from 'simple-oauth2';
-import * as fs from 'fs';
 import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as request from 'request';
@@ -13,8 +13,7 @@ import * as compression from 'compression';
 import * as helmet from 'helmet';
 import * as Memcached from 'memcached';
 import {OAuthToken} from './app';
-
-const {provideModuleMap} = require('@nguniversal/module-map-ngfactory-loader');
+import * as fs from 'fs';
 
 dotenv.config();
 
@@ -264,7 +263,7 @@ export function applyApiProxyMiddleware(app: Express, proxyServer) {
 
   function doProxyApiRequest(req, res, next) {
     const requestUrl = url.parse(req.url);
-    const shouldProxyRequest = url => {
+    const shouldProxyRequest = proxyUrl => {
       const validPaths = [
         /^\/api\//,
         /^\/oauth\/authorize$/,
@@ -272,16 +271,16 @@ export function applyApiProxyMiddleware(app: Express, proxyServer) {
         /^\/callback\/email$/
       ];
       return validPaths.filter(p => {
-        return p.test(url);
+        return p.test(proxyUrl);
       }).length;
     };
 
     if (shouldProxyRequest(requestUrl.path)) {
       const apiVersion = getConfig('API_VERSION');
       const apiEndpoint = getConfig('API_ENDPOINT');
-      const path = requestUrl.path.toString()
+      const thePath = requestUrl.path.toString()
         .replace(/^\//g, '').replace(/^api\//, `${apiVersion}/`);
-      const target = `${apiEndpoint}/${path}`;
+      const target = `${apiEndpoint}/${thePath}`;
       // for API requests without an access token, add client (limited privilege) access token
       if (!req.headers.Authorization) {
         req.headers.Authorization = `Bearer ${clientOAuthToken.raw.access_token}`;
@@ -367,20 +366,12 @@ export function applyAuthProxyMiddleware(app: Express) {
  * @param {e.Express} app
  */
 export function setupAngularRenderer(app: Express) {
-  // AppServerModuleNgFactory is generated from our AOT build and will be exported in our main `server` bundle
-  let fileName = '';
-  fs.readdirSync(__dirname).forEach(file => {
-    if (file.startsWith('main')) {
-      fileName = file;
-    }
-  });
-  const bundle = require('./' + fileName);
-  const AppServerModuleNgFactory = bundle.AppServerModuleNgFactory;
+  const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require(path.join(__dirname, '..', 'server', 'main'));
 
   app.engine('html', ngExpressEngine({
     bootstrap: AppServerModuleNgFactory,
     providers: [
-      provideModuleMap(bundle.LAZY_MODULE_MAP)
+      provideModuleMap(LAZY_MODULE_MAP)
     ]
   }));
   app.set('view engine', 'html');
@@ -441,9 +432,7 @@ export function applyViewCachingMiddleware(app: Express, memcachedUrl: string) {
  * Add DOM bindings to global scope for server side rendering
  */
 export function initializeGlobalDOMBindings() {
-  const domino = require('@angular/platform-server/node_modules/domino');
-  const fs = require('fs');
-  const path = require('path');
+  const domino = require('domino');
   const template = fs.readFileSync(path.join(getTemplatesPath(), 'index.html')).toString();
   const win = domino.createWindow(template);
   // some things to note here:
@@ -469,7 +458,7 @@ export function initializeGlobalDOMBindings() {
  * @returns {string}
  */
 export function getTemplatesPath() {
-  return path.join(__dirname, '..', 'browser');
+  return path.join(__dirname, '..', 'build');
 }
 
 function getMockMutationObserver() {
