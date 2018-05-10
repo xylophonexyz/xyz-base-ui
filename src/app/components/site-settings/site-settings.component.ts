@@ -191,22 +191,22 @@ export class SiteSettingsComponent extends SiteAdminComponent implements OnInit 
   }
 
   private doFileUploadForCollection(collection: ComponentCollectionDataInterface<ImageComponentMedia, ComponentMetadata>, file: File) {
-    try {
-      this.componentService.upload(collection.components[0].id, file).subscribe((res: ComponentDataInterface) => {
+    this.componentService.upload(collection.components[0].id, file).subscribe((res: ComponentDataInterface) => {
+      try {
         collection.components[0].media_processing = res.media_processing;
         // dont override the dataUrl preview -- add the final media data when the processing job is complete
         if (!res.media_processing) {
           collection.components[0].media = res.media;
         }
-      }, err => {
-        collection.components[0].media = {error: err};
-        collection.components[0].media_processing = false;
-      }, () => {
-        this.updateSiteMetadata();
-      });
-    } catch (e) {
-      console.log('Error uploading file for component', e);
-    }
+      } catch (e) {
+        console.log('Error uploading file for component', e);
+      }
+    }, err => {
+      collection.components[0].media = {error: err};
+      collection.components[0].media_processing = false;
+    }, () => {
+      this.updateSiteMetadata();
+    });
   }
 
 }

@@ -118,7 +118,7 @@ describe('SitesComponent', () => {
         observer.complete();
       });
     });
-    fixture.detectChanges();
+    component.ngOnInit();
     expect(component.sites[0].updatedAt.getTime()).toBeGreaterThan(component.sites[1].updatedAt.getTime());
   }));
 

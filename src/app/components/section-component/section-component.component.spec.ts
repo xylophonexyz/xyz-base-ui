@@ -269,7 +269,7 @@ describe('UISectionComponent', () => {
       spyOn(collectionService, 'create').and.callThrough();
       spyOn(componentService, 'upload').and.callFake(() => {
         return Observable.create(observer => {
-          observer.next(null); // success but malformed data
+          observer.next({}); // success but malformed data
         });
       });
       component.component = new Component({metadata: {}} as any);

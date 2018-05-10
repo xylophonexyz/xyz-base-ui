@@ -445,16 +445,6 @@ describe('PageComponent', () => {
     expect(router.navigate).toHaveBeenCalled();
   });
 
-  it('should provide a method to show the app modal used to publish the page', () => {
-    component.page = mockPage();
-    expect(component.pageSettingsViewIsActive).toEqual(false);
-    component.openPageSettings();
-    expect(component.pageSettingsViewIsActive).toEqual(true);
-
-    component.didClosePageSettings();
-    expect(component.pageSettingsViewIsActive).toEqual(false);
-  });
-
   it('should update the page when didClosePageSettings is called', async(() => {
     const pagesProvider = getTestBed().get(PagesService);
     spyOn(pagesProvider, 'update').and.callThrough();

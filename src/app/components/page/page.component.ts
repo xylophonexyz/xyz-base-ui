@@ -96,7 +96,7 @@ export class PageComponent implements OnInit, OnDestroy {
 
   siteNavigation(): Page[] {
     return this.page.composition.pages.filter(page => {
-      return (page.published || this.currentUserIsPageAuthor()) && page.metadata && page.metadata.navigationItem;
+      return ((page.published || this.currentUserIsPageAuthor()) && page.metadata && page.metadata.navigationItem);
     });
   }
 

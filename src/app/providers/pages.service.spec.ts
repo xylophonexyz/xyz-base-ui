@@ -40,7 +40,7 @@ export const mockPageResponse = {
     mockComponentCollectionData
   ]
 };
-export const mockPageData = Object.assign({}, mockPageResponse);
+export const mockPageData: PageDataInterface = Object.assign({}, mockPageResponse);
 
 export function mockPage(data: PageDataInterface = mockPageResponse) {
   return new Page(Object.assign({}, data));
