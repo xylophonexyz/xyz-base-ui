@@ -14,7 +14,7 @@
     "build:server": "npm run compile:server && ng build ssr --aot --prod && ng run ssr:server",
     "compile:server": "tsc src/server.ts --lib es6,dom --target es5",
     "compile:server:dev": "tsc src/server.dev.ts --lib es6,dom --target es5",
-    "build:prod": "ng build --prod --aot --build-optimizer",
+    "build:prod": "ng build --prod --aot",
     "build:full": "npm run build:server && npm run build:prod",
     "start": "NODE_ENV=production npm run run:prod",
     "run:prod": "node dist/server-build/server.js",

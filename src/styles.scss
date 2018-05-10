@@ -1,11 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 @import './assets/fonts/_pictos-redux-part-1-lines.css';
+
+@import '../node_modules/bulma/sass/utilities/initial-variables';
+@import '../node_modules/bulma/sass/utilities/functions';
+
 @import './app/theme/colors.scss';
-@import '../node_modules/bulma/bulma.sass';
-@import '../node_modules/bulma/sass/utilities/_all.sass';
+
+@import '../node_modules/bulma/sass/utilities/derived-variables';
+
 @import '../node_modules/quill/dist/quill.bubble.css';
 @import '../node_modules/quill/dist/quill.snow.css';
 @import '../src/app/theme/quill-overrides.scss';
+
+@import '../node_modules/bulma/bulma';
 
 @media(max-width: $tablet) {
   body {

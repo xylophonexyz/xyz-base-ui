@@ -12,7 +12,7 @@ export class FeatherIconPipe implements PipeTransform {
 
   transform(value: any, args?: any): SafeHtml {
     try {
-      return this.sanitizer.bypassSecurityTrustHtml(feather.toSvg(value));
+      return this.sanitizer.bypassSecurityTrustHtml(feather.icons[value].toSvg());
     } catch (e) {
       return '';
     }
