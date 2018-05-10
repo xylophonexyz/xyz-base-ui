@@ -68,6 +68,7 @@ import {QuillService} from './providers/quill.service';
 import {AboutPageComponent} from './components/about-page/about-page.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {OwnershipGuard} from './guards/ownership.guard';
+import { PageSettingsComponent } from './components/page-settings/page-settings.component';
 
 export function getBrowserOriginFactory() {
   return () => null;
@@ -120,6 +121,7 @@ export function getAppTitleFactory() {
     SiteFilesComponent,
     XzChangeBgColorOnHoverDirective,
     AboutPageComponent,
+    PageSettingsComponent,
   ],
   entryComponents: [],
   imports: [

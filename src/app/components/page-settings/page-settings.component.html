@@ -1,0 +1,118 @@
+<div class="page-settings">
+  <section class="section">
+    <div class="container">
+      <p class="title">
+        <strong>Settings for <i>{{page.title || 'Untitled'}}</i></strong>
+      </p>
+      <hr>
+      <p class="subtitle">
+        Title
+      </p>
+      <p>
+        The title is used to identify this page and how it appears in search results and on social media sites.
+      </p>
+      <br>
+      <div class="field">
+        <p class="control">
+          <input class="input"
+                 [(ngModel)]="page.title"
+                 placeholder="Page Title">
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Description
+      </p>
+      <p>
+        A short description is used to enhance this page's visibility to search engines. Maximum of 160 characters.
+      </p>
+      <br>
+      <div class="field">
+        <p class="control">
+          <input class="input"
+                 [(ngModel)]="page.description"
+                 placeholder="Page Description"
+                 maxlength="160">
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Privacy
+      </p>
+      <p>
+        Manage privacy settings for this page. A public page can be viewed by anybody. Private pages are only
+        viewable by you and are excluded from site navigation.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="page.published"
+                  (click)="publishPage(true)">
+            Public
+          </button>
+        </p>
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="!page.published"
+                  (click)="publishPage(false)">
+            Private
+          </button>
+        </p>
+      </div>
+      <hr>
+      <p class="subtitle">
+        Header
+      </p>
+      <p>
+        Hide or show the top navigational header for this page.
+      </p>
+      <br>
+      <div class="field has-addons">
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="page.hasHeader()"
+                  (click)="showPageNav(true)">
+            Show
+          </button>
+        </p>
+        <p class="control">
+          <button class="button"
+                  [class.is-primary]="!page.hasHeader()"
+                  (click)="showPageNav(false)">
+            Hide
+          </button>
+        </p>
+      </div>
+      <br>
+      <div *ngIf="page.hasHeader()">
+        <p>
+          Use a transparent navigational header for this page. This will allow you to
+          design full screen pages without sacrificing site navigation.
+        </p>
+        <br>
+        <div class="field has-addons">
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="page.hasTransparentHeader()"
+                    (click)="useTransparentHeader(true)">
+              Transparent
+            </button>
+          </p>
+          <p class="control">
+            <button class="button"
+                    [class.is-primary]="!page.hasTransparentHeader()"
+                    (click)="useTransparentHeader(false)">
+              Solid
+            </button>
+          </p>
+        </div>
+        <hr>
+        <div class="buttons">
+          <button class="button is-primary" (click)="save()">Save</button>
+          <button class="button" (click)="exit()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

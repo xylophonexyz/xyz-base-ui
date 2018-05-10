@@ -54,16 +54,16 @@ export class PageComponent implements OnInit, OnDestroy {
     return page.description || page.composition.title;
   }
 
-  constructor(private nav: NavbarDelegateService,
-              private footer: FooterDelegateService,
+  constructor(private footer: FooterDelegateService,
               private auth: AuthService,
               private pagesProvider: PagesService,
               private titleService: Title,
               private metaService: Meta,
               private location: Location,
               private windowRef: WindowRefService,
-              private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              protected router: Router,
+              protected nav: NavbarDelegateService) {
   }
 
   get components(): ComponentCollection[] {
@@ -123,7 +123,9 @@ export class PageComponent implements OnInit, OnDestroy {
   }
 
   openPageSettings(): void {
-    this.pageSettingsViewIsActive = true;
+    this.router.navigate(['/pages/' + this.page.id + '/settings']).then(() => {
+      this.pageSettingsViewIsActive = true;
+    });
   }
 
   didClosePageSettings(): void {

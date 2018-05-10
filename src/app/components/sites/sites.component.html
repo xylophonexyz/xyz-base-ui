@@ -13,7 +13,7 @@
        *ngFor="let site of sitesFilteredByActiveTab(sites)">
     <nav class="level">
       <div class="level-left">
-        <div class="level-item">
+        <div class="level-item" [routerLink]="[settingsUrl(site)]" style="cursor: pointer">
           <figure class="site-thumb image is-128x128" *ngIf="site.hasCover()">
             <img [src]="site.cover"
                  alt="">

@@ -64,18 +64,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "temp:build"
+            "browserTarget": "xyzBase:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "temp:build:production"
+              "browserTarget": "xyzBase:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "temp:build"
+            "browserTarget": "xyzBase:build"
           }
         },
         "test": {
@@ -186,7 +186,7 @@
         }
       }
     },
-    "temp-e2e": {
+    "xyzBase-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -194,7 +194,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "temp:serve"
+            "devServerTarget": "xyzBase:serve"
           }
         },
         "lint": {

@@ -20,6 +20,7 @@ import {PageGuard} from './guards/page.guard';
 import {SiteFilesComponent} from './components/site-files/site-files.component';
 import {AboutPageComponent} from './components/about-page/about-page.component';
 import {OwnershipGuard} from './guards/ownership.guard';
+import {PageSettingsComponent} from './components/page-settings/page-settings.component';
 
 const routes: Routes = [
   {
@@ -129,6 +130,11 @@ const routes: Routes = [
       {
         path: 'p/:pageId/:pageSlug',
         component: PageComponent,
+        canActivate: [PageGuard]
+      },
+      {
+        path: 'pages/:pageId/settings',
+        component: PageSettingsComponent,
         canActivate: [PageGuard]
       },
       // set default page ("/") to admin
