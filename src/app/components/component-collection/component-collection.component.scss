@@ -3,5 +3,6 @@
 .component-collection {
   &.is-mediaFocused {
     border: 2px solid $success;
+    margin-top: 2px;
   }
 }
