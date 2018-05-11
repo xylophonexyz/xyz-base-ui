@@ -99,8 +99,9 @@ export function applyAvailableComponentsQueryMiddleware(app: Express) {
 /**
  * Return the components available to the current user, or return the basic set.
  * @param {e.Express} app
+ * @param memcachedUrl the connection to a memcache instance where templates will be stored
  */
-export function applyCustomDomainMiddleware(app: Express, memcachedUrl: string) {
+export function applyCustomDomainMiddleware(app: Express, memcachedUrl?: string) {
   app.post('/api/domains', bodyParser.json(), (req: Request, res: Response) => {
     if (req.body) {
       const target = getConfig('CREATE_FULL_ZONE_SERVICE_ENDPOINT');

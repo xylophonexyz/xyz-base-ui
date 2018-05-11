@@ -16,6 +16,7 @@ import {UtilService} from '../../providers/util.service';
 import {WindowRefService} from '../../providers/window-ref.service';
 import {ComponentCollectionService} from '../../providers/component-collection.service';
 import {ComponentService} from '../../providers/component.service';
+import {Observable} from 'rxjs/Rx';
 
 @Component({
   selector: 'app-site-admin',
@@ -166,6 +167,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
           });
         }, () => {
           Page.swap(target, source, -1); // revert
+        }, () => {
+          this.clearDnsLookupCache();
         });
       }
       return target;
@@ -183,6 +186,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
           });
         }, () => {
           Page.swap(target, source, 1); // revert
+        }, () => {
+          this.clearDnsLookupCache();
         });
       }
       return target;
@@ -195,6 +200,8 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
         this.site.pages = this.site.pages.filter(p => {
           return p.id !== pageId;
         });
+      }, null, () => {
+        this.clearDnsLookupCache();
       });
     }
   }
@@ -274,6 +281,16 @@ export class SiteAdminComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  protected clearDnsLookupCache() {
+    if (this.site && this.site.customDomain) {
+      this.isLoading = true;
+      const domainMappings = this.site.customDomain.domainMappings || ['@', 'www'];
+      Observable.from(domainMappings).concatMap(mapping => {
+        return this.sitesProvider.clearDnsLookupCache(this.site.id, this.site.customDomain.domainName, mapping);
+      }).subscribe();
+    }
   }
 
   private setDocumentTitle() {

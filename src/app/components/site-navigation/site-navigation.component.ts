@@ -54,7 +54,9 @@ export class SiteNavigationComponent extends SiteAdminComponent implements OnIni
         null,
         () => {
           this.isLoading = false;
-        });
+          this.clearDnsLookupCache();
+        }
+      );
     }
   }
 
