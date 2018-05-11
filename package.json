@@ -5,9 +5,9 @@
   "scripts": {
     "ng": "ng",
     "dev": "npm run compile:server:dev && concurrently \"ng serve --aot --proxy-config proxy.conf.json\" \"npm run run:server:dev\" -k",
-    "test": "ng test --watch --source-map=false",
-    "test:singleRun": "ng test",
-    "test:coverage": "ng test --code-coverage",
+    "test": "ng test --watch --sourceMap=false",
+    "test:singleRun": "ng test --sourceMap=false",
+    "test:coverage": "ng test --code-coverage --sourceMap=false",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build": "ng build",

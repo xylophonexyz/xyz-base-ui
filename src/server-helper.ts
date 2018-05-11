@@ -100,7 +100,7 @@ export function applyAvailableComponentsQueryMiddleware(app: Express) {
  * Return the components available to the current user, or return the basic set.
  * @param {e.Express} app
  */
-export function applyCustomDomainMiddleware(app: Express) {
+export function applyCustomDomainMiddleware(app: Express, memcachedUrl: string) {
   app.post('/api/domains', bodyParser.json(), (req: Request, res: Response) => {
     if (req.body) {
       const target = getConfig('CREATE_FULL_ZONE_SERVICE_ENDPOINT');
@@ -220,6 +220,7 @@ export function applyCustomDomainMiddleware(app: Express) {
       const siteId = req.params.siteId;
       const domainName = req.query.domainName;
       const subdomain = req.query.subdomain;
+      const fullDomainName = getFullDomainName(domainName, subdomain);
       request({
         method: 'POST',
         url: target,
@@ -227,13 +228,17 @@ export function applyCustomDomainMiddleware(app: Express) {
           'Content-Type': 'application/json',
           'Authorization': req.headers.authorization || req.headers.Authorization
         },
-        body: JSON.stringify({siteId, domainName: getFullDomainName(domainName, subdomain)})
+        body: JSON.stringify({siteId, domainName: fullDomainName})
       }, (err, _, apiResponse) => {
         if (err) {
           res.status(400).send({error: err.message}).end();
         } else {
           res.send(apiResponse).end();
         }
+      });
+      const key = req.protocol + '://' + fullDomainName;
+      removeFromMemcache(memcachedUrl, key).then(() => {
+        console.log(`Cleared cached page template for ${key}`);
       });
     } else {
       const error = new Error('Required parameters missing: {domainName, siteId, subdomain}');
@@ -403,28 +408,26 @@ export function applyServeStaticMiddleware(app: Express) {
  */
 export function applyViewCachingMiddleware(app: Express, memcachedUrl: string) {
   if (memcachedUrl) {
-    const memcached = new Memcached(memcachedUrl);
     app.get('/*', (req, res, next) => {
-      memcached.get(req.url, (err, data) => {
+      getFromMemcache(memcachedUrl, req.url).then(data => {
         if (data) {
           res.send(data);
         } else {
           const send = res.send;
           res.send = function (body?: any): Response {
             const expiry = 86400 * 5; // 24 hours * 5 days
-            memcached.set(req.url, body.toString(), expiry, () => {
-              console.log('Cached view for:', req.url, 'with expiry:', expiry);
+            const key = req.protocol + '://' + req.get('host') + req.originalUrl;
+            storeInMemcache(memcachedUrl, key, body.toString(), expiry).then(() => {
+              console.log('Cached view for:', key, 'with expiry:', expiry);
             });
             return send.call(this, body);
           };
           next();
         }
-      });
+      }).catch(next);
     });
     // flush the cache before start up
-    memcached.flush(() => {
-      console.log('View cache flushed successfully.');
-    });
+    flushMemcache(memcachedUrl);
   }
 }
 
@@ -459,6 +462,52 @@ export function initializeGlobalDOMBindings() {
  */
 export function getTemplatesPath() {
   return path.join(__dirname, '..', 'build');
+}
+
+function removeFromMemcache(memcachedUrl, key) {
+  return new Promise((resolve, reject) => {
+    const memcached = new Memcached(memcachedUrl);
+    memcached.del(key, err => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+function storeInMemcache(memcachedUrl, key, value, expiry) {
+  return new Promise((resolve, reject) => {
+    const memcached = new Memcached(memcachedUrl);
+    memcached.set(key, value, expiry, err => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
+
+function getFromMemcache(memcachedUrl, key) {
+  return new Promise((resolve, reject) => {
+    const memcached = new Memcached(memcachedUrl);
+    memcached.get(key, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
+function flushMemcache(memcachedUrl) {
+  const memcached = new Memcached(memcachedUrl);
+  memcached.flush(() => {
+    console.log('View cache flushed successfully.');
+  });
 }
 
 function getMockMutationObserver() {

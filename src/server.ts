@@ -56,7 +56,7 @@ export async function bootstrap(app: Express) {
     applyCompressionMiddleware(app);
     applyAuthProxyMiddleware(app);
     applyAvailableComponentsQueryMiddleware(app);
-    applyCustomDomainMiddleware(app);
+    applyCustomDomainMiddleware(app, memcachedUrl);
     applyApiProxyMiddleware(app, proxyServer);
     applyServeStaticMiddleware(app);
     app.listen(port, (err) => {
